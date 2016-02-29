@@ -8,20 +8,11 @@
 	require_once $root.'backends/admin-backend.php';
 	require_once $root.'/'.'views/Layout_View.php';
 	
-	if ($_GET['promoted'])
-	{
-		$option = "promoted";
-	} 
-	elseif ($_GET['categoryId'])
-	{
-		$option = 'byCategory';
-	} else {
-		$option = 'companies';
-	}
+	$option = "inicio";
 	
-	$data 	= $backend->loadBackend();
+	$data 	= $backend->loadBackend($option);
 	
-	$view 	= new Layout_View($data, 'Dashboard');
+	$view 	= new Layout_View($data, 'Causas');
 	
 	echo $view->printHTMLPage('dashboard');
 	

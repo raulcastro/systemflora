@@ -1218,15 +1218,47 @@ ul.inbox-pagination li {
 	margin: 10px 0;
 }
  
+.section-title {
+	margin-top: 20px;
+} 
  
+ .itemBlock {
+ 	background-color: #F1F1F1;
+ 	padding: 10px;
+ 	margin-top: 10px;
+ }
  
+ .itemBlock p {
+ 	font-size: 12px;
+ }
  
+.edit-box {	
+	margin-bottom: 20px;
+} 
+
+.gallery-box {
+	margin-bottom: 20px;
+}
+
+.gallery-item {
+	height: 200px;
+	margin-bottom: 30px;
+	
+}
+
+.gallery-item .image {
+    height: 170px;
+    float: left;
+    margin: 0 20px 24px 0;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    behavior: url(border-radius.htc);
+    overflow: hidden
+}
  
- 
- 
- 
- 
- 
+#galleryVideoItems {
+	margin-top: 20px;
+}
  
  
  

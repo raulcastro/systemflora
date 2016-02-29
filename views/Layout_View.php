@@ -43,6 +43,8 @@ class Layout_View
 	 */
 	private $section;
 	
+	private $kindPage;
+	
 	/**
 	 * get's the data *ARRAY* and the title of the document
 	 * 
@@ -53,6 +55,29 @@ class Layout_View
 	{
 		$this->data = $data;
 		$this->title = $title;
+		
+		switch ($_GET['kind'])
+		{
+			case 1:// Causas
+				$this->kindPage = "causas";
+			break;
+			
+			case 2:// Links
+				$this->kindPage = "links";
+			break;
+			
+			case 3:// Espacios
+				$this->kindPage = "espacios";
+			break;
+			
+			case 4:// Noticias
+				$this->kindPage = "noticias";
+			break;
+			
+			default:
+				;
+			break;
+		}
 	}    
 	
 	/**
@@ -95,46 +120,26 @@ class Layout_View
 				case 'dashboard':
 					# code...
 				break;
-			
-				case 'members':
-					# code...
-				break;
-
-				case 'add-member':
-					echo self :: getMembersHead();
-				break;
-				
-				case 'reservations':
-					echo self :: getReservationsHead();
-				break;
-
-				case 'rooms':
-					echo self :: getRoomsHead();
-				break;
-				
-				case 'rooms-month':
-					echo self :: getRoomsMonthHead();
-				break;
-
-				case 'calendar':
-					echo self :: getCalendarHead();
-				break;
-				
-				case 'agencies':
-					echo self :: getAgenciesHead();
-				break;
-
-				case 'tasks':
-					echo self :: getTasksHead();
-				break;
-				
-				case 'reports':
-					echo self :: getReportsHead();
-				break;
 				
 				case 'main-sliders':
 					echo self :: getMainSliderHead();
 	 			break;
+	 			
+	 			case 'banner':
+	 				echo self :: getBannerHead();
+ 				break;
+ 				
+ 				case 'aliados':
+ 					echo self :: getAliadosHead();
+ 				break;
+ 				
+ 				case 'noticias':
+ 					echo self::getNoticiasHeader();
+ 				break;
+ 				
+ 				case 'editar-seccion':
+ 					echo self::getEditSectionHeader();
+ 				break;
 			}
 			?>
 		</head>
@@ -148,54 +153,41 @@ class Layout_View
 			<div class="container-fluid">
 				<div class="row">
 					<?php echo self::getSidebar(); ?>
-					<div class="col-sm-11 col-sm-offset-1 main">
+					<div class="col-sm-10 col-sm-offset-2 main">
 						<h1 class="page-header"><?php echo $this->title; ?></h1>
 						<?php 
-						echo self :: getDashboardIcons();
 						switch ($section) {
 
 							case 'dashboard':
-								echo self :: getRecentMembers();
-							break;
-
-							case 'members':
-								echo self :: getAllMembers();
-							break;
-
-							case 'add-member':
-								echo self :: getAddMember();
-							break;
-							
-							case 'reservations':
-								echo self :: getReservations();
-							break;
-							
-							case 'rooms':
-								echo self :: getRooms();
-							break;
-							
-							case 'rooms-month':
-								echo self :: getRoomsMonth();
-							break;
-
-							case 'calendar':
-								echo self :: getCalendar();
-							break;
-							
-							case 'agencies':
-								echo self :: getAgencies();
-							break;
-
-							case 'tasks':
-								echo self :: getAllTasks();
-							break;
-							
-							case 'reports':
-								echo self :: getReports();
+								echo self :: getIndexSections();
 							break;
 							
 							case 'main-sliders':
 								echo self :: getMainSlider();
+							break;
+							
+							case 'banner':
+								echo self :: getBanner();
+							break;
+							
+							case 'aliados':
+								echo self :: getAliados();
+							break;
+							
+							case 'links':
+								echo self :: getLinksSections();
+							break;
+							
+							case 'espacios':
+								echo self :: getEspaciosSections();
+							break;
+							
+							case 'noticias':
+								echo self :: getNoticiasSections();
+							break;
+							
+							case 'editar-seccion':
+								echo self :: getEditSection();
 							break;
 							
 							default :
@@ -294,8 +286,8 @@ class Layout_View
 				<ul class="nav navbar-nav main-menu">
 					<li><a <?php if ($_GET['section'] == 1) echo $active; ?> href="/dashboard/"><b><?php echo $this->data['userInfo']['name']; ?></b></a></li>
 					<li><a <?php if ($_GET['section'] == 17) echo $active; ?> href="/banner/">Banner Principal</a></li>
-					<li><a <?php if ($_GET['section'] == 5) echo $active; ?> href="#">Manage Rooms</a></li>		
-					<li><a <?php if ($_GET['section'] == 10) echo $active; ?> href="/sign-out/" class="sign-out">Log Out</a></li>
+					<li><a <?php if ($_GET['section'] == 5) echo $active; ?> href="/aliados/">Aliados y donantes</a></li>		
+					<li><a <?php if ($_GET['section'] == 10) echo $active; ?> href="/sign-out/" class="sign-out">Salir</a></li>
 				</ul>
 			</nav>
 				<?php 
@@ -425,23 +417,15 @@ class Layout_View
    		ob_start();
    		$active = 'class="active"';
    		?>
-   		<div class="col-sm-1 col-md-1 sidebar">
+   		<div class="col-sm-2 col-md-2 sidebar">
 			<ul class="nav nav-sidebar">
-				<li <?php if ($_GET['section'] == 1) echo $active; ?>><a href="/dashboard/">Dashboard</a></li>
-				<li <?php if ($_GET['section'] == 12) echo $active; ?>><a href="/reservations/">New Reservation</a></li>
-			</ul>
-			
-			<ul class="nav nav-sidebar">
-				<?php 
-   				if ($this->data['userInfo']['type'] == 1)
-   				{
-   					?>
-				<li <?php if ($_GET['section'] == 16) echo $active; ?>><a href="/reports/">Reports</a></li>
-				<?php 
-				}
-				?>
-				<li <?php if ($_GET['section'] == 13) echo $active; ?>><a href="/rooms/">Rooms</a></li>
-				<li <?php if ($_GET['section'] == 5) echo $active; ?>><a href="/agencies/">Agencies</a></li>
+				<li <?php if ($_GET['section'] == 1) echo $active; ?>><a href="/dashboard/">Causas</a></li>
+				<li <?php if ($_GET['section'] == 2) echo $active; ?>><a href="/espacios/">Espacios</a></li>
+				<li <?php if ($_GET['section'] == 3) echo $active; ?>><a href="/dashboard/">Proyectos</a></li>
+				<li <?php if ($_GET['section'] == 4) echo $active; ?>><a href="/dashboard/">Actividades</a></li>
+				<li <?php if ($_GET['section'] == 5) echo $active; ?>><a href="/dashboard/">Logros</a></li>
+				<li <?php if ($_GET['section'] == 6) echo $active; ?>><a href="/noticias/">Noticias</a></li>
+				<li <?php if ($_GET['section'] == 7) echo $active; ?>><a href="/links/">Links</a></li>
 			</ul>
 		</div>
    		<?php
@@ -449,48 +433,23 @@ class Layout_View
    		ob_end_clean();
    		return $sideBar;
    	}
-   	
+
    	/**
-   	 * the big icons that appear on the top of every section
-   	 * 
-   	 * @return string
-   	 */
-   	public function getDashboardIcons() 
-   	{
-   		ob_start();
-   		?>
-   		<div class="row placeholders dashboard-icons">
-			<div class="col-xs-6 col-sm-3 placeholder">
-				<a href="/guests/">
-					<i class="glyphicon glyphicon-th"></i>
-					<h4>Guests</h4>
-					<span class="text-muted">
-					<?php 
-					if ($this->data['recentMembers'] > 0)
-						echo $this->data['recentMembers'];
-					else 
-						echo 'No';
-					?>
-					 recent guests
-					</span>
-				</a>
-			</div>
-			<div class="col-xs-6 col-sm-3 placeholder">
-				<a href="/tasks/">
-					<i class="glyphicon glyphicon-th-list"></i>
-					<h4>Tasks</h4>
-					<span class="text-muted">
-						<strong><?php echo $this->data['taskInfo']['today']; ?></strong> tasks for today, 
-						<strong><?php echo $this->data['taskInfo']['pending']; ?></strong> pending
-					</span>
-				</a>
-			</div>
-		</div>
-   		<?php
-   		$dashboardIcons = ob_get_contents();
-   		ob_end_clean();
-   		return $dashboardIcons;
-   	}
+	 * extra files for the main-slider
+	 * @return string
+	 */
+	public function getMainSliderHead()
+	{
+		ob_start();
+		?>
+		<link href="/css/uploadfile.css" rel="stylesheet">
+		<script src="/js/jquery.uploadfile.min.js"></script>
+		<script src="/js/sliders.js"></script>
+   		<?php		
+		$agenciesHead = ob_get_contents();
+		ob_end_clean();
+		return $agenciesHead;
+	}
    	
    	/**
 	 * Main slider
@@ -557,8 +516,157 @@ class Layout_View
 		ob_end_clean();
 		return $sliders;
 	}
+	
+	/**
+	 * extra files for the main-slider
+	 * @return string
+	 */
+	public function getBannerHead()
+	{
+		ob_start();
+		?>
+		<link href="/css/uploadfile.css" rel="stylesheet">
+		<script src="/js/jquery.uploadfile.min.js"></script>
+		<script src="/js/banner.js"></script>
+   		<?php		
+		$agenciesHead = ob_get_contents();
+		ob_end_clean();
+		return $agenciesHead;
+	}
    	
+   	/**
+	 * Main slider
+	 * 
+	 * @return string
+	 */
+	public function getBanner()
+	{
+		ob_start();
+		?>
+		<div class="row">
+			<div class="col-sm-12">
+				<h5>(2050 * 1072 px)</h5>
+			</div>
+			<div class="col-sm-12 upload-slider">
+				Upload
+			</div>
+		</div>
+		
+		<div class="row" id="slidersBox">
+			<?php 
+			if ($this->data['banner'])
+			{
+				echo self::getBannerItem($this->data['banner']);
+			}
+			?>
+		</div>
+		<?php
+		$agencies = ob_get_contents();
+		ob_end_clean();
+		return $agencies; 
+	}
+	
+	public function getBannerItem($banner)
+	{
+		ob_start();
+		?>
+		<div class="col-sm-12 slider-item" id="sId-<?php echo $banner['banner_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-4">
+					<img alt="" src="/images-system/medium/<?php echo $banner['banner']; ?>" />
+				</div>
+				<div class="col-sm-offset-7 col-sm-1">
+					<a href="javascript:void(0);" class="btn btn-danger btn-xs deleteSlider" sId="<?php echo $banner['banner_id']; ?>">Delete</a>
+				</div>
+			</div>
+		</div>
+		<?php
+		$sliders = ob_get_contents();
+		ob_end_clean();
+		return $sliders;
+	}
+	
+	/**
+	 * extra files for the main-slider
+	 * @return string
+	 */
+	public function getAliadosHead()
+	{
+		ob_start();
+		?>
+		<link href="/css/uploadfile.css" rel="stylesheet">
+		<script src="/js/jquery.uploadfile.min.js"></script>
+		<script src="/js/aliados.js"></script>
+   		<?php		
+		$agenciesHead = ob_get_contents();
+		ob_end_clean();
+		return $agenciesHead;
+	}
    	
+   	/**
+	 * Main slider
+	 * 
+	 * @return string
+	 */
+	public function getAliados()
+	{
+		ob_start();
+		?>
+		<div class="row">
+			<div class="col-sm-12">
+				<h5>(170 * 170 px)</h5>
+			</div>
+			<div class="col-sm-12 upload-slider">
+				Upload
+			</div>
+		</div>
+		
+		<div class="row" id="slidersBox">
+			<?php 
+			foreach ($this->data['aliados'] as $aliado)
+			{
+				echo self::getAliadosItem($aliado);
+			}
+			?>
+		</div>
+		<?php
+		$agencies = ob_get_contents();
+		ob_end_clean();
+		return $agencies; 
+	}
+	
+	public function getAliadosItem($aliado)
+	{
+		ob_start();
+		?>
+		<div class="col-sm-12 slider-item" id="sId-<?php echo $aliado['aliado_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-4">
+					<img alt="" src="/images-system/medium/<?php echo $aliado['aliado']; ?>" />
+				</div>
+				<div class="col-sm-offset-6 col-sm-2">
+					<a href="javascript:void(0);" class="btn btn-info btn-xs saveSlider" sId="<?php echo $aliado['aliado_id']; ?>">Save</a>
+					<a href="javascript:void(0);" class="btn btn-danger btn-xs deleteSlider" sId="<?php echo $aliado['aliado_id']; ?>">Delete</a>
+				</div>
+			</div>
+			
+			<div class="col-sm-12 slider-section">
+				<div class="col-sm-4">
+					<input type="text" placeholder="Twitter" class="form-control" id="titleSlider-<?php echo $aliado['aliado_id']; ?>" value="<?php echo $aliado['twitter']; ?>">
+				</div>
+				<div class="col-sm-4">
+					<input type="text" placeholder="Facebook" class="form-control" id="linkSlider-<?php echo $aliado['aliado_id']; ?>" value="<?php echo $aliado['facebook']; ?>">
+				</div>
+				<div class="col-sm-4">
+					<input type="text" placeholder="Google Plus" class="form-control" id="gSlider-<?php echo $aliado['aliado_id']; ?>" value="<?php echo $aliado['gplus']; ?>">
+				</div>
+			</div>
+		</div>
+		<?php
+		$sliders = ob_get_contents();
+		ob_end_clean();
+		return $sliders;
+	}
    	
    	/**
    	 * Last n members
@@ -568,97 +676,651 @@ class Layout_View
    	 * @return string
    	 */
    	
-   	public function getRecentMembers()
+   	public function getIndexSections()
    	{
    		ob_start();
    		?>
-   		<h2 class="sub-header">Recent Guests</h2>
-		<div class="table-responsive">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>Member ID</th>
-						<th>Name</th>
-						<?php 
-						if ($_SESSION['loginType'] == 1)
-						{
-						?>
-							<th>Added by</th>
-						<?php 
-						} 
-						else 
-						{
-						?>
-							<th>Address</th>
-						<?php 
-						}
-						?>
-						<th>City</th>
-						<th>State</th>
-						<th>Country</th>
-					</tr>
-				</thead>
-				<tbody>
+   		<div class="row">
+   		<?php 
+   		foreach ($this->data['causas'] as $section)
+   		{
+   			echo self::getSectionCausasItem($section);
+   		}
+   		?>
+   		</div>
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+	
+   	public function getSectionCausasItem($section)
+   	{
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['causas_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" height="100" src="/images-system/medium/<?php echo $section['icon']; ?>" />
+				</div>
+				<div class="col-sm-9">
+					<p class="section-title"><?php echo $section['title']; ?></p>
+				</div>
+				<div class="col-sm-1">
+					<a href="/editar-causas/<?php echo $section['causas_id']; ?>/<?php echo Tools::slugify($section['title']); ?>/<?php echo $section['kind']."/"; ?>" class="btn btn-info btn-xs deleteSlider" sId="<?php echo $section['section_id']; ?>">Editar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
+   	
+   	public function getLinksSections()
+   	{
+   		ob_start();
+   		?>
+   		<div class="row">
+   		<?php 
+   		foreach ($this->data['links'] as $section)
+   		{
+   			echo self::getLinksItem($section);
+   		}
+   		?>
+   		</div>
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+	
+   	public function getLinksItem($section)
+   	{
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['causas_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" height="100" src="/images-system/medium/<?php echo $section['icon']; ?>" />
+				</div>
+				<div class="col-sm-9">
+					<p class="section-title"><?php echo $section['title']; ?></p>
+				</div>
+				<div class="col-sm-1">
+					<a href="/editar-links/<?php echo $section['link_id']; ?>/<?php echo Tools::slugify($section['title']); ?>/<?php echo $section['kind']."/"; ?>" class="btn btn-info btn-xs deleteSlider" sId="<?php echo $section['section_id']; ?>">Editar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
+   	
+   	public function getEspaciosSections()
+   	{
+   		ob_start();
+   		?>
+   		<div class="row">
+   		<?php 
+   		foreach ($this->data['espacios'] as $section)
+   		{
+   			echo self::getEspaciosItem($section);
+   		}
+   		?>
+   		</div>
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+	
+   	public function getEspaciosItem($section)
+   	{
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['causas_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" height="100" src="/images-system/medium/<?php echo $section['icon']; ?>" />
+				</div>
+				<div class="col-sm-9">
+					<p class="section-title"><?php echo $section['title']; ?></p>
+				</div>
+				<div class="col-sm-1">
+					<a href="/editar-espacios/<?php echo $section['espacios_id']; ?>/<?php echo Tools::slugify($section['title']); ?>/<?php echo $section['kind']."/"; ?>" class="btn btn-info btn-xs deleteSlider" sId="<?php echo $section['section_id']; ?>">Editar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
+   	
+   	public function getNoticiasHeader()
+	{
+		ob_start();
+		?>
+		<script src="/js/jquery.uploadfile.min.js"></script>
+		<link rel="stylesheet" href="/css/jquery-ui.css">
+		<script src="/js/jquery-ui.js"></script>
+		<script src="/js/noticias.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		});
+		</script>
+		
+   		<?php		
+		$sectionHead = ob_get_contents();
+		ob_end_clean();
+		return $sectionHead;
+	}
+   	
+   	public function getNoticiasSections()
+   	{
+   		ob_start();
+   		?>
+   		<div class="row">
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-1 control-label" for="textinput"><b>Fecha</b></label>
+						<div class="col-sm-2">
+							<input type="text" placeholder="" class="form-control has-date" id="newNoticiaDate" value="">
+						</div>
+						<label class="col-sm-1 control-label" for="textinput"><b>T&iacute;tulo</b></label>
+						<div class="col-sm-5">
+							<input type="text" placeholder="T&iacute;tulo" class="form-control" id="newNoticiaTitle" value="">
+						</div>
+						<div class="col-sm-2 col-sm-offset-1">
+							<button type="submit" class="btn btn-primary" id="addNoticia">A&ntilde;adir noticia</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
+   		
+   		<div class="row" id="noticiasBox">
+   		<?php 
+   		foreach ($this->data['noticias'] as $section)
+   		{
+   			echo self::getNoticiasItem($section);
+   		}
+   		?>
+   		</div>
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+	
+   	public function getNoticiasItem($section)
+   	{
+   		$img = '';
+   		if (!$section['icon'])
+   			$img = '/images/100x100-default.jpg';
+   		else
+   			$img = "/images-system/medium/".$section['icon'];
+   		
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['noticias_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" height="100" src="<?php echo $img; ?>" />
+				</div>
+				<div class="col-sm-8">
+					<p class="section-title"><strong><?php echo $section['title']; ?></strong></p>
+					<p class="section-title"><?php echo Tools::formatMYSQLToFront($section['date']); ?></p>
+				</div>
+				<div class="col-sm-2">
+					<a href="/editar-noticias/<?php echo $section['noticias_id']; ?>/<?php echo Tools::slugify($section['title']); ?>/<?php echo $section['kind']."/"; ?>" class="btn btn-info btn-xs deleteSlider" sId="<?php echo $section['section_id']; ?>">Editar</a>
+					<a href="" class="btn btn-danger btn-xs deleteNew" sId="<?php echo $section['noticias_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
+   	
+   	public function getEditSectionHeader()
+	{
+		ob_start();
+		?>
+		<link href="/css/uploadfile.css" rel="stylesheet">
+		<script src="/js/jquery.uploadfile.min.js"></script>
+		<script src="/js/trumbowyg/trumbowyg.min.js"></script>
+		<link rel="stylesheet" href="/js/trumbowyg/ui/trumbowyg.min.css">
+		<script type="text/javascript">
+		$(document).ready(function()
+				{
+					$('.has-editor').trumbowyg({
+					    fullscreenable: false,
+					    semantic: true,
+					    resetCss: true,
+					    removeformatPasted: true,
+					    autogrow: true,
+					    mobile: true,
+					    tablet: true,
+					    btns: ['viewHTML',
+					           '|', 'btnGrp-design',
+					           '|', 'btnGrp-justify',
+					           '|', 'btnGrp-lists']
+					});
+				});
+		</script>
+		<?php 
+		switch ($this->kindPage)
+		{
+			case 'causas':
+			?>
+			<script src="/js/causas.js"></script>
+			<?php
+			break;
+			
+			case 'links':
+			?>
+			<script src="/js/links.js"></script>
+			<?php
+			break;
+			
+			case 'espacios':
+			?>
+			<script src="/js/espacios.js"></script>
+			<?php
+			break;
+			
+			case 'noticias':
+			?>
+			<script src="/js/noticias.js"></script>
+			<?php
+			break;
+		}
+		?>
+		
+   		<?php		
+		$agenciesHead = ob_get_contents();
+		ob_end_clean();
+		return $agenciesHead;
+	}
+   	
+   	
+   	
+   	public function getEditSection()
+   	{
+   		$section = $this->data['section'];
+   		ob_start();
+
+		switch ($this->kindPage)
+		{
+			case 'causas':
+			?>
+			<input type="hidden" value="<?php echo $section['causas_id']; ?>" id="sectionId" />
+			<?php
+			break;
+			
+			case 'links':
+			?>
+			<input type="hidden" value="<?php echo $section['link_id']; ?>" id="sectionId" />
+			<?php
+			break;
+			
+			case 'espacios':
+			?>
+			<input type="hidden" value="<?php echo $section['espacios_id']; ?>" id="sectionId" />
+			<?php
+			break;
+			
+			case 'noticias':
+			?>
+			<input type="hidden" value="<?php echo $section['noticias_id']; ?>" id="sectionId" />
+			<?php
+			break;
+			
+		}
+		?>
+   		
+   		<div class="row edit-box">
+	   		<?php 
+	   		if ($section['has_icon'] == 1)
+	   		{
+	   				$img = '';
+	   			if (!$section['icon'])
+	   				$img = '/images/100x100-default.jpg';
+	   			else
+	   				$img = "/images-system/medium/".$section['icon'];
+	   			?>
+	   		<div class="row">
+				<div class="col-sm-12">
+					<div class="col-sm-2">
+						<img alt="" height="100" id="iconImg" src="<?php echo $img; ?>" />
+					</div>
+					<div class="col-sm-2">
+						<h5><b>Icono</b> (170 * 170 px)</h5>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="col-sm-6 upload-icon">
+						Cambiar icono
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="clearfix"></div>
+	   			<?php
+	   		}
+	   		?>
+   			
+   			<?php 
+	   		if ($section['has_bg'] == 1)
+	   		{
+	   			?>
+	   		<div class="row">
+				<div class="col-sm-12">
+					<div class="col-sm-2">
+						<img alt="" width="170" id="iconbg" src="/images-system/medium/<?php echo $section['background']; ?>" />
+					</div>
+					<div class="col-sm-2">
+						<h5><b>Fondo</b> (2050 * 1072 px)</h5>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="col-sm-6 upload-bg">
+						Cambiar fondo
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="clearfix"></div>
+	   			<?php
+	   		}
+	   		?>
+	   		
+	   		<?php 
+	   		if ($section['has_portrait'] == 1)
+	   		{
+	   			$img = '';
+	   			if (!$section['portrait'])
+	   				$img = '/images/300x108-default.jpg';
+	   			else
+	   				$img = "/images-system/medium/".$section['portrait'];
+	   			?>
+	   		<div class="row">
+				<div class="col-sm-12">
+					<div class="col-sm-2">
+						<img alt="" width="170" id="portraitImg" src="<?php echo $img; ?>" />
+					</div>
+					<div class="col-sm-3">
+						<h5><b>Imagen principal</b> (800 * 290 px)</h5>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="col-sm-6 upload-portrait">
+						Cambiar imagen principal
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="clearfix"></div>
+	   			<?php
+	   		}
+	   		?>
+   		
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>T&iacute;tulo</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="T&iacute;tulo" class="form-control" id="sectionTitle" value="<?php echo $section['title']; ?>">
+						</div>
+					</div>
+						
+					<!-- Textarea input-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Descripci&oacute;n</b></label>
+						<div class="col-sm-10">
+							<textarea rows="4" cols="" class="form-control" placeholder="Descripci&oacute;n" id="sectionDescription"><?php echo $section['description']; ?></textarea>
+						</div>
+					</div>
+					
 					<?php 
-					foreach ($this->data['lastMembers'] as $member)
+					if ($this->kindPage == 'causas' || $this->kindPage == 'espacios' || $this->kindPage == 'noticias')
 					{
 						?>
-					<tr>
-						<td>
-							<a href="/<?php echo $member['member_id']; ?>/<?php echo Tools::slugify($member['name'].' '.$member['last_name']); ?>/">
-								<?php echo $member['member_id']; ?>
-							</a>
-						</td>
-						<td>
-							<a href="/<?php echo $member['member_id']; ?>/<?php echo Tools::slugify($member['name'].' '.$member['last_name']); ?>/" class="member-link">
-								<?php echo $member['name'].' '.$member['last_name']; ?>
-							</a>
-						</td>
-						<?php 
-						if ($_SESSION['loginType'] == 1)
-						{
-							?>
-							<td><?php echo $member['user_name']; ?></td>
-							<?php 
-						} 
-						else 
-						{
-							?>
-							<td><?php echo $member['address']; ?></td>
-							 <?php 
-						}
-						?>
-						<td><?php echo $member['city']; ?></td>
-						<td><?php echo $member['state']; ?></td>
-						<td><?php echo $member['country']; ?></td>
-					</tr>
+					<!-- Textarea input-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Contenido</b></label>
+						<div class="col-sm-10">
+							<textarea rows="10" cols="" class="form-control has-editor" placeholder="Contenido" id="sectionContent"><?php echo $section['content']; ?></textarea>
+						</div>
+					</div>
 						<?php
 					}
 					?>
-				</tbody>
-			</table>
-		</div>
-   		<?php
-   		$membersRecent = ob_get_contents();
-   		ob_end_clean();
-   		return $membersRecent;
-   	}
-	
-   	/**
-   	 * The whole list of members
-   	 * 
-   	 * @return string
-   	 */
-   	public function getAllMembers()
-   	{
-   		ob_start();
-   		?>
+					
+					<?php 
+					if ($this->kindPage == 'espacios')
+					{
+						?>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>T&iacute;tulo segunda columna</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="T&iacute;tulo segunda columna" class="form-control" id="secondColumnTitle" value="<?php echo $section['second_column_title']; ?>">
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
+					<?php 
+					if ($this->kindPage == 'espacios')
+					{
+						?>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>T&iacute;tulo tercera columna</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="T&iacute;tulo tercera columna" class="form-control" id="thirdColumnTitle" value="<?php echo $section['third_column_title']; ?>">
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
+					<?php 
+					if ($this->kindPage == 'espacios')
+					{
+						?>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Bloques de la segunda columna</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="T&iacute;tulo del bloque" class="form-control" id="bloqueTitle" value="">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<textarea rows="3" cols="" class="form-control" placeholder="Contenido del bloque" id="bloqueContent"></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<p  class="text-right"><a href="javascript:void(0)" class="addBloque">A&ntilde;adir bloque</a></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<h4 class="sub-header">Bloques a&ntilde;adidos</h4>	
+						</div>
+						<div class="col-sm-10 col-sm-offset-2" id="bloquesBox">
+							<?php 
+							if ($this->data['bloques'])
+							{
+								foreach ($this->data['bloques'] as $bloque)
+								{
+									?>
+							<div class="itemBlock" id="itemBlock-<?php echo $bloque['espacios_bloques_id']; ?>">
+								<div class="text-right">
+									<a href="#" bloqueId="<?php echo $bloque['espacios_bloques_id']; ?>" class="glyphicon glyphicon-remove text-danger delete-bloque"></a>
+								</div>
+								<div>
+									<h5><?php echo $bloque['title']; ?></h5>
+									<p><?php echo $bloque['description']; ?></p>
+								</div>
+							</div>
+									<?php
+								}
+							}
+								
+							?>
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
+					<?php 
+					if ($this->kindPage == 'espacios')
+					{
+						?>
+					<!-- Textarea input-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Contenido tercera columna</b></label>
+						<div class="col-sm-10">
+							<textarea rows="12" cols="" class="form-control has-editor" placeholder="Contenido tercera columna" id="thirdColumnContent"><?php echo $section['third_column_content']; ?></textarea>
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
+					<?php 
+					if ($this->kindPage == 'espacios')
+					{
+						?>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>T&iacute;tulo tercera columna</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="T&iacute;tulo tercera columna" class="form-control" id="singleVideo" value="<?php echo $section['video']; ?>">
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<div class="pull-right">
+								<button type="submit" class="btn btn-primary" id="updateSection">Guardar</button>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
    		
-   	   	<?php
-   	   	$membersRecent = ob_get_contents();
-   	   	ob_end_clean();
-   	   	return $membersRecent;
+   		<?php 
+		if ($this->kindPage == 'noticias')
+		{
+			?>
+   		<div class="row gallery-box">
+   			<h4 class="subheader">Galer&iacute;a de videos</h4>
+   			<div class="row">
+				<div class="col-sm-12">
+					<form class="form-horizontal" role="form">
+						<fieldset>
+							<label class="col-sm-2 control-label" for="textinput"><b>URL del Video</b></label>
+							<div class="col-sm-8">
+								<input type="text" placeholder="URL del Video" class="form-control" id="videoURL" value="">
+							</div>
+							<div class="col-sm-2">
+								<div class="pull-left">
+									<button type="submit" class="btn btn-primary" id="addVideo">Agregar Video</button>
+								</div>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+				<div class="col-sm-12" id="galleryVideoItems">
+					<?php 
+					if ($this->data['videos'])
+					{
+						foreach ($this->data['videos'] as $video)
+						{
+							?>
+					<div class="col-sm-2 gallery-item" id="itemVideo-<?php echo $video['video_id']; ?>">
+						<div class="delete-picture">
+							<div class="text-right">
+								<a href="#" videoId="<?php echo $video['video_id']; ?>" class="glyphicon glyphicon-remove text-danger delete-video"></a>
+							</div>	
+						</div>
+						<div class="image">
+							<img alt="" width="180" src="http://img.youtube.com/vi/<?php echo $video['video']; ?>/0.jpg">
+						</div>
+					</div>
+							<?php
+						}
+					}
+					?>
+				</div>
+			</div>
+			<br>
+			<div class="clearfix"></div>
+   		</div>
+   			<?php
+		}
+		?>
+   		
+   		<?php 
+		if ($this->kindPage == 'noticias')
+		{
+			?>
+   		<div class="row gallery-box">
+   			<h4 class="subheader">Galer&iacute;a de im&aacute;genes</h4>
+   			<div class="row">
+				<div class="col-sm-12">
+					<div class="col-sm-6 upload-gallery">
+						A&ntilde;adir im&aacute;gen
+					</div>
+				</div>
+				<div class="col-sm-12" id="galleryBoxItems">
+					<?php 
+					if ($this->data['gallery'])
+					{
+						foreach ($this->data['gallery'] as $picture)
+						{
+							?>
+					<div class="col-sm-3 gallery-item" id="itemPicture-<?php echo $picture['picture_id']; ?>">
+						<div class="delete-picture">
+							<div class="text-right">
+								<a href="#" pictureId="<?php echo $picture['picture_id']; ?>" class="glyphicon glyphicon-remove text-danger delete-picture"></a>
+							</div>	
+						</div>
+						<div class="image">
+							<img alt="" src="/images-system/medium/<?php echo $picture['picture']; ?>">
+						</div>
+					</div>
+							<?php
+						}
+					}
+					?>
+				</div>
+			</div>
+			<br>
+			<div class="clearfix"></div>
+   		</div>
+   			<?php
+		}
+		?>
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
    	}
+   	
+   	
    	
    	/**
    	 * The very awesome footer!
@@ -689,22 +1351,5 @@ class Layout_View
     	$footer = ob_get_contents();
     	ob_end_clean();
     	return $footer;
-	}
-	
-	/**
-	 * extra files for the main-slider
-	 * @return string
-	 */
-	public function getMainSliderHead()
-	{
-		ob_start();
-		?>
-		<link href="/css/uploadfile.css" rel="stylesheet">
-		<script src="/js/jquery.uploadfile.min.js"></script>
-		<script src="/js/sliders.js"></script>
-   		<?php		
-		$agenciesHead = ob_get_contents();
-		ob_end_clean();
-		return $agenciesHead;
 	}
 }

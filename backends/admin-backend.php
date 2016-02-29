@@ -34,7 +34,7 @@ class generalBackend
 	 * @param string $section
 	 * @return array Array with the asked info of the application
 	 */
-	public function loadBackend($section = '', $memberId = '')
+	public function loadBackend($section = '')
 	{
 		$data 		= array();
 		
@@ -61,7 +61,6 @@ class generalBackend
 				'instagram'		=> $appInfoRow['instagram'],
 				'email'			=> $appInfoRow['email'],
 				'lang'			=> $appInfoRow['lang']
-				 
 		);
 		
 		$data['appInfo'] = $appInfo;
@@ -74,16 +73,6 @@ class generalBackend
 		$userInfoRow 				= $this->model->getUserInfo();
 		$data['userInfo'] 			= $userInfoRow;
 		
-		// Last 20 members
-		$lastMembersArray 			= $this->model->getLastMembers();
-		$data['lastMembers'] 		= $lastMembersArray;
-		
-		// Task Info
-		$data['taskInfo']['today'] 		= $this->model->getTotalTodayTasksByMemberId();
-		$data['taskInfo']['pending'] 	= $this->model->getTotalPendingTasksByMemberId();
-		$data['taskInfo']['future'] 	= $this->model->getTotalFutureTasksByMemberId();
-		$data['recentMembers'] 			= $this->model->getRecentMembers();
-		
 		switch ($section) 
 		{
 			case 'companies':
@@ -92,209 +81,78 @@ class generalBackend
 				$data['companies'] 	= $companiesArray;
 			break;
 			
-			case 'members':
-				// 		get all members
-				$membersArray 		= $this->model->getAllMembers();
-				$data['members'] 	= $membersArray;
-			break;
-			
-			case 'member-info':
-				// 		get all countries
-				$countriesArray 		= $this->model->getAllCountries();
-				$data['countries'] 		= $countriesArray;
-				
-				$memberInfoRow 			= $this->model->getMemberByMemberId($memberId);
-				$data['memberInfo'] 	= $memberInfoRow;
-				
-// 				Emails
-				$memberEmailsArray  	= $this->model->getMemberEmailsById($memberId);
-				$data['memberEmails'] 	= $memberEmailsArray;
-				
-// 				Phones
-				$memberPhonesArray		= $this->model->getMemberPhonesById($memberId);
-				$data['memberPhones'] 	= $this->model->getMemberPhonesById($memberId);
-				
-// 				History
-				$memberHistoryArray 	= $this->model->getMemberHistoryById($memberId);
-				$data['memberHistory'] 	= $memberHistoryArray;
-				
-// 				Tasks
-				$memberTasksArray		= $this->model->getMemberTaskByMemberId($memberId);
-				$data['memberTasks'] 	= $memberTasksArray; 
-				
-// 				Reservations
-				$memberReservationsArray 	= $this->model->getMemberReservationsByMemberId($memberId);
-				
-				$data['memberReservations'] = array();
-				
-				foreach ($memberReservationsArray as $reservation)
-				{
-					$grandTotal = $this->model->getReservationGrandTotalByReservationId($reservation['reservation_id']);
-					$paid 		= $this->model->getReservationPaidByReservationId($reservation['reservation_id']);
-					$unpaid 	= $this->model->getReservationUnpaidByReservationId($reservation['reservation_id']);
-					
-					$grandTotalStaying = $this->model->getReservationStayingCostTotal($reservation['reservation_id']);
-					$paidStaying		= $this->model->getReservationStayingCostPaid($reservation['reservation_id']);
-					$pendingStaying	= $this->model->getReservationStayingPending($reservation['reservation_id']);
-					
-					// List of available rooms of for the current range of date
-					$reservationDate 	= array('checkIn' => $reservation['check_in'], 'checkOut' => $reservation['check_out']);
-					$availableRooms 	= $this->model->searchRooms($reservationDate);
-					
-					$reservationInfo = array(
-							'reservation_id'	=> $reservation['reservation_id'],
-							'room_id' 			=> $reservation['room_id'],
-							'date'				=> $reservation['date'],
-							'check_in' 			=> $reservation['check_in'],
-							'check_in_mask'		=> $reservation['check_in_mask'],
-							'check_out' 		=> $reservation['check_out'],
-							'check_out_mask'	=> $reservation['check_out_mask'],
-							'room' 				=> $reservation['room'],
-							'room_type' 		=> $reservation['room_type'],
-							'adults' 			=> $reservation['adults'],
-							'children' 			=> $reservation['children'],
-							'agency' 			=> $reservation['agency'],
-							'agency_id'			=> $reservation['agency_id'],
-							'external_id' 		=> $reservation['external_id'],
-							'status' 			=> $reservation['status'],
-							'grandTotal' 		=> $grandTotal,
-							'paid' 				=> $paid,
-							'unpaid' 			=> $unpaid,
-							'staying_total'		=> $grandTotalStaying,
-							'staying_paid'		=> $paidStaying,
-							'staying_pending'	=> $pendingStaying,
-							'availableRooms'	=> $availableRooms
-					);
-					
-					$payments['payments'] = $this->model->getPaymentsByReservationId($reservation['reservation_id']);
-					array_push($reservationInfo, $payments);
-					array_push($data['memberReservations'], $reservationInfo);
-				}
-				
-				// 				Cancelations
-				$memberReservationsArray 	= $this->model->getMemberCancelationsByMemberId($memberId);
-				
-				foreach ($memberReservationsArray as $reservation)
-				{
-					$grandTotal = $this->model->getReservationGrandTotalByReservationId($reservation['reservation_id']);
-					$paid 		= $this->model->getReservationPaidByReservationId($reservation['reservation_id']);
-					$unpaid 	= $this->model->getReservationUnpaidByReservationId($reservation['reservation_id']);
-						
-					$cancelationInfo = array(
-							'reservation_id'	=> $reservation['reservation_id'],
-							'room_id' 		=> $reservation['room_id'],
-							'date'			=> $reservation['date'],
-							'check_in' 		=> $reservation['check_in'],
-							'check_in_mask'	=> $reservation['check_in_mask'],
-							'check_out' 	=> $reservation['check_out'],
-							'check_out_mask'=> $reservation['check_out_mask'],
-							'room' 			=> $reservation['room'],
-							'room_type' 	=> $reservation['room_type'],
-							'adults' 		=> $reservation['adults'],
-							'children' 		=> $reservation['children'],
-							'agency' 		=> $reservation['agency'],
-							'external_id' 	=> $reservation['external_id'],
-							'status' 		=> 5,
-							'grandTotal' 	=> $grandTotal,
-							'paid' 			=> $paid,
-							'unpaid' 		=> $unpaid
-					);
-					
-					$payments['payments'] = $this->model->getPaymentsByReservationId($reservation['reservation_id']);
-					array_push($cancelationInfo, $payments);
-					
-					array_push($data['memberReservations'], $cancelationInfo);
-				}
-				
-// 				/Cancelations
-				
-// 				Agencies
-				$agenciesArray 		= $this->model->getAgencies();
-				$data['agencies'] 	= $agenciesArray;
-				
-// 				Rooms
-				$roomsArray 	= $this->model->getAllRooms();
-				$data['rooms'] 	= array();
-				foreach ($roomsArray as $room)
-				{
-					$roomInfo = array(
-							'room_id'	=> $room['room_id'],
-							'room' 		=> $room['room'],
-							'abbr' 		=> $room['abbr']
-					);
-				
-					array_push($data['rooms'], $roomInfo);
-				}
-				
-			break;
-			
-// 			Reservations
-			case 'reservations':
-				$agenciesArray 		= $this->model->getAgencies();
-				$data['agencies'] 	= $agenciesArray;
-			break;
-			
-// 			Rooms
-			case 'rooms':
-				$roomsArray 	= $this->model->getAllRooms();
-				$data['rooms'] 	= array();
-				foreach ($roomsArray as $room)
-				{
-					$roomInfo = array(
-							'room_id'	=> $room['room_id'],
-							'room' 		=> $room['room'],
-							'abbr' 		=> $room['abbr']
-					);
-						
-					$reservations['reservations'] = $this->model->getReservationsByRoomId($room['room_id']);
-					array_push($roomInfo, $reservations);
-					array_push($data['rooms'], $roomInfo);
-				}
-			break;
-			
-// 			Calendar
-			case 'calendar':
-				$calendarArray 			= $this->model->getAllReservations();
-				$data['reservations'] 	= $calendarArray;
-			break;
-					
-// 			Agencias
-			case 'agencies':
-				$agenciesArray 		= $this->model->getAgencies();
-				$data['agencies'] 	= $agenciesArray;
-			break;
-			
-// 			Tasks
-			case 'tasks':
-				if ($data['userInfo']['type'] == 1)
-					$memberTasksArray	= $this->model->getAllMemberTasks();
-				else
-					$memberTasksArray	= $this->model->getAllTasksByUser();
-				
-				$data['memberTasks'] 	= $memberTasksArray;
-			break;
-			
-			case 'reports':
-				if (!$_GET['from'])
-				{
-					$from 	= date('Y-m-d', strtotime(' -1 day'));
-					$start 	= date('Y-m-d', strtotime(' -1 day', strtotime($from)));
-					$end 	= date('Y-m-d', strtotime(' +31 day', strtotime($from)));
-				}
-				else
-				{
-					$from 	= date('Y-m-d', strtotime($_GET['from']));
-					$start 	= date('Y-m-d', strtotime(' -1 day', strtotime($_GET['from'])));
-					$end 	= date('Y-m-d', strtotime(' +32 day', strtotime($_GET['from'])));
-				}
-				
-				$reservationsArray = $this->model->getReservationsByRange($start, $end);
-				$data['reservations'] = $reservationsArray; 
+			case 'banner':
+				$slidersArray 		= $this->model->getBanner();
+				$data['banner'] 	= $slidersArray;
 			break;
 			
 			case 'main-sliders':
 				$slidersArray 		= $this->model->getSliders();
 				$data['sliders'] 	= $slidersArray;
+			break;
+			
+			case 'aliados':
+				$slidersArray 		= $this->model->getAliados();
+				$data['aliados'] 	= $slidersArray;
+			break;
+			
+			case 'inicio':
+				$causasArray		= $this->model->getCausas();
+				$data['causas']		= $causasArray;
+			break;
+			
+			case 'links':
+				$linksArray		= $this->model->getLinks();
+				$data['links']		= $linksArray;
+			break;
+			
+			case 'espacios':
+				$espaciosArray = $this->model->getEspacios();
+				$data['espacios'] = $espaciosArray;
+			break;
+			
+			case 'noticias':
+				$newsArray = $this->model->getNews();
+				$data['noticias'] = $newsArray;
+			break;
+			
+			case 'editar-seccion':
+				switch ($_GET['kind']) 
+				{
+					case 1:// Causas
+						$sectionRow = $this->model->getSeccionInfo($_GET['sectionId']);
+						$data['section'] = $sectionRow;
+					break;
+					
+					case 2:// Links
+						$sectionRow = $this->model->getLinkByLinkId($_GET['sectionId']);
+						$data['section'] = $sectionRow;
+					break;
+					
+					case 3:// Espacios
+						$sectionRow = $this->model->getEspaciosByEspacioId($_GET['sectionId']);
+						$data['section'] = $sectionRow;
+						
+						$bloquesArray = $this->model->getEspaciosBloques($_GET['sectionId']);
+						$data['bloques'] = $bloquesArray;
+					break;
+					
+					case 4:// Noticias
+						$sectionRow = $this->model->getNewsById($_GET['sectionId']);
+						$data['section'] = $sectionRow;
+					
+						$galleryArray  = $this->model->getNewsGallery($_GET['sectionId']);
+						$data['gallery'] = $galleryArray;
+						
+						$videosArray	= $this->model->getNewsVideo($_GET['sectionId']);
+						$data['videos'] = $videosArray;
+					break;
+					
+					default:
+						;
+					break;
+				}
+				 
 			break;
 			
 			default:

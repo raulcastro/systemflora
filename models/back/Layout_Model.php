@@ -1475,7 +1475,594 @@ class Layout_Model
 		}
 	}
 	
+	public function addBanner($name)
+	{
+		try
+		{
+			$query = 'DELETE FROM banner';
+			
+			if ($this->db->run($query))
+			{
+				$query = 'INSERT INTO banner(banner)
+	                VALUES(?)';
+				
+				$prep = $this->db->prepare($query);
+				
+				$prep->bind_param(
+						's',
+						$name
+				);
+				
+				if ($prep->execute())
+					return $prep->insert_id;
+			}
+		}
+		catch (Exception $e)
+		{
+			return false;
+		}
+	}
+	
+	public function getBanner()
+	{
+		try {
+			$query = 'SELECT * FROM banner';
+				
+			return $this->db->getRow($query);
+				
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteBanner($data)
+	{
+		try {
+			$query = 'DELETE FROM banner WHERE banner_id = ?';
+				
+			$prep = $this->db->prepare($query);
+				
+			$prep->bind_param('i', $data['sId']);
+				
+			if($prep->execute())
+			{
+				return true;
+			}
+				
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getAliados()
+	{
+		try {
+			$query = 'SELECT * FROM aliados ORDER BY aliado_id DESC';
+	
+			return $this->db->getArray($query);
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addAliados($name)
+	{
+		try
+		{
+			$query = 'INSERT INTO aliados(aliado)
+	                VALUES(?)';
+				
+			$prep = $this->db->prepare($query);
+				
+			$prep->bind_param(
+					's',
+					$name
+			);
+	
+			if ($prep->execute())
+				return $prep->insert_id;
+		}
+		catch (Exception $e)
+		{
+			return false;
+		}
+	}
+	
+	public function updateAliados($data)
+	{
+		try {
+			$query = 'UPDATE aliados
+					SET
+					twitter = ?,
+					facebook = ?,
+					gplus = ?
+					WHERE aliado_id = ?
+					';
+				
+			$prep = $this->db->prepare($query);
+				
+			$prep->bind_param(
+					'sssi',
+					$data['titleSlider'],
+					$data['linkSlider'],
+					$data['infoSlider'],
+					$data['sId']
+			);
+				
+			return $prep->execute();
+				
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteAliado($data)
+	{
+		try {
+			$query = 'DELETE FROM aliados WHERE aliado_id = ?';
+	
+			$prep = $this->db->prepare($query);
+	
+			$prep->bind_param('i', $data['sId']);
+	
+			if($prep->execute())
+			{
+				return true;
+			}
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getCausas()
+	{
+		try {
+			$query = 'SELECT * FROM causas';
+			
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getMediumIndexSections()
+	{
+		try {
+			$query = 'SELECT * FROM sections WHERE on_index = 1 AND segment = "medium"';
+				
+			return $this->db->getArray($query);
+			
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getBottomIndexSection() {
+		try {
+			
+			$query = 'SELECT * FROM sections WHERE on_index = 1 AND segment = "bottom"';
+			
+			return $this->db->getArray($query);
+			
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getSeccionInfo($section_id)
+	{
+		try {
+			$section_id = (int) $section_id;
+			
+			$query = 'SELECT * FROM causas WHERE causas_id = '.$section_id;
+
+			return $this->db->getRow($query);
+			
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateCausasIcon($data)
+	{
+		try {
+			$query = 'UPDATE causas SET icon = ? WHERE causas_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['icon'], $data['sectionId']);
+			
+			return $prep->execute();
+			
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateCausas($data)
+	{
+		try {
+			$query = 'UPDATE causas SET title = ?, description = ?, content = ? WHERE causas_id = ?';
+			
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('sssi', 
+					$data['sectionTitle'],
+					$data['sectionDescription'],
+					$data['sectionContent'],
+					$data['sectionId']);
+			
+			return $prep->execute();
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getLinks()
+	{
+		try {
+			$query = 'SELECT * FROM links';
+			
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getLinkByLinkId($link_id)
+	{
+		try {
+			$link_id = (int) $link_id;
+			$query = 'SELECT * FROM links WHERE link_id = '.$link_id;
+			return $this->db->getRow($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateLinksIcon($data)
+	{
+		try {
+			$query = 'UPDATE links SET icon = ? WHERE link_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['icon'], $data['sectionId']);
+				
+			return $prep->execute();
+				
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateLinks($data)
+	{
+		try {
+			$query = 'UPDATE links SET title = ?, description = ? WHERE link_id = ?';
+				
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('ssi',
+					$data['sectionTitle'],
+					$data['sectionDescription'],
+					$data['sectionId']);
+				
+			return $prep->execute();
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getEspacios()
+	{
+		try {
+			$query = 'SELECT * FROM espacios';
+			
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getEspaciosByEspacioId($espacio_id)
+	{
+		try {
+			$espacio_id = (int) $espacio_id;
+			$query = 'SELECT * FROM espacios WHERE espacios_id = '.$espacio_id;
+
+			return $this->db->getRow($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateEspaciosIcon($data)
+	{
+		try {
+			$query = 'UPDATE espacios SET icon = ? WHERE espacios_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['icon'], $data['sectionId']);
+	
+			return $prep->execute();
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateEspaciosBackground($data)
+	{
+		try {
+			$query = 'UPDATE espacios SET background = ? WHERE espacios_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['background'], $data['sectionId']);
+	
+			return $prep->execute();
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateEspacios($data)
+	{
+		try {
+			$query = 'UPDATE espacios SET
+					title = ?,
+					description = ?,
+					content = ?,
+					second_column_title = ?,
+					third_column_title = ?,
+					third_column_content = ?,
+					video = ?
+					WHERE espacios_id = ?
+					';
+			
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('sssssssi', 
+					$data['sectionTitle'],
+					$data['sectionDescription'],
+					$data['sectionContent'],
+					$data['secondColumnTitle'],
+					$data['thirdColumnTitle'],
+					$data['thirdColumnContent'],
+					$data['singleVideo'],
+					$data['sectionId']
+					);
+			
+			return $prep->execute();
+			
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addBloque($data)
+	{
+		try {
+			$query = 'INSERT INTO espacios_bloques(espacios_id, title, description) VALUES(?, ?, ?)';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('iss', $data['sectionId'], $data['bloqueTitle'], $data['bloqueContent']);
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+			
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getEspaciosBloques($espacioId)
+	{
+		try {
+			$espacioId = (int) $espacioId;
+			
+			$query = 'SELECT * FROM espacios_bloques WHERE espacios_id = '.$espacioId.' ORDER BY espacios_bloques_id DESC';
+			
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteEspaciosBloques($bloqueId)
+	{
+		try {
+			$query = 'DELETE FROM espacios_bloques WHERE espacios_bloques_id = '.$bloqueId;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addNews($data)
+	{
+		try {
+			$query = 'INSERT INTO noticias(title, date) VALUES(?, ?)';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('ss', $data['newTitle'], Tools::formatToMYSQL($data['newDate']));
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getNewsById($noticiasId)
+	{
+		try {
+			$noticiasId = (int) $noticiasId;
+			$query = 'SELECT * FROM noticias WHERE noticias_id = '.$noticiasId;
+			return $this->db->getRow($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getNews()
+	{
+		try {
+			$query = 'SELECT * FROM noticias ORDER BY date DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteNew($noticias_id)
+	{
+		try {
+			$noticias_id = (int) $noticias_id;
+			$query = 'DELETE FROM noticias WHERE noticias_id = '.$noticias_id;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateNewsIcon($data)
+	{
+		try {
+			$query = 'UPDATE noticias SET icon = ? WHERE noticias_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['background'], $data['sectionId']);
+	
+			return $prep->execute();
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateNewsPortrait($data)
+	{
+		try {
+			$query = 'UPDATE noticias SET portrait = ? WHERE noticias_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['background'], $data['sectionId']);
+	
+			return $prep->execute();
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateNews($data)
+	{
+		try {
+			$query = 'UPDATE noticias SET 
+					title = ?, 
+					description = ?, 
+					content = ? 
+					WHERE noticias_id = ?';
+			
+			$prep = $this->db->prepare($query);
+			
+			$prep->bind_param('sssi', 
+					$data['sectionTitle'], 
+					$data['sectionDescription'], 
+					$data['sectionContent'], 
+					$data['sectionId']);
+			
+			return $prep->execute();
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addNewsGallery($data)
+	{
+		try {
+			$query = 'INSERT INTO noticias_gallery(noticias_id, picture) VALUES(?, ?)';
+			
+			$prep = $this->db->prepare($query);
+			
+			$prep->bind_param('is', $data['sectionId'], $data['image']);
+			
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getNewsGallery($noticias_id)
+	{
+		try {
+			$query = 'SELECT * FROM noticias_gallery WHERE noticias_id = '.$noticias_id.' ORDER BY picture_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteNewsPicture($pictureId)
+	{
+		try {
+			$query = 'DELETE FROM noticias_gallery WHERE picture_id = '.$pictureId;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addNewsVideo($data)
+	{
+		try {
+			$query = 'INSERT INTO noticias_videos(noticias_id, video) VALUES(?, ?)';
+				
+			$prep = $this->db->prepare($query);
+				
+			$prep->bind_param('is', $data['sectionId'], $data['video']);
+				
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getNewsVideo($noticias_id)
+	{
+		try {
+			$query = 'SELECT * FROM noticias_videos WHERE noticias_id = '.$noticias_id.' ORDER BY video_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteNewsVideo($videoId)
+	{
+		try {
+			$query = 'DELETE FROM noticias_videos WHERE video_id = '.$videoId;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
