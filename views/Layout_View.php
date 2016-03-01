@@ -133,6 +133,10 @@ class Layout_View
  					echo self :: getAliadosHead();
  				break;
  				
+ 				case 'directorio':
+ 					echo self :: getDirectorioHead();
+ 				break;
+ 				
  				case 'noticias':
  					echo self::getNoticiasHeader();
  				break;
@@ -172,6 +176,10 @@ class Layout_View
 							
 							case 'aliados':
 								echo self :: getAliados();
+							break;
+							
+							case 'directorio':
+								echo self :: getDirectorio();
 							break;
 							
 							case 'links':
@@ -286,7 +294,8 @@ class Layout_View
 				<ul class="nav navbar-nav main-menu">
 					<li><a <?php if ($_GET['section'] == 1) echo $active; ?> href="/dashboard/"><b><?php echo $this->data['userInfo']['name']; ?></b></a></li>
 					<li><a <?php if ($_GET['section'] == 17) echo $active; ?> href="/banner/">Banner Principal</a></li>
-					<li><a <?php if ($_GET['section'] == 5) echo $active; ?> href="/aliados/">Aliados y donantes</a></li>		
+					<li><a <?php if ($_GET['section'] == 5) echo $active; ?> href="/aliados/">Aliados y donantes</a></li>
+					<li><a <?php if ($_GET['section'] == 5) echo $active; ?> href="/directorio/">Directorio</a></li>		
 					<li><a <?php if ($_GET['section'] == 10) echo $active; ?> href="/sign-out/" class="sign-out">Salir</a></li>
 				</ul>
 			</nav>
@@ -886,6 +895,151 @@ class Layout_View
    		ob_end_clean();
    		return $item;
    	}
+   	
+   	/**
+	 * extra files for the main-slider
+	 * @return string
+	 */
+	public function getDirectorioHead()
+	{
+		ob_start();
+		?>
+		<link href="/css/uploadfile.dir.css" rel="stylesheet">
+		<script src="/js/jquery.uploadfile.min.js"></script>
+		<script src="/js/directorio.js"></script>
+		
+		<<script type="text/javascript">
+		$(document).ready(function()
+		{
+		<?php
+		if ($this->data['directorio'])
+		{
+			foreach ($this->data['directorio'] as $directorio)
+			{
+				?>
+				$("#uploadDir-<?php echo $directorio['directorio_id']; ?>").uploadFile({
+					url:		"/ajax/media.php",
+					fileName:	"myfile",
+					multiple: 	true,
+					doneStr:	"uploaded!",
+					dragDrop:	true,
+					formData: {
+							directorioId: <?php echo $directorio['directorio_id']; ?>,
+							opt: 16 
+						},
+					onSuccess:function(files, data, xhr)
+					{
+						obj 			= JSON.parse(data);
+						imageGallery 	= obj.fileName;
+						lastIdGallery 	= obj.lastId;
+
+						$('#iconDir<?php echo $directorio['directorio_id']; ?>').attr('src',"/images-system/medium/"+imageGallery);
+					}
+				});
+				<?php
+			}
+		}
+		?>
+		});
+		</script>
+   		<?php		
+		$agenciesHead = ob_get_contents();
+		ob_end_clean();
+		return $agenciesHead;
+	}
+   	
+   	/**
+	 * Main slider
+	 * 
+	 * @return string
+	 */
+	public function getDirectorio()
+	{
+		ob_start();
+		?>
+		<div class="row">
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-1 control-label" for="textinput"><b>Nombre</b></label>
+						<div class="col-sm-2">
+							<input type="text" placeholder="Nombre" class="form-control has-date" id="dirName" value="">
+						</div>
+						<label class="col-sm-1 control-label" for="textinput"><b>T&iacute;tulo</b></label>
+						<div class="col-sm-2">
+							<input type="text" placeholder="T&iacute;tulo" class="form-control" id="dirCharge" value="">
+						</div>
+						<label class="col-sm-1 control-label" for="textinput"><b>E-Mail</b></label>
+						<div class="col-sm-2">
+							<input type="text" placeholder="E-Mail" class="form-control" id="dirEmail" value="">
+						</div>
+						<div class="col-sm-2 col-sm-offset-1">
+							<button type="submit" class="btn btn-primary" id="addDir">A&ntilde;adir</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
+		
+		<div class="row" id="dirBox">
+			<?php 
+			foreach ($this->data['directorio'] as $directorio)
+			{
+				echo self::getDirectorioItem($directorio);
+			}
+			?>
+		</div>
+		<?php
+		$agencies = ob_get_contents();
+		ob_end_clean();
+		return $agencies; 
+	}
+	
+	public function getDirectorioItem($directorio)
+	{
+		ob_start();
+		$img = '';
+		if ($directorio['icon'])
+			$img = '/images-system/medium/'.$directorio['icon'];
+		else
+			$img = '/images/100x100-default.jpg'; 
+		?>
+		<div class="col-sm-12 slider-item" id="sId-<?php echo $directorio['directorio_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" src="<?php echo $img; ?>" id="iconDir<?php echo $directorio['directorio_id']; ?>" />
+				</div>
+				<div class="col-sm-3">
+					<div class="col-sm-12" id="uploadDir-<?php echo $directorio['directorio_id']; ?>">
+						Cambiar foto. (155 * 138 px)
+					</div>
+				</div>
+				<div class="col-sm-offset-5 col-sm-2">
+					<a href="javascript:void(0);" class="btn btn-info btn-xs saveDir" sId="<?php echo $directorio['directorio_id']; ?>">Guardar</a>
+					<a href="javascript:void(0);" class="btn btn-danger btn-xs deleteDir" sId="<?php echo $directorio['directorio_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+			
+			<div class="col-sm-12 slider-section">
+				<div class="col-sm-4">
+					<input type="text" placeholder="Nombre" class="form-control" id="dirName-<?php echo $directorio['directorio_id']; ?>" value="<?php echo $directorio['name']; ?>">
+				</div>
+				<div class="col-sm-4">
+					<input type="text" placeholder="Titulo" class="form-control" id="dirCharge-<?php echo $directorio['directorio_id']; ?>" value="<?php echo $directorio['charge']; ?>">
+				</div>
+				<div class="col-sm-4">
+					<input type="text" placeholder="E-Mail" class="form-control" id="dirEmail-<?php echo $directorio['directorio_id']; ?>" value="<?php echo $directorio['e_mail']; ?>">
+				</div>
+			</div>
+		</div>
+		<?php
+		$sliders = ob_get_contents();
+		ob_end_clean();
+		return $sliders;
+	}
+   	
+   	
+   	
    	
    	public function getEditSectionHeader()
 	{

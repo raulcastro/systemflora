@@ -2046,6 +2046,74 @@ class Layout_Model
 			return false;
 		}
 	}
+	
+	public function addDirectorio($data)
+	{
+		try {
+			$query = 'INSERT INTO directorio(name, charge, e_mail) VALUES(?, ?, ?)';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('sss', $data['dirName'], $data['dirCharge'], $data['dirEmail']);
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getDirectorio()
+	{
+		try {
+			$query = 'SELECT * FROM directorio ORDER BY directorio_id ASC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateDirectorioIcon($data)
+	{
+		try {
+			$query = 'UPDATE directorio SET icon = ? WHERE directorio_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['icon'], $data['directorioId']);
+	
+			return $prep->execute();
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateDirectorio($data)
+	{
+		try {
+			$query = 'UPDATE directorio SET name = ?, charge = ?, e_mail = ? WHERE directorio_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('sssi', 
+					$data['dirName'],
+					$data['dirCharge'],
+					$data['dirEmail'],
+					$data['directorioId']);
+			return $prep->execute();
+			
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteDirectorio($directorioId)
+	{
+		try {
+			$directorioId = (int) $directorioId;
+			$query = 'DELETE FROM directorio WHERE directorio_id = '.$directorioId;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
 }
 
 

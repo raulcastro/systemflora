@@ -44,6 +44,7 @@ RewriteRule ^noticias/$ 						/noticias.php?section=6
 RewriteRule ^links/$ 							/links.php?section=7
 RewriteRule ^banner/$ 							/banner.php?section=17
 RewriteRule ^aliados/$ 							/aliados.php?section=18
+RewriteRule ^directorio/$ 						/directorio.php?section=19
 
 
 

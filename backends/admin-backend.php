@@ -96,6 +96,11 @@ class generalBackend
 				$data['aliados'] 	= $slidersArray;
 			break;
 			
+			case 'directorio':
+				$directorioArray	= $this->model->getDirectorio();
+				$data['directorio'] = $directorioArray; 
+			break;
+			
 			case 'inicio':
 				$causasArray		= $this->model->getCausas();
 				$data['causas']		= $causasArray;

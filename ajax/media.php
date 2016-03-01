@@ -439,6 +439,46 @@ switch ($_POST['opt'])
 				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
 			}
 		break;
+		
+		case 16: // Update directorio-icon
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'directorio';
+			$mediumWidth 	= 100;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('icon'=>$result['fileName'], 'directorioId'=>$_POST['directorioId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->updateDirectorioIcon($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
 	
 	default:
 	break;

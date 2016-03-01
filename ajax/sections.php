@@ -89,6 +89,27 @@ switch ($_POST['opt'])
 		}
 	break;
 	
+	case 12:
+		if ($model->updateDirectorio($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 13:
+		if ($model->deleteDirectorio($_POST['directorioId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 14:
+		if ($lastDir = $model->addDirectorio($_POST))
+		{
+			echo $lastDir;
+		}
+	break;
+	
 	default:
 	break;
 }
