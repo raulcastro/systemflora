@@ -45,6 +45,20 @@ $(document).ready(function()
 			'			<input type="text" placeholder="Google Plus" class="form-control" id="gSlider-'+lastIdGallery+'" value="">'+
 			'		</div>'+
 			'	</div>'+
+			'	<div class="col-sm-12 slider-section " id="causasSelector-'+lastIdGallery+'">'+
+			'		<div class="col-sm-3">'+
+			'			<input type="checkbox" class="causas-selector-item" causaName="conservacion" >'+ 
+			'			<label>Conservaci&oacute;n</label>'+
+			'		</div>'+
+			'		<div class="col-sm-3">'+
+			'			<input type="checkbox" class="causas-selector-item" causaName="bienestar" >'+ 
+			'			<label>Bienestar comunitario</label>'+
+			'		</div>'+
+			'		<div class="col-sm-3">'+
+			'			<input type="checkbox" class="causas-selector-item" causaName="educacion" >'+ 
+			'			<label>Educaci&oacute;n ambiental</label>'+
+			'		</div>'+
+			'	</div>'+
 			'</div>';
 			
 			$('#slidersBox').prepend(itemGallery);

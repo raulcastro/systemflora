@@ -673,15 +673,15 @@ class Layout_View
 			
 			<div class="col-sm-12 slider-section " id="causasSelector-<?php echo $aliado['aliado_id']; ?>">
 				<div class="col-sm-3">
-					<input type="checkbox" class="causas-selector-item" id="causaSelectorId-<?php echo $causa['causa_id']; ?>" causaName="conservacion" > 
+					<input type="checkbox" class="causas-selector-item" <?php if($aliado['conservacion'] == 1){echo "checked";} ?> causaName="conservacion" > 
 					<label>Conservaci&oacute;n</label>
 				</div>
 				<div class="col-sm-3">
-					<input type="checkbox" class="causas-selector-item"  id="causaSelectorId-<?php echo $causa['causa_id']; ?>" causaName="bienestar" > 
+					<input type="checkbox" class="causas-selector-item" <?php if($aliado['bienestar'] == 1){echo "checked";} ?> causaName="bienestar" > 
 					<label>Bienestar comunitario</label>
 				</div>
 				<div class="col-sm-3">
-					<input type="checkbox" class="causas-selector-item"  id="causaSelectorId-<?php echo $causa['causa_id']; ?>" causaName="educacion" > 
+					<input type="checkbox" class="causas-selector-item" <?php if($aliado['educacion'] == 1){echo "checked";} ?> causaName="educacion" > 
 					<label>Educaci&oacute;n ambiental</label>
 				</div>
 			</div>
