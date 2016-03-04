@@ -61,7 +61,7 @@ switch ($_POST['opt'])
 		}
 	break;
 	
-	case 8:
+	case 8://update noticias
 		if ($model->updateNews($_POST))
 		{
 			echo 1;

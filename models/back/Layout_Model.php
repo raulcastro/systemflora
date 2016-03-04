@@ -1960,15 +1960,21 @@ class Layout_Model
 			$query = 'UPDATE noticias SET 
 					title = ?, 
 					description = ?, 
-					content = ? 
+					content = ? ,
+					conservacion = ?,
+					bienestar = ?,
+					educacion = ?
 					WHERE noticias_id = ?';
 			
 			$prep = $this->db->prepare($query);
 			
-			$prep->bind_param('sssi', 
+			$prep->bind_param('sssiiii', 
 					$data['sectionTitle'], 
 					$data['sectionDescription'], 
 					$data['sectionContent'], 
+					$data['conservacion'],
+					$data['bienestar'],
+					$data['educacion'],
 					$data['sectionId']);
 			
 			return $prep->execute();

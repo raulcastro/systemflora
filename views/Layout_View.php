@@ -1220,7 +1220,7 @@ class Layout_View
 	   			?>
 	   		<div class="row">
 				<div class="col-sm-12">
-					<div class="col-sm-2">
+					<div class="col-sm-3">
 						<img alt="" width="170" id="portraitImg" src="<?php echo $img; ?>" />
 					</div>
 					<div class="col-sm-3">
@@ -1378,6 +1378,30 @@ class Layout_View
 						<?php
 					}
 					?>
+					<?php 
+					if ($this->kindPage == 'noticias')
+					{
+						?>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Causas</b></label>
+						<div class="col-sm-10" id="causasSelector">
+							<div class="col-sm-3">
+								<input type="checkbox" class="causas-selector-item" <?php if($section['conservacion'] == 1){echo "checked";} ?> causaname="conservacion"> 
+								<label>Conservación</label>
+							</div>
+							<div class="col-sm-3">
+								<input type="checkbox" class="causas-selector-item" <?php if($section['bienestar'] == 1){echo "checked";} ?> causaname="bienestar"> 
+								<label>Bienestar comunitario</label>
+							</div>
+							<div class="col-sm-3">
+								<input type="checkbox" class="causas-selector-item" <?php if($section['educacion'] == 1){echo "checked";} ?> causaname="educacion"> 
+								<label>Educación ambiental</label>
+							</div>
+						</div>
+					</div>
+						<?php
+					}
+					?>
 					
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10">
@@ -1389,7 +1413,6 @@ class Layout_View
 				</fieldset>
 			</form>
    		</div>
-   		
    		<?php 
 		if ($this->kindPage == 'noticias')
 		{

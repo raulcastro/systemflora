@@ -1248,6 +1248,7 @@ ul.inbox-pagination li {
 
 .gallery-item .image {
     height: 170px;
+    width: 200px;
     float: left;
     margin: 0 20px 24px 0;
     -moz-border-radius: 5px;

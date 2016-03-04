@@ -165,6 +165,37 @@ function updateSection()
 	var sectionDescription	= $('#sectionDescription').val();
 	var sectionContent		= $('#sectionContent').val();
 	
+	var conservacion 	= 0;
+	var bienestar 		= 0;
+	var educacion 		= 0;
+	
+	$('#causasSelector .causas-selector-item').each(function(){
+		var causaName = $(this).attr('causaName');
+		switch (causaName)
+		{
+			case 'conservacion':
+				if ($(this).is(':checked'))
+				{
+					conservacion = 1;
+				}
+			break;
+			
+			case 'bienestar':
+				if ($(this).is(':checked'))
+				{
+					bienestar = 1;
+				}
+			break;
+			
+			case 'educacion':
+				if ($(this).is(':checked'))
+				{
+					educacion = 1;
+				}
+			break;
+		}
+	});
+	
 	if (sectionId)
 	{
 		$.ajax({
@@ -174,6 +205,9 @@ function updateSection()
 	        	sectionTitle:			sectionTitle,
 	        	sectionDescription: 	sectionDescription,
 	        	sectionContent: 		sectionContent,
+	        	conservacion:			conservacion,
+	        	bienestar:				bienestar,
+	        	educacion:				educacion,
 	            opt: 					8
 	             },
 	        success:
