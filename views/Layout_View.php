@@ -670,6 +670,21 @@ class Layout_View
 					<input type="text" placeholder="Google Plus" class="form-control" id="gSlider-<?php echo $aliado['aliado_id']; ?>" value="<?php echo $aliado['gplus']; ?>">
 				</div>
 			</div>
+			
+			<div class="col-sm-12 slider-section " id="causasSelector-<?php echo $aliado['aliado_id']; ?>">
+				<div class="col-sm-3">
+					<input type="checkbox" class="causas-selector-item" id="causaSelectorId-<?php echo $causa['causa_id']; ?>" causaName="conservacion" > 
+					<label>Conservaci&oacute;n</label>
+				</div>
+				<div class="col-sm-3">
+					<input type="checkbox" class="causas-selector-item"  id="causaSelectorId-<?php echo $causa['causa_id']; ?>" causaName="bienestar" > 
+					<label>Bienestar comunitario</label>
+				</div>
+				<div class="col-sm-3">
+					<input type="checkbox" class="causas-selector-item"  id="causaSelectorId-<?php echo $causa['causa_id']; ?>" causaName="educacion" > 
+					<label>Educaci&oacute;n ambiental</label>
+				</div>
+			</div>
 		</div>
 		<?php
 		$sliders = ob_get_contents();

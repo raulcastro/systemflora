@@ -80,6 +80,10 @@ function addDirectorio()
 	            	});
 	            	
 	            	uploader(lastId);
+	            	
+	            	$('#dirName').val('');
+	            	$('#dirCharge').val('');
+	            	$('#dirEmail').val('');
 //	            	alert('Informacion actualizada!');
 	            }
 	        }

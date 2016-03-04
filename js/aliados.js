@@ -69,6 +69,37 @@ function saveSlider(node)
 	var linkSlider 	= $('#linkSlider-'+sid).val();
 	var gSlider 	= $('#gSlider-'+sid).val();
 	
+	var conservacion 	= 0;
+	var bienestar 		= 0;
+	var educacion 		= 0;
+	
+	$('#causasSelector-'+sid+' .causas-selector-item').each(function(){
+		var causaName = $(this).attr('causaName');
+		switch (causaName)
+		{
+			case 'conservacion':
+				if ($(this).is(':checked'))
+				{
+					conservacion = 1;
+				}
+			break;
+			
+			case 'bienestar':
+				if ($(this).is(':checked'))
+				{
+					bienestar = 1;
+				}
+			break;
+			
+			case 'educacion':
+				if ($(this).is(':checked'))
+				{
+					educacion = 1;
+				}
+			break;
+		}
+	});
+	
 	if (sid)
 	{
 		$.ajax({
@@ -78,6 +109,9 @@ function saveSlider(node)
 	        	titleSlider:	titleSlider,
 	        	linkSlider: 	linkSlider,
 	        	infoSlider: 	gSlider,
+	        	conservacion:	conservacion,
+	        	bienestar:		bienestar,
+	        	educacion:		educacion,
 	            opt: 			7
 	             },
 	        success:

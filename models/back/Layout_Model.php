@@ -1576,17 +1576,23 @@ class Layout_Model
 					SET
 					twitter = ?,
 					facebook = ?,
-					gplus = ?
+					gplus = ?,
+					conservacion = ?,
+					bienestar = ?,
+					educacion = ?
 					WHERE aliado_id = ?
 					';
 				
 			$prep = $this->db->prepare($query);
 				
 			$prep->bind_param(
-					'sssi',
+					'sssiiii',
 					$data['titleSlider'],
 					$data['linkSlider'],
 					$data['infoSlider'],
+					$data['conservacion'],
+					$data['bienestar'],
+					$data['educacion'],
 					$data['sId']
 			);
 				
