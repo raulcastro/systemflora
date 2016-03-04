@@ -143,7 +143,7 @@ function addNoticia()
 	            		+ '		<p class="section-title">'+newNoticiaDate+'</p>'
 	            		+ '	</div>'
 	            		+ '	<div class="col-sm-1">'
-	            		+ '		<a href="/editar-espacios/'+newId+'/nueva-noticia/4/" class="btn btn-info btn-xs deleteSlider" sId="'+newId+'">Editar</a>'
+	            		+ '		<a href="/editar-noticias/'+newId+'/nueva-noticia/4/" class="btn btn-info btn-xs deleteSlider" sId="'+newId+'">Editar</a>'
 	            		+ '	</div>'
 	            		+ '</div>'
 	            		+ '</div>';
