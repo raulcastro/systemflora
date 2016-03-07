@@ -2126,6 +2126,164 @@ class Layout_Model
 		}
 	}
 	
+	public function getAllLogros()
+	{
+		try {
+			$query = 'SELECT * FROM logros';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addLogros($data)
+	{
+		try {
+			$query = 'INSERT INTO logros(title) VALUES(?)';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('s', $data['newTitle']);
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteLogro($id)
+	{
+		try {
+			$id = (int) $id;
+			$query = 'DELETE FROM logros WHERE logros_id = '.$id;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getSingleLogro($logroId)
+	{
+		try {
+			$logroId = (int) $logroId;
+			$query = 'SELECT * FROM logros WHERE logros_id= '.$logroId;
+			return $this->db->getRow($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateLogrosIcon($data)
+	{
+		try {
+			$query = 'UPDATE logros SET icon = ? WHERE logros_id = ?';
+			
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['background'], $data['sectionId']);
+	
+			if (!$prep->execute())
+			{
+				printf("Errormessage: %s\n", $prep->error);
+			}
+			
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateLogrosPortrait($data)
+	{
+		try {
+			$query = 'UPDATE logros SET portrait = ? WHERE logros_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['background'], $data['sectionId']);
+	
+			return $prep->execute();
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getAllLogrosFechasDestacadas()
+	{
+		try {
+			$query = 'SELECT * FROM logros_fechas ORDER BY logros_fechas_id DESC';
+				
+			return $this->db->getArray($query);
+				
+			return $prep->execute();
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addLogrosFechasDestacadas($data)
+	{
+		try {
+			$query = 'INSERT INTO logros_fechas(title, url) VALUES(?, ?)';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('ss', $data['newTitle'], $data['newURL']);
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteLogrosFechas($id)
+	{
+		try {
+			$id = (int) $id;
+			$query = 'DELETE FROM logros_fechas WHERE logros_fechas_id = '.$id;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getAllLogrosOtros()
+	{
+		try {
+			$query = 'SELECT * FROM logros_otros ORDER BY logros_otros_id DESC';
+	
+			return $this->db->getArray($query);
+	
+			return $prep->execute();
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addLogrosOtros($data)
+	{
+		try {
+			$query = 'INSERT INTO logros_otros(title) VALUES(?)';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('s', $data['newTitle']);
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteLogrosOtros($id)
+	{
+		try {
+			$id = (int) $id;
+			$query = 'DELETE FROM logros_otros WHERE logros_otros_id = '.$id;
+			echo $query;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
 }
 
 

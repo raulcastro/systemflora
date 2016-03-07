@@ -74,6 +74,10 @@ class Layout_View
 				$this->kindPage = "noticias";
 			break;
 			
+			case 5:// Noticias
+				$this->kindPage = "logros";
+			break;
+			
 			default:
 				;
 			break;
@@ -141,6 +145,10 @@ class Layout_View
  					echo self::getNoticiasHeader();
  				break;
  				
+ 				case 'logros':
+ 					echo self::getLogrosHeader();
+				break;
+ 				
  				case 'editar-seccion':
  					echo self::getEditSectionHeader();
  				break;
@@ -192,6 +200,10 @@ class Layout_View
 							
 							case 'noticias':
 								echo self :: getNoticiasSections();
+							break;
+							
+							case 'logros':
+								echo self :: getLogrosSections();
 							break;
 							
 							case 'editar-seccion':
@@ -432,7 +444,7 @@ class Layout_View
 				<li <?php if ($_GET['section'] == 2) echo $active; ?>><a href="/espacios/">Espacios</a></li>
 				<li <?php if ($_GET['section'] == 3) echo $active; ?>><a href="/dashboard/">Proyectos</a></li>
 				<li <?php if ($_GET['section'] == 4) echo $active; ?>><a href="/dashboard/">Actividades</a></li>
-				<li <?php if ($_GET['section'] == 5) echo $active; ?>><a href="/dashboard/">Logros</a></li>
+				<li <?php if ($_GET['section'] == 8) echo $active; ?>><a href="/logros/">Logros</a></li>
 				<li <?php if ($_GET['section'] == 6) echo $active; ?>><a href="/noticias/">Noticias</a></li>
 				<li <?php if ($_GET['section'] == 7) echo $active; ?>><a href="/links/">Links</a></li>
 			</ul>
@@ -1052,6 +1064,183 @@ class Layout_View
 		ob_end_clean();
 		return $sliders;
 	}
+	
+	public function getLogrosHeader()
+	{
+		ob_start();
+		?>
+		<script src="/js/jquery.uploadfile.min.js"></script>
+		<link rel="stylesheet" href="/css/jquery-ui.css">
+		<script src="/js/jquery-ui.js"></script>
+		<script src="/js/logros.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		});
+		</script>
+		
+   		<?php		
+		$sectionHead = ob_get_contents();
+		ob_end_clean();
+		return $sectionHead;
+	}
+   	
+   	public function getLogrosSections()
+   	{
+   		ob_start();
+   		?>
+   		<div class="row">
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-1 control-label" for="textinput"><b>T&iacute;tulo</b></label>
+						<div class="col-sm-5">
+							<input type="text" placeholder="T&iacute;tulo" class="form-control" id="newLogroTitle" value="">
+						</div>
+						<div class="col-sm-2 col-sm-offset-4">
+							<button type="submit" class="btn btn-primary" id="addLogro">A&ntilde;adir logro</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
+   		
+   		<div class="row" id="logrosBox">
+   		<?php 
+   		foreach ($this->data['logros'] as $section)
+   		{
+   			echo self::getLogrosItem($section);
+   		}
+   		?>
+   		</div>
+   		
+   		<h3 class="page-header" style="margin-top: 30px;">Fechas destacadas</h3>
+   		
+   		<div class="row">
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<div class="col-sm-5">
+							<input type="text" placeholder="T&iacute;tulo" class="form-control" id="newFechaDestacadaTitle" value="">
+						</div>
+						<div class="col-sm-5">
+							<input type="text" placeholder="URL" class="form-control" id="newFechaDestacadaURL" value="">
+						</div>
+						<div class="col-sm-2">
+							<button type="submit" class="btn btn-primary" id="addFechaDestacada">A&ntilde;adir fecha</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
+   		<div class="row" id="fechasDestacadasBox">
+   		<?php 
+   		foreach ($this->data['fechasDestacadas'] as $section)
+   		{
+   			echo self::getFechaDestacadaItem($section);
+   		}
+   		?>
+   		</div>
+   		
+   		<h3 class="page-header" style="margin-top: 30px;">Otros logros</h3>
+   		
+   		<div class="row">
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<div class="col-sm-10">
+							<input type="text" placeholder="T&iacute;tulo" class="form-control" id="newOtrosLogrosTitle" value="">
+						</div>
+						<div class="col-sm-2">
+							<button type="submit" class="btn btn-primary" id="addOtrosLogros">A&ntilde;adir logro</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
+   		<div class="row" id="otrosLogrosBox">
+   		<?php 
+   		foreach ($this->data['otrosLogros'] as $section)
+   		{
+   			echo self::getOtrosLogrosItem($section);
+   		}
+   		?>
+   		</div>
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+	
+   	public function getLogrosItem($section)
+   	{
+   		$img = '';
+   		if (!$section['icon'])
+   			$img = '/images/100x100-default.jpg';
+   		else
+   			$img = "/images-system/medium/".$section['icon'];
+   		
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['logros_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" height="100" src="<?php echo $img; ?>" />
+				</div>
+				<div class="col-sm-8">
+					<p class="section-title"><strong><?php echo $section['title']; ?></strong></p>
+				</div>
+				<div class="col-sm-2">
+					<a href="/editar-logros/<?php echo $section['logros_id']; ?>/<?php echo Tools::slugify($section['title']); ?>/<?php echo $section['kind']."/"; ?>" class="btn btn-info btn-xs deleteSlider" sId="<?php echo $section['section_id']; ?>">Editar</a>
+					<a href="" class="btn btn-danger btn-xs deleteLogro" sId="<?php echo $section['logros_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
+   	
+   	public function getFechaDestacadaItem($section)
+   	{
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['logros_fechas_id']; ?>">
+			<div class="col-sm-12">
+				<div class=" col-sm-9">
+					<p class="section-title"><strong><?php echo $section['title']; ?></strong></p>
+					<p class="section-title"><?php echo $section['url']; ?></p>
+				</div>
+				<div class="col-sm-1 col-sm-offset-2">
+					<a href="" class="btn btn-danger btn-xs deleteLogrosFechas" sId="<?php echo $section['logros_fechas_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
+   	
+   	public function getOtrosLogrosItem($section)
+   	{
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['logros_otros_id']; ?>">
+			<div class="col-sm-12">
+				<div class=" col-sm-9">
+					<p class="section-title"><strong><?php echo $section['title']; ?></strong></p>
+				</div>
+				<div class="col-sm-1 col-sm-offset-2">
+					<a href="" class="btn btn-danger btn-xs deleteOtrosLogros" sId="<?php echo $section['logros_otros_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
    	
    	
    	
@@ -1078,7 +1267,8 @@ class Layout_View
 					    btns: ['viewHTML',
 					           '|', 'btnGrp-design',
 					           '|', 'btnGrp-justify',
-					           '|', 'btnGrp-lists']
+					           '|', 'btnGrp-lists',
+					           '|', 'link'],
 					});
 				});
 		</script>
@@ -1108,6 +1298,14 @@ class Layout_View
 			<script src="/js/noticias.js"></script>
 			<?php
 			break;
+			
+			case 'logros':
+			?>
+			<script src="/js/logros.js"></script>
+			<?php
+			break;
+			
+			
 		}
 		?>
 		
@@ -1124,9 +1322,14 @@ class Layout_View
    		$section = $this->data['section'];
    		ob_start();
 
+   		$iconSize 		= '';
+   		$portraitSize 	= '';
+   		
 		switch ($this->kindPage)
 		{
+			
 			case 'causas':
+				$iconSize 		= 'JPG (370 * 300 px)';
 			?>
 			<input type="hidden" value="<?php echo $section['causas_id']; ?>" id="sectionId" />
 			<?php
@@ -1139,16 +1342,30 @@ class Layout_View
 			break;
 			
 			case 'espacios':
+				$iconSize 		= 'JPG (270 * 241 px)';
+				$portraitSize = 'JPG (2050 * 1072 px)';
 			?>
 			<input type="hidden" value="<?php echo $section['espacios_id']; ?>" id="sectionId" />
 			<?php
 			break;
 			
 			case 'noticias':
+				$iconSize 		= 'JPG (270 * 241 px)';
+				$portraitSize 	= 'JPG (800 * 290 px)';
 			?>
 			<input type="hidden" value="<?php echo $section['noticias_id']; ?>" id="sectionId" />
 			<?php
 			break;
+			
+			case 'logros':
+				$iconSize 		= 'JPG (270 * 241 px)';
+				$portraitSize 	= 'JPG (900 * 560 px)';
+			?>
+			<input type="hidden" value="<?php echo $section['logros_id']; ?>" id="sectionId" />
+			<?php
+			break;
+			
+			
 			
 		}
 		?>
@@ -1168,8 +1385,8 @@ class Layout_View
 					<div class="col-sm-2">
 						<img alt="" height="100" id="iconImg" src="<?php echo $img; ?>" />
 					</div>
-					<div class="col-sm-2">
-						<h5><b>Icono</b> (170 * 170 px)</h5>
+					<div class="col-sm-3">
+						<h5><b>Icono</b> <?php echo $iconSize; ?></h5>
 					</div>
 				</div>
 				<div class="col-sm-12">
@@ -1190,11 +1407,11 @@ class Layout_View
 	   			?>
 	   		<div class="row">
 				<div class="col-sm-12">
-					<div class="col-sm-2">
+					<div class="col-sm-3">
 						<img alt="" width="170" id="iconbg" src="/images-system/medium/<?php echo $section['background']; ?>" />
 					</div>
-					<div class="col-sm-2">
-						<h5><b>Fondo</b> (2050 * 1072 px)</h5>
+					<div class="col-sm-3">
+						<h5><b>Fondo</b> <?php echo $portraitSize; ?></h5>
 					</div>
 				</div>
 				<div class="col-sm-12">
@@ -1223,8 +1440,8 @@ class Layout_View
 					<div class="col-sm-3">
 						<img alt="" width="170" id="portraitImg" src="<?php echo $img; ?>" />
 					</div>
-					<div class="col-sm-3">
-						<h5><b>Imagen principal</b> (800 * 290 px)</h5>
+					<div class="col-sm-4">
+						<h5><b>Imagen principal</b> <?php echo $portraitSize; ?></h5>
 					</div>
 				</div>
 				<div class="col-sm-12">

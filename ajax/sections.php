@@ -110,6 +110,55 @@ switch ($_POST['opt'])
 		}
 	break;
 	
+	case 15:// Add Logro
+		if ($lastLogro = $model->addLogros($_POST))
+		{
+			echo $lastLogro;
+		}
+	break;
+	
+	case 16:// Delete Logro
+		if ($model->deleteLogro($_POST['logros_id']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 18://Update Logros
+		if ($model->updateLogros($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 19:
+		if ($lastFecha = $model->addLogrosFechasDestacadas($_POST))
+		{
+			echo $lastFecha;
+		}
+	break;
+	
+	case 20:
+		if ($model->deleteLogrosFechas($_POST['logros_id']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 21:
+		if ($lastOtroLogro = $model->addLogrosOtros($_POST))
+		{
+			echo $lastOtroLogro;
+		}
+	break;
+	
+	case 22:
+		if ($model->deleteLogrosOtros($_POST['logros_id']))
+		{
+			echo 1;
+		}
+	break;
+	
 	default:
 	break;
 }

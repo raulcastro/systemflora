@@ -360,7 +360,7 @@ switch ($_POST['opt'])
 			}
 		break;
 		
-		case 14: // change news icon
+		case 14: // change news portrait
 			$model	= new Layout_Model();
 			$data 	= $backend->loadBackend();
 		
@@ -471,6 +471,86 @@ switch ($_POST['opt'])
 				if ($newData)
 				{
 					$lastId = $model->updateDirectorioIcon($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
+		case 17: // change logros icon
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'logros-icon';
+			$mediumWidth 	= 100;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('background'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+				
+				if ($newData)
+				{
+					$lastId = $model->updateLogrosIcon($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
+		case 18: // change news portrait
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'logros-portrait';
+			$mediumWidth 	= 300;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('background'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->updateLogrosPortrait($info);
 				}
 		
 				$data  = array('success'=>true, 'fileName'=>$result['fileName'],

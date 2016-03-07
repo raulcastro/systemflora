@@ -124,6 +124,17 @@ class generalBackend
 				$data['noticias'] = $newsArray;
 			break;
 			
+			case 'logros':
+				$logrosArray = $this->model->getAllLogros();
+				$data['logros'] = $logrosArray;
+				
+				$fechasLogros = $this->model->getAllLogrosFechasDestacadas();
+				$data['fechasDestacadas'] = $fechasLogros;
+				
+				$otrosLogros = $this->model->getAllLogrosOtros();
+				$data['otrosLogros'] = $otrosLogros;
+			break;
+			
 			case 'editar-seccion':
 				switch ($_GET['kind']) 
 				{
@@ -154,6 +165,11 @@ class generalBackend
 						
 						$videosArray	= $this->model->getNewsVideo($_GET['sectionId']);
 						$data['videos'] = $videosArray;
+					break;
+					
+					case 5://Logros
+						$sectionRow = $this->model->getSingleLogro($_GET['sectionId']);
+						$data['section'] = $sectionRow;
 					break;
 					
 					default:
