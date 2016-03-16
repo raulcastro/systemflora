@@ -2526,6 +2526,188 @@ class Layout_Model
 			return false;
 		}
 	}
+	
+	public function addActividad($data)
+	{
+		try {
+			$query = 'INSERT INTO actividades(title, date) VALUES(?, ?)';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('ss', $data['newTitle'], Tools::formatToMYSQL($data['newDate']));
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getActividades()
+	{
+		try {
+			$query = 'SELECT * FROM actividades ORDER BY date DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteActividades($actividades_id)
+	{
+		try {
+			$actividades_id = (int) $actividades_id;
+			$query = 'DELETE FROM actividades WHERE actividades_id = '.$actividades_id;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getActividadesById($actividades_id)
+	{
+		try {
+			$actividades_id = (int) $actividades_id;
+			$query = 'SELECT * FROM actividades WHERE actividades_id = '.$actividades_id;
+			return $this->db->getRow($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateActividadesIcon($data)
+	{
+		try {
+			$query = 'UPDATE actividades SET icon = ? WHERE actividades_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['background'], $data['sectionId']);
+	
+			return $prep->execute();
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateActividadesPortrait($data)
+	{
+		try {
+			$query = 'UPDATE actividades SET portrait = ? WHERE actividades_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['background'], $data['sectionId']);
+	
+			return $prep->execute();
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateActividades($data)
+	{
+		try {
+			$query = 'UPDATE actividades SET
+					title = ?,
+					description = ?,
+					content = ? ,
+					voluntariado = ?,
+					conservacion = ?,
+					bienestar = ?,
+					educacion = ?
+					WHERE actividades_id = ?';
+				
+			$prep = $this->db->prepare($query);
+				
+			$prep->bind_param('sssiiiii',
+					$data['sectionTitle'],
+					$data['sectionDescription'],
+					$data['sectionContent'],
+					$data['voluntariado'],
+					$data['conservacion'],
+					$data['bienestar'],
+					$data['educacion'],
+					$data['sectionId']);
+				
+			return $prep->execute();
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addActividadesGallery($data)
+	{
+		try {
+			$query = 'INSERT INTO actividades_gallery(actividades_id, picture) VALUES(?, ?)';
+				
+			$prep = $this->db->prepare($query);
+				
+			$prep->bind_param('is', $data['sectionId'], $data['image']);
+				
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getActividadesGallery($actividades_id)
+	{
+		try {
+			$query = 'SELECT * FROM actividades_gallery WHERE actividades_id = '.$actividades_id.' ORDER BY picture_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteActividadesPicture($pictureId)
+	{
+		try {
+			$query = 'DELETE FROM actividades_gallery WHERE picture_id = '.$pictureId;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addActividadesVideo($data)
+	{
+		try {
+			$query = 'INSERT INTO actividades_videos(actividades_id, video) VALUES(?, ?)';
+	
+			$prep = $this->db->prepare($query);
+	
+			$prep->bind_param('is', $data['sectionId'], $data['video']);
+	
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getActividadesVideo($actividades_id)
+	{
+		try {
+			$query = 'SELECT * FROM actividades_videos WHERE actividades_id = '.$actividades_id.' ORDER BY video_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteActividadesVideo($videoId)
+	{
+		try {
+			$query = 'DELETE FROM actividades_videos WHERE video_id = '.$videoId;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
 }
 
 

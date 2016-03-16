@@ -140,6 +140,11 @@ class generalBackend
 				$data['proyectos'] 	= $proyectosArray;
 			break;
 			
+			case 'actividades':
+				$newsArray 			= $this->model->getActividades();
+				$data['actividades'] 	= $newsArray;
+			break;
+			
 			case 'editar-seccion':
 				switch ($_GET['kind']) 
 				{
@@ -194,6 +199,17 @@ class generalBackend
 						$data['gallery'] 	= $galleryArray;
 						
 						$videosArray	= $this->model->getProyectosVideo($_GET['sectionId']);
+						$data['videos'] = $videosArray;
+					break;
+					
+					case 7:// actividades
+						$sectionRow 		= $this->model->getActividadesById($_GET['sectionId']);
+						$data['section'] 	= $sectionRow;
+							
+						$galleryArray  		= $this->model->getActividadesGallery($_GET['sectionId']);
+						$data['gallery'] 	= $galleryArray;
+					
+						$videosArray	= $this->model->getActividadesVideo($_GET['sectionId']);
 						$data['videos'] = $videosArray;
 					break;
 					

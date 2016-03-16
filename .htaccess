@@ -19,28 +19,13 @@ RewriteRule ^sitemap.xml$ sitemap.xml
 # Rewrite Rules
 RewriteRule ^sign-out/$ 					/sign-out.php
 RewriteRule ^dashboard/$ 					/dashboard.php?section=1
-RewriteRule ^add-guest/$ 					/add-member.php?section=2
-RewriteRule ^guests/$ 						/members.php?section=3
-RewriteRule ^tasks/$ 						/tasks.php?section=4
-RewriteRule ^agencies/$ 					/agencies.php?section=5
-RewriteRule ^([0-9]+)/([A-Za-z0-9-]+)/$ 	/add-member.php?memberId=$1&section=6
-RewriteRule ^email/$ 						/email.php?section=7
-RewriteRule ^brokers/$ 						/brokers.php?section=8
-RewriteRule ^add-broker/$ 					/add-broker.php?section=9
-RewriteRule ^calendar/$ 					/calendar.php?section=11
-RewriteRule ^reservations/$ 				/reservations.php?section=12
-RewriteRule ^rooms/$ 						/rooms.php?section=13
-RewriteRule ^rooms/from/([A-Za-z0-9-]+)/$ 	/rooms.php?from=$1&section=13
-RewriteRule ^rooms/month/$ 					/rooms-month.php?section=13
-RewriteRule ^rooms/month/from/([A-Za-z0-9-]+)/$ 	/rooms-month.php?from=$1&section=13
-RewriteRule ^reports/$ 						/reports.php?section=16
-RewriteRule ^reports/from/([A-Za-z0-9-]+)/$ 	/reports.php?from=$1&section=16
 
 #	Brand
 
 
 RewriteRule ^espacios/$ 						/espacios.php?section=2
 RewriteRule ^proyectos/$ 						/proyectos.php?section=3
+RewriteRule ^actividades/$ 						/actividades.php?section=4
 RewriteRule ^noticias/$ 						/noticias.php?section=6
 RewriteRule ^links/$ 							/links.php?section=7
 RewriteRule ^logros/$ 							/logros.php?section=8
@@ -56,6 +41,7 @@ RewriteRule ^editar-espacios/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?se
 RewriteRule ^editar-noticias/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?section=6&sectionId=$1&kind=$3
 RewriteRule ^editar-logros/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 		/editar.php?section=8&sectionId=$1&kind=$3
 RewriteRule ^editar-proyectos/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?section=3&sectionId=$1&kind=$3
+RewriteRule ^editar-actividades/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ /editar.php?section=4&sectionId=$1&kind=$3
 
 
 

@@ -215,6 +215,48 @@ switch ($_POST['opt'])
 		}
 	break;
 	
+	case 31:// Añade una actividad
+		if ($noticiaId = $model->addActividad($_POST))
+		{
+			echo $noticiaId;
+		}
+	break;
+	
+	case 32:// Delete actividad
+		if ($model->deleteActividades($_POST['actividades_id']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 33://update actividades
+		if ($model->updateActividades($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 34:
+		if ($model->deleteActividadesPicture($_POST['pictureId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 35:
+		if($model->addActividadesVideo($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 36:
+		if($model->deleteActividadesVideo($_POST['videoId']))
+		{
+			echo 1;
+		}
+	break;
+	
 	default:
 	break;
 }
