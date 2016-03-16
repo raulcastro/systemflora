@@ -559,7 +559,87 @@ switch ($_POST['opt'])
 				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
 			}
 		break;
+		
+		case 19: // change proyectos icon
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'proyectos-icon';
+			$mediumWidth 	= 100;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('image'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->updateProyectosIcon($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
 	
+		case 20: // Add proyectos gallery
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'proyectos-gallery';
+			$mediumWidth 	= 300;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('image'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->addProyectosGallery($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
 	default:
 	break;
 }

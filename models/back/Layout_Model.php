@@ -2136,6 +2136,23 @@ class Layout_Model
 		}
 	}
 	
+	public function updateLogros($data)
+	{
+		try {
+			$query = 'UPDATE logros SET title = ?, description = ? WHERE logros_id = ?';
+	
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('ssi',
+					$data['sectionTitle'],
+					$data['sectionDescription'],
+					$data['sectionId']);
+	
+			return $prep->execute();
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
 	public function addLogros($data)
 	{
 		try {
@@ -2278,34 +2295,238 @@ class Layout_Model
 		try {
 			$id = (int) $id;
 			$query = 'DELETE FROM logros_otros WHERE logros_otros_id = '.$id;
-			echo $query;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getProyectos()
+	{
+		try {
+			$query = 'SELECT * FROM proyectos ORDER BY proyectos_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addProyectos($data)
+	{
+		try {
+			$query 	= 'INSERT INTO proyectos(title) VALUES(?)';
+			$prep 	= $this->db->prepare($query);
+			$prep->bind_param('s', $data['newTitle']);
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteProyectos($id)
+	{
+		try {
+			$id = (int) $id;
+			$query = 'DELETE FROM proyectos WHERE proyectos_id = '.$id;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getSingleProyecto($proyectoId)
+	{
+		try {
+			$proyectoId = (int) $proyectoId;
+			$query = 'SELECT * FROM proyectos WHERE proyectos_id = '.$proyectoId;
+			
+			return $this->db->getRow($query); 
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateProyectosIcon($data)
+	{
+		try {
+			$query = 'UPDATE proyectos SET icon = ? WHERE proyectos_id = ?';
+				
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['image'], $data['sectionId']);
+	
+			if (!$prep->execute())
+			{
+				printf("Errormessage: %s\n", $prep->error);
+			}
+				
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateProyectos($data)
+	{
+		try {
+			$query = 'UPDATE proyectos 
+					SET 
+					title = ?, 
+					description = ?, 
+					content = ?,
+					first_column_title = ?,
+					second_column_title = ?,
+					third_column_title = ? 
+					WHERE proyectos_id = ?';
+	
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('ssssssi',
+					$data['sectionTitle'],
+					$data['sectionDescription'],
+					$data['sectionContent'],
+					$data['firstColumnTitle'],
+					$data['secondColumnTitle'],
+					$data['thirdColumnTitle'],
+					$data['sectionId']);
+	
+			if (!$prep->execute())
+			{
+				printf("Errormessage: %s\n", $prep->error);
+			}
+			else
+			{
+				return true;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addProyectosLinks($data)
+	{
+		try {
+			$query = 'INSERT INTO proyectos_links(proyectos_id, title, url, kind) VALUES(?, ?, ?, ?)';
+			
+			$prep = $this->db->prepare($query);
+			
+			$prep->bind_param('issi', 
+					$data['sectionId'],
+					$data['linkTitle'],
+					$data['linkUrl'],
+					$data['linkType']);
+			
+			if (!$prep->execute())
+			{
+				printf("Errormessage: %s\n", $prep->error);
+			}
+			else
+			{
+				return $prep->insert_id;
+			}
+			
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getProyectosLinksByIdAndType($sectionId, $type)
+	{
+		try {
+			$query = 'SELECT * FROM proyectos_links WHERE proyectos_id = '.$sectionId.' AND kind = '.$type.' ORDER BY proyectos_links_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteProyectosLinksById($id)
+	{
+		try {
+			$query = 'DELETE FROM proyectos_links WHERE proyectos_links_id = '.$id;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addProyectosVideo($data)
+	{
+		try {
+			$query = 'INSERT INTO proyectos_videos(proyectos_id, video) VALUES(?, ?)';
+	
+			$prep = $this->db->prepare($query);
+	
+			$prep->bind_param('is', $data['sectionId'], $data['video']);
+	
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getProyectosVideo($noticias_id)
+	{
+		try {
+			$query = 'SELECT * FROM proyectos_videos WHERE proyectos_id= '.$noticias_id.' ORDER BY video_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteProyectosVideo($videoId)
+	{
+		try {
+			$query = 'DELETE FROM proyectos_videos WHERE video_id = '.$videoId;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addProyectosGallery($data)
+	{
+		try {
+			$query = 'INSERT INTO proyectos_gallery(proyectos_id, picture) VALUES(?, ?)';
+				
+			$prep = $this->db->prepare($query);
+				
+			$prep->bind_param('is', $data['sectionId'], $data['image']);
+				
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getProyectosGallery($proyectos_id)
+	{
+		try {
+			$query = 'SELECT * FROM proyectos_gallery WHERE proyectos_id = '.$proyectos_id.' ORDER BY picture_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteProyectosPicture($pictureId)
+	{
+		try {
+			$query = 'DELETE FROM proyectos_gallery WHERE picture_id = '.$pictureId;
 			return $this->db->run($query);
 		} catch (Exception $e) {
 			return false;
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

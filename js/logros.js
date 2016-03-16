@@ -147,13 +147,14 @@ function updateSection()
 function deleteLogro(node)
 {
 	var sId = $(node).attr('sId');
+	alert(sId);
 	if (sId)
 	{
 		$.ajax({
 	        type:   'POST',
 	        url:    '/ajax/sections.php',
-	        data:{  logros_id: 	sId,
-	            	opt: 		16
+	        data:{  proyectos_id: 	sId,
+	            	opt: 			24
 	             },
 	        success:
 	        function(xml)

@@ -78,6 +78,10 @@ class Layout_View
 				$this->kindPage = "logros";
 			break;
 			
+			case 6:
+				$this->kindPage = 'proyectos';
+			break;
+			
 			default:
 				;
 			break;
@@ -148,6 +152,10 @@ class Layout_View
  				case 'logros':
  					echo self::getLogrosHeader();
 				break;
+				
+				case 'proyectos':
+					echo self::getProyectosHeader();
+				break;
  				
  				case 'editar-seccion':
  					echo self::getEditSectionHeader();
@@ -204,6 +212,10 @@ class Layout_View
 							
 							case 'logros':
 								echo self :: getLogrosSections();
+							break;
+							
+							case 'proyectos':
+								echo self :: getProyectosSections();
 							break;
 							
 							case 'editar-seccion':
@@ -442,7 +454,7 @@ class Layout_View
 			<ul class="nav nav-sidebar">
 				<li <?php if ($_GET['section'] == 1) echo $active; ?>><a href="/dashboard/">Causas</a></li>
 				<li <?php if ($_GET['section'] == 2) echo $active; ?>><a href="/espacios/">Espacios</a></li>
-				<li <?php if ($_GET['section'] == 3) echo $active; ?>><a href="/dashboard/">Proyectos</a></li>
+				<li <?php if ($_GET['section'] == 3) echo $active; ?>><a href="/proyectos/">Proyectos</a></li>
 				<li <?php if ($_GET['section'] == 4) echo $active; ?>><a href="/dashboard/">Actividades</a></li>
 				<li <?php if ($_GET['section'] == 8) echo $active; ?>><a href="/logros/">Logros</a></li>
 				<li <?php if ($_GET['section'] == 6) echo $active; ?>><a href="/noticias/">Noticias</a></li>
@@ -566,7 +578,7 @@ class Layout_View
 		?>
 		<div class="row">
 			<div class="col-sm-12">
-				<h5>(2050 * 1072 px)</h5>
+				<h5>JPG(2050 * 1072 px)</h5>
 			</div>
 			<div class="col-sm-12 upload-slider">
 				Upload
@@ -574,12 +586,12 @@ class Layout_View
 		</div>
 		
 		<div class="row" id="slidersBox">
-			<?php 
-			if ($this->data['banner'])
-			{
-				echo self::getBannerItem($this->data['banner']);
-			}
-			?>
+		<?php 
+		if ($this->data['banner'])
+		{
+			echo self::getBannerItem($this->data['banner']);
+		}
+		?>
 		</div>
 		<?php
 		$agencies = ob_get_contents();
@@ -682,7 +694,7 @@ class Layout_View
 					<input type="text" placeholder="Google Plus" class="form-control" id="gSlider-<?php echo $aliado['aliado_id']; ?>" value="<?php echo $aliado['gplus']; ?>">
 				</div>
 			</div>
-			
+			<!-- 
 			<div class="col-sm-12 slider-section " id="causasSelector-<?php echo $aliado['aliado_id']; ?>">
 				<div class="col-sm-3">
 					<input type="checkbox" class="causas-selector-item" <?php if($aliado['conservacion'] == 1){echo "checked";} ?> causaName="conservacion" > 
@@ -697,6 +709,7 @@ class Layout_View
 					<label>Educaci&oacute;n ambiental</label>
 				</div>
 			</div>
+			 -->
 		</div>
 		<?php
 		$sliders = ob_get_contents();
@@ -1069,9 +1082,6 @@ class Layout_View
 	{
 		ob_start();
 		?>
-		<script src="/js/jquery.uploadfile.min.js"></script>
-		<link rel="stylesheet" href="/css/jquery-ui.css">
-		<script src="/js/jquery-ui.js"></script>
 		<script src="/js/logros.js"></script>
 		<script type="text/javascript">
 		$(document).ready(function(){
@@ -1242,8 +1252,86 @@ class Layout_View
    		return $item;
    	}
    	
+   	public function getProyectosHeader()
+	{
+		ob_start();
+		?>
+		<script src="/js/proyectos.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		});
+		</script>
+		
+   		<?php		
+		$sectionHead = ob_get_contents();
+		ob_end_clean();
+		return $sectionHead;
+	}
    	
-   	
+   	public function getProyectosSections()
+   	{
+   		ob_start();
+   		?>
+   		<div class="row">
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-1 control-label" for="textinput"><b>T&iacute;tulo</b></label>
+						<div class="col-sm-9">
+							<input type="text" placeholder="T&iacute;tulo" class="form-control" id="newProyectoTitle" value="">
+						</div>
+						<div class="col-sm-2">
+							<button type="submit" class="btn btn-primary" id="addProyecto">A&ntilde;adir proyecto</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
+   		
+   		<div class="row" id="proyectosBox">
+   		<?php 
+   		foreach ($this->data['proyectos'] as $section)
+   		{
+   			echo self::getProyectosItem($section);
+   		}
+   		?>
+   		</div>
+   		
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+	
+   	public function getProyectosItem($section)
+   	{
+   		$img = '';
+   		if (!$section['icon'])
+   			$img = '/images/100x100-default.jpg';
+   		else
+   			$img = "/images-system/medium/".$section['icon'];
+   		
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['proyectos_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" height="100" src="<?php echo $img; ?>" />
+				</div>
+				<div class="col-sm-8">
+					<p class="section-title"><strong><?php echo $section['title']; ?></strong></p>
+				</div>
+				<div class="col-sm-2">
+					<a href="/editar-proyectos/<?php echo $section['proyectos_id']; ?>/<?php echo Tools::slugify($section['title']); ?>/<?php echo $section['kind']."/"; ?>" class="btn btn-info btn-xs">Editar</a>
+					<a href="" class="btn btn-danger btn-xs deleteProyectos" sId="<?php echo $section['proyectos_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
    	
    	public function getEditSectionHeader()
 	{
@@ -1305,17 +1393,17 @@ class Layout_View
 			<?php
 			break;
 			
-			
+			case 'proyectos':
+				?>
+			<script src="/js/proyectos.js"></script>
+			<?php
+			break;
 		}
-		?>
 		
-   		<?php		
 		$agenciesHead = ob_get_contents();
 		ob_end_clean();
 		return $agenciesHead;
 	}
-   	
-   	
    	
    	public function getEditSection()
    	{
@@ -1365,6 +1453,12 @@ class Layout_View
 			<?php
 			break;
 			
+			case 'proyectos':
+				$iconSize 		= 'JPG (270 * 241 px)';
+			?>
+			<input type="hidden" value="<?php echo $section['proyectos_id']; ?>" id="sectionId" />
+			<?php
+			break;
 			
 			
 		}
@@ -1474,7 +1568,7 @@ class Layout_View
 					</div>
 					
 					<?php 
-					if ($this->kindPage == 'causas' || $this->kindPage == 'espacios' || $this->kindPage == 'noticias')
+					if ($this->kindPage == 'causas' || $this->kindPage == 'espacios' || $this->kindPage == 'noticias' || $this->kindPage == 'proyectos')
 					{
 						?>
 					<!-- Textarea input-->
@@ -1489,7 +1583,21 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'espacios')
+					if ($this->kindPage == 'proyectos')
+					{
+						?>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>T&iacute;tulo primera columna</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="T&iacute;tulo primera columna" class="form-control" id="firstColumnTitle" value="<?php echo $section['first_column_title']; ?>">
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
+					<?php 
+					if ($this->kindPage == 'espacios' || $this->kindPage == 'proyectos')
 					{
 						?>
 					<div class="form-group">
@@ -1503,13 +1611,166 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'espacios')
+					if ($this->kindPage == 'espacios' || $this->kindPage == 'proyectos')
 					{
 						?>
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="textinput"><b>T&iacute;tulo tercera columna</b></label>
 						<div class="col-sm-10">
 							<input type="text" placeholder="T&iacute;tulo tercera columna" class="form-control" id="thirdColumnTitle" value="<?php echo $section['third_column_title']; ?>">
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
+					<?php 
+					if ($this->kindPage == 'proyectos')
+					{
+						?>
+						<h4>Links de la primera columna</h4>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Titulo del link</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="T&iacute;tulo del link" class="form-control" id="linkTitle-1" value="">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Link</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="URL" class="form-control" id="linkUrl-1" value="">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<p  class="text-right"><a href="javascript:void(0)" class="addLink" linkType="1">A&ntilde;adir Link</a></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<h4 class="sub-header">Links a&ntilde;adidos</h4>	
+						</div>
+						<div class="col-sm-10 col-sm-offset-2" id="linksBox-1">
+							<?php 
+							if ($this->data['links-1'])
+							{
+								foreach ($this->data['links-1'] as $link)
+								{
+									?>
+							<div class="itemBlock" id="linkBlock-<?php echo $link['proyectos_links_id']; ?>">
+								<div class="text-right">
+									<a href="#" linkId="<?php echo $link['proyectos_links_id']; ?>" class="glyphicon glyphicon-remove text-danger deleteProyectosLink"></a>
+								</div>
+								<div>
+									<a href="<?php echo $link['url']; ?>" target="_blank" linkId="<?php echo $link['proyectos_links_id']; ?>" class="text-success"><?php echo $link['title']; ?></a>
+								</div>
+							</div>
+									<?php
+								}
+							}
+							?>
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
+					<?php 
+					if ($this->kindPage == 'proyectos')
+					{
+						?>
+						<h4>Links de la segunda columna</h4>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Titulo del link</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="T&iacute;tulo del link" class="form-control" id="linkTitle-2" value="">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Link</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="URL" class="form-control" id="linkUrl-2" value="">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<p  class="text-right"><a href="javascript:void(0)" class="addLink" linkType="2">A&ntilde;adir Link</a></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<h4 class="sub-header">Links a&ntilde;adidos</h4>	
+						</div>
+						<div class="col-sm-10 col-sm-offset-2" id="linksBox-2">
+							<?php 
+							if ($this->data['links-2'])
+							{
+								foreach ($this->data['links-2'] as $link)
+								{
+									?>
+							<div class="itemBlock" id="linkBlock-<?php echo $link['proyectos_links_id']; ?>">
+								<div class="text-right">
+									<a href="#" linkId="<?php echo $link['proyectos_links_id']; ?>" class="glyphicon glyphicon-remove text-danger deleteProyectosLink"></a>
+								</div>
+								<div>
+									<a href="<?php echo $link['url']; ?>" target="_blank" linkId="<?php echo $link['proyectos_links_id']; ?>" class="text-success"><?php echo $link['title']; ?></a>
+								</div>
+							</div>
+									<?php
+								}
+							}
+							?>
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
+					<?php 
+					if ($this->kindPage == 'proyectos')
+					{
+						?>
+						<h4>Links de la tercera columna</h4>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Titulo del link</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="T&iacute;tulo del link" class="form-control" id="linkTitle-3" value="">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Link</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="URL" class="form-control" id="linkUrl-3" value="">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<p  class="text-right"><a href="javascript:void(0)" class="addLink" linkType="3">A&ntilde;adir Link</a></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<h4 class="sub-header">Links a&ntilde;adidos</h4>	
+						</div>
+						<div class="col-sm-10 col-sm-offset-2" id="linksBox-3">
+							<?php 
+							if ($this->data['links-3'])
+							{
+								foreach ($this->data['links-3'] as $link)
+								{
+									?>
+							<div class="itemBlock" id="linkBlock-<?php echo $link['proyectos_links_id']; ?>">
+								<div class="text-right">
+									<a href="#" linkId="<?php echo $link['proyectos_links_id']; ?>" class="glyphicon glyphicon-remove text-danger deleteProyectosLink"></a>
+								</div>
+								<div>
+									<a href="<?php echo $link['url']; ?>" target="_blank" linkId="<?php echo $link['proyectos_links_id']; ?>" class="text-success"><?php echo $link['title']; ?></a>
+								</div>
+							</div>
+									<?php
+								}
+							}
+							?>
 						</div>
 					</div>
 						<?php
@@ -1559,7 +1820,6 @@ class Layout_View
 									<?php
 								}
 							}
-								
 							?>
 						</div>
 					</div>
@@ -1595,6 +1855,7 @@ class Layout_View
 						<?php
 					}
 					?>
+					
 					<?php 
 					if ($this->kindPage == 'noticias')
 					{
@@ -1631,7 +1892,7 @@ class Layout_View
 			</form>
    		</div>
    		<?php 
-		if ($this->kindPage == 'noticias')
+		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos')
 		{
 			?>
    		<div class="row gallery-box">
@@ -1683,7 +1944,7 @@ class Layout_View
 		?>
    		
    		<?php 
-		if ($this->kindPage == 'noticias')
+		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos')
 		{
 			?>
    		<div class="row gallery-box">

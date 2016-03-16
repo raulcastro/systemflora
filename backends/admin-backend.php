@@ -111,65 +111,90 @@ class generalBackend
 			
 			case 'links':
 				$linksArray		= $this->model->getLinks();
-				$data['links']		= $linksArray;
+				$data['links']	= $linksArray;
 			break;
 			
 			case 'espacios':
-				$espaciosArray = $this->model->getEspacios();
-				$data['espacios'] = $espaciosArray;
+				$espaciosArray 		= $this->model->getEspacios();
+				$data['espacios'] 	= $espaciosArray;
 			break;
 			
 			case 'noticias':
-				$newsArray = $this->model->getNews();
-				$data['noticias'] = $newsArray;
+				$newsArray 			= $this->model->getNews();
+				$data['noticias'] 	= $newsArray;
 			break;
 			
 			case 'logros':
-				$logrosArray = $this->model->getAllLogros();
+				$logrosArray 	= $this->model->getAllLogros();
 				$data['logros'] = $logrosArray;
 				
-				$fechasLogros = $this->model->getAllLogrosFechasDestacadas();
-				$data['fechasDestacadas'] = $fechasLogros;
+				$fechasLogros 				= $this->model->getAllLogrosFechasDestacadas();
+				$data['fechasDestacadas'] 	= $fechasLogros;
 				
-				$otrosLogros = $this->model->getAllLogrosOtros();
-				$data['otrosLogros'] = $otrosLogros;
+				$otrosLogros 			= $this->model->getAllLogrosOtros();
+				$data['otrosLogros'] 	= $otrosLogros;
+			break;
+			
+			case 'proyectos':
+				$proyectosArray 	= $this->model->getProyectos();
+				$data['proyectos'] 	= $proyectosArray;
 			break;
 			
 			case 'editar-seccion':
 				switch ($_GET['kind']) 
 				{
 					case 1:// Causas
-						$sectionRow = $this->model->getSeccionInfo($_GET['sectionId']);
-						$data['section'] = $sectionRow;
+						$sectionRow 		= $this->model->getSeccionInfo($_GET['sectionId']);
+						$data['section'] 	= $sectionRow;
 					break;
 					
 					case 2:// Links
-						$sectionRow = $this->model->getLinkByLinkId($_GET['sectionId']);
-						$data['section'] = $sectionRow;
+						$sectionRow 		= $this->model->getLinkByLinkId($_GET['sectionId']);
+						$data['section'] 	= $sectionRow;
 					break;
 					
 					case 3:// Espacios
-						$sectionRow = $this->model->getEspaciosByEspacioId($_GET['sectionId']);
-						$data['section'] = $sectionRow;
+						$sectionRow 		= $this->model->getEspaciosByEspacioId($_GET['sectionId']);
+						$data['section'] 	= $sectionRow;
 						
-						$bloquesArray = $this->model->getEspaciosBloques($_GET['sectionId']);
-						$data['bloques'] = $bloquesArray;
+						$bloquesArray 		= $this->model->getEspaciosBloques($_GET['sectionId']);
+						$data['bloques'] 	= $bloquesArray;
 					break;
 					
 					case 4:// Noticias
-						$sectionRow = $this->model->getNewsById($_GET['sectionId']);
-						$data['section'] = $sectionRow;
+						$sectionRow 		= $this->model->getNewsById($_GET['sectionId']);
+						$data['section'] 	= $sectionRow;
 					
-						$galleryArray  = $this->model->getNewsGallery($_GET['sectionId']);
-						$data['gallery'] = $galleryArray;
+						$galleryArray  		= $this->model->getNewsGallery($_GET['sectionId']);
+						$data['gallery'] 	= $galleryArray;
 						
 						$videosArray	= $this->model->getNewsVideo($_GET['sectionId']);
 						$data['videos'] = $videosArray;
 					break;
 					
 					case 5://Logros
-						$sectionRow = $this->model->getSingleLogro($_GET['sectionId']);
+						$sectionRow 		= $this->model->getSingleLogro($_GET['sectionId']);
+						$data['section'] 	= $sectionRow;
+					break;
+					
+					case 6://Proyectos
+						$sectionRow = $this->model->getSingleProyecto($_GET['sectionId']);
 						$data['section'] = $sectionRow;
+						
+						$linksArray = $this->model->getProyectosLinksByIdAndType($_GET['sectionId'], 1);
+						$data['links-1'] = $linksArray;
+						
+						$linksArray = $this->model->getProyectosLinksByIdAndType($_GET['sectionId'], 2);
+						$data['links-2'] = $linksArray;
+						
+						$linksArray = $this->model->getProyectosLinksByIdAndType($_GET['sectionId'], 3);
+						$data['links-3'] = $linksArray;
+						
+						$galleryArray  		= $this->model->getProyectosGallery($_GET['sectionId']);
+						$data['gallery'] 	= $galleryArray;
+						
+						$videosArray	= $this->model->getProyectosVideo($_GET['sectionId']);
+						$data['videos'] = $videosArray;
 					break;
 					
 					default:

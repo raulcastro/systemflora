@@ -159,6 +159,62 @@ switch ($_POST['opt'])
 		}
 	break;
 	
+	case 23:
+		if ($lastProyecto = $model->addProyectos($_POST))
+		{
+			echo $lastProyecto;
+		}
+	break;
+	
+	case 24:
+		if ($model->deleteProyectos($_POST['logros_id']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 25:
+		if ($model->updateProyectos($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 26:
+		if ($lastLink = $model->addProyectosLinks($_POST))
+		{
+			echo $lastLink;
+		}
+	break;
+	
+	case 27:
+		if ($model->deleteProyectosLinksById($_POST['linkId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 28:
+		if($model->addProyectosVideo($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 29:
+		if($model->deleteProyectosVideo($_POST['videoId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 30:
+		if ($model->deleteProyectosPicture($_POST['pictureId']))
+		{
+			echo 1;
+		}
+	break;
+	
 	default:
 	break;
 }

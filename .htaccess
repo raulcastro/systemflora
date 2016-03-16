@@ -40,6 +40,7 @@ RewriteRule ^reports/from/([A-Za-z0-9-]+)/$ 	/reports.php?from=$1&section=16
 
 
 RewriteRule ^espacios/$ 						/espacios.php?section=2
+RewriteRule ^proyectos/$ 						/proyectos.php?section=3
 RewriteRule ^noticias/$ 						/noticias.php?section=6
 RewriteRule ^links/$ 							/links.php?section=7
 RewriteRule ^logros/$ 							/logros.php?section=8
@@ -54,6 +55,7 @@ RewriteRule ^editar-links/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 		/editar.php?sect
 RewriteRule ^editar-espacios/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?section=2&sectionId=$1&kind=$3
 RewriteRule ^editar-noticias/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?section=6&sectionId=$1&kind=$3
 RewriteRule ^editar-logros/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 		/editar.php?section=8&sectionId=$1&kind=$3
+RewriteRule ^editar-proyectos/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?section=3&sectionId=$1&kind=$3
 
 
 
