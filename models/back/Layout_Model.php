@@ -2708,6 +2708,248 @@ class Layout_Model
 			return false;
 		}
 	}
+	
+	public function addCampana($data)
+	{
+		try {
+			$query 	= 'INSERT INTO campanas(title) VALUES(?)';
+			$prep 	= $this->db->prepare($query);
+			$prep->bind_param('s', $data['newTitle']);
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getCampanas()
+	{
+		try {
+			$query = 'SELECT * FROM campanas ORDER BY campanas_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteCampanas($id)
+	{
+		try {
+			$id = (int) $id;
+			$query = 'DELETE FROM campanas WHERE campanas_id = '.$id;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getCampanasById($campanas_id)
+	{
+		try {
+			$campanas_id = (int) $campanas_id;
+			$query = 'SELECT * FROM campanas WHERE campanas_id = '.$campanas_id;
+			return $this->db->getRow($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateCampanasIcon($data)
+	{
+		try {
+			$query = 'UPDATE campanas SET icon = ? WHERE campanas_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['background'], $data['sectionId']);
+	
+			return $prep->execute();
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateCampanasPortrait($data)
+	{
+		try {
+			$query = 'UPDATE campanas SET portrait = ? WHERE campanas_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['background'], $data['sectionId']);
+	
+			return $prep->execute();
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateCampanas($data)
+	{
+		try {
+			$query = 'UPDATE campanas
+					SET
+					title = ?,
+					description = ?,
+					content = ?,
+					second_column_title = ?,
+					second_column_content = ?,
+					otros_content = ?,
+					third_column_title = ?,
+					third_column_content = ?,
+					video = ?,
+					promoted = ?
+					WHERE campanas_id = ?';
+	
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('sssssssssii',
+					$data['sectionTitle'],
+					$data['sectionDescription'],
+					$data['sectionContent'],
+					$data['secondColumnTitle'],
+					$data['secondColumnContent'],
+					$data['otrosContent'],
+					$data['thirdColumnTitle'],
+					$data['thirdColumnContent'],
+					$data['singleVideo'],
+					$data['promoted'],
+					$data['sectionId']);
+	
+			if (!$prep->execute())
+			{
+				printf("Errormessage: %s\n", $prep->error);
+			}
+			else
+			{
+				return true;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addCampanasLinks($data)
+	{
+		try {
+			$query = 'INSERT INTO campanas_links(campanas_id, title, url, kind) VALUES(?, ?, ?, ?)';
+				
+			$prep = $this->db->prepare($query);
+				
+			$prep->bind_param('issi',
+					$data['sectionId'],
+					$data['linkTitle'],
+					$data['linkUrl'],
+					$data['linkType']);
+				
+			if (!$prep->execute())
+			{
+				printf("Errormessage: %s\n", $prep->error);
+			}
+			else
+			{
+				return $prep->insert_id;
+			}
+				
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getCampanasLinksByIdAndType($sectionId, $type)
+	{
+		try {
+			$query = 'SELECT * FROM campanas_links WHERE campanas_id = '.$sectionId.' AND kind = '.$type.' ORDER BY proyectos_links_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteCampanasLinksById($id)
+	{
+		try {
+			$query = 'DELETE FROM campanas_links WHERE proyectos_links_id = '.$id;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addCampanasGallery($data)
+	{
+		try {
+			$query = 'INSERT INTO campanas_gallery(campanas_id, picture) VALUES(?, ?)';
+	
+			$prep = $this->db->prepare($query);
+	
+			$prep->bind_param('is', $data['sectionId'], $data['image']);
+	
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getCampanasGallery($campanas_id)
+	{
+		try {
+			$query = 'SELECT * FROM campanas_gallery WHERE campanas_id = '.$campanas_id.' ORDER BY picture_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteCampanasPicture($pictureId)
+	{
+		try {
+			$query = 'DELETE FROM campanas_gallery WHERE picture_id = '.$pictureId;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addCampanasVideo($data)
+	{
+		try {
+			$query = 'INSERT INTO campanas_videos(campanas_id, video) VALUES(?, ?)';
+	
+			$prep = $this->db->prepare($query);
+	
+			$prep->bind_param('is', $data['sectionId'], $data['video']);
+	
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getCampanasVideo($campanas_id)
+	{
+		try {
+			$query = 'SELECT * FROM campanas_videos WHERE campanas_id = '.$campanas_id.' ORDER BY video_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteCampanasVideo($videoId)
+	{
+		try {
+			$query = 'DELETE FROM campanas_videos WHERE video_id = '.$videoId;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
 }
 
 

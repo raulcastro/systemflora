@@ -257,6 +257,62 @@ switch ($_POST['opt'])
 		}
 	break;
 	
+	case 37:
+		if ($lastCampana = $model->addCampana($_POST))
+		{
+			echo $lastCampana;
+		}
+	break;
+	
+	case 38:
+		if ($model->deleteCampanas($_POST['campanas_id']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 39:
+		if ($model->updateCampanas($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 40:
+		if ($lastLink = $model->addCampanasLinks($_POST))
+		{
+			echo $lastLink;
+		}
+	break;
+	
+	case 41:
+		if ($model->deleteCampanasLinksById($_POST['linkId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 42:
+		if ($model->deleteCampanasPicture($_POST['pictureId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 43:
+		if($model->addCampanasVideo($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 44:
+		if($model->deleteCampanasVideo($_POST['videoId']))
+		{
+			echo 1;
+		}
+	break;
+	
 	default:
 	break;
 }

@@ -29,6 +29,7 @@ RewriteRule ^actividades/$ 						/actividades.php?section=4
 RewriteRule ^noticias/$ 						/noticias.php?section=6
 RewriteRule ^links/$ 							/links.php?section=7
 RewriteRule ^logros/$ 							/logros.php?section=8
+RewriteRule ^campanas/$ 						/campanas.php?section=9
 RewriteRule ^banner/$ 							/banner.php?section=17
 RewriteRule ^aliados/$ 							/aliados.php?section=18
 RewriteRule ^directorio/$ 						/directorio.php?section=19
@@ -42,6 +43,7 @@ RewriteRule ^editar-noticias/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?se
 RewriteRule ^editar-logros/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 		/editar.php?section=8&sectionId=$1&kind=$3
 RewriteRule ^editar-proyectos/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?section=3&sectionId=$1&kind=$3
 RewriteRule ^editar-actividades/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ /editar.php?section=4&sectionId=$1&kind=$3
+RewriteRule ^editar-campanas/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?section=9&sectionId=$1&kind=$3
 
 
 

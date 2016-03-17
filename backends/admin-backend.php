@@ -141,8 +141,13 @@ class generalBackend
 			break;
 			
 			case 'actividades':
-				$newsArray 			= $this->model->getActividades();
+				$newsArray 				= $this->model->getActividades();
 				$data['actividades'] 	= $newsArray;
+			break;
+			
+			case 'campanas':
+				$newsArray 			= $this->model->getCampanas();
+				$data['campanas'] 	= $newsArray;
 			break;
 			
 			case 'editar-seccion':
@@ -210,6 +215,23 @@ class generalBackend
 						$data['gallery'] 	= $galleryArray;
 					
 						$videosArray	= $this->model->getActividadesVideo($_GET['sectionId']);
+						$data['videos'] = $videosArray;
+					break;
+					
+					case 8:// Campañas
+						$sectionRow 		= $this->model->getCampanasById($_GET['sectionId']);
+						$data['section'] 	= $sectionRow;
+					
+						$linksArray = $this->model->getCampanasLinksByIdAndType($_GET['sectionId'], 3);
+						$data['links-3'] = $linksArray;
+						
+						$linksArray = $this->model->getCampanasLinksByIdAndType($_GET['sectionId'], 4);
+						$data['links-4'] = $linksArray;
+						
+						$galleryArray  		= $this->model->getCampanasGallery($_GET['sectionId']);
+						$data['gallery'] 	= $galleryArray;
+							
+						$videosArray	= $this->model->getCampanasVideo($_GET['sectionId']);
 						$data['videos'] = $videosArray;
 					break;
 					

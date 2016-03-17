@@ -8,12 +8,10 @@
 	require_once $root.'backends/admin-backend.php';
 	require_once $root.'/'.'views/Layout_View.php';
 	
-	$option = "editar-seccion";
+	$option = "campanas";
 	
 	$data 	= $backend->loadBackend($option);
-	$title = $data['section']['title'];
-	
-	$view 	= new Layout_View($data, $title);
+	$view 	= new Layout_View($data, 'Campañas');
 	
 	echo $view->printHTMLPage($option);
 	

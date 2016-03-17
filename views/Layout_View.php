@@ -86,6 +86,10 @@ class Layout_View
 				$this->kindPage = 'actividades';
 			break;
 			
+			case 8:
+				$this->kindPage = 'campanas';
+			break;
+			
 			default:
 				;
 			break;
@@ -165,6 +169,10 @@ class Layout_View
 					echo self::getActividadesHeader();
 				break;
 				
+				case 'campanas':
+					echo self::getCampanasHeader();
+				break;
+				
  				case 'editar-seccion':
  					echo self::getEditSectionHeader();
  				break;
@@ -229,6 +237,10 @@ class Layout_View
 							
 							case 'actividades':
 								echo self :: getActividadesSections();
+							break;
+							
+							case 'campanas':
+								echo self :: getCampanasSections();
 							break;
 							
 							case 'editar-seccion':
@@ -466,10 +478,11 @@ class Layout_View
    		<div class="col-sm-2 col-md-2 sidebar">
 			<ul class="nav nav-sidebar">
 				<li <?php if ($_GET['section'] == 1) echo $active; ?>><a href="/dashboard/">Causas</a></li>
-				<li <?php if ($_GET['section'] == 2) echo $active; ?>><a href="/espacios/">Espacios</a></li>
+				<li <?php if ($_GET['section'] == 8) echo $active; ?>><a href="/logros/">Logros</a></li>
 				<li <?php if ($_GET['section'] == 3) echo $active; ?>><a href="/proyectos/">Proyectos</a></li>
 				<li <?php if ($_GET['section'] == 4) echo $active; ?>><a href="/actividades/">Actividades</a></li>
-				<li <?php if ($_GET['section'] == 8) echo $active; ?>><a href="/logros/">Logros</a></li>
+				<li <?php if ($_GET['section'] == 9) echo $active; ?>><a href="/campanas/">Campa&ntilde;as</a></li>
+				<li <?php if ($_GET['section'] == 2) echo $active; ?>><a href="/espacios/">Espacios</a></li>
 				<li <?php if ($_GET['section'] == 6) echo $active; ?>><a href="/noticias/">Noticias</a></li>
 				<li <?php if ($_GET['section'] == 7) echo $active; ?>><a href="/links/">Links</a></li>
 			</ul>
@@ -1434,6 +1447,88 @@ class Layout_View
    		return $item;
    	}
    	
+   	public function getCampanasHeader()
+	{
+		ob_start();
+		?>
+		<script src="/js/campanas.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		});
+		</script>
+		
+   		<?php		
+		$sectionHead = ob_get_contents();
+		ob_end_clean();
+		return $sectionHead;
+	}
+   	
+   	
+   	public function getCampanasSections()
+   	{
+   		ob_start();
+   		?>
+   		<div class="row">
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-1 control-label" for="textinput"><b>T&iacute;tulo</b></label>
+						<div class="col-sm-9">
+							<input type="text" placeholder="T&iacute;tulo" class="form-control" id="newCampanaTitle" value="">
+						</div>
+						<div class="col-sm-2">
+							<button type="submit" class="btn btn-primary" id="addCampana">A&ntilde;adir campa&ntilde;a</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
+   		
+   		<div class="row" id="campanasBox">
+   		<?php 
+   		foreach ($this->data['campanas'] as $section)
+   		{
+   			echo self::getCampanasItem($section);
+   		}
+   		?>
+   		</div>
+   		
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+	
+   	public function getCampanasItem($section)
+   	{
+   		$img = '';
+   		if (!$section['icon'])
+   			$img = '/images/100x100-default.jpg';
+   		else
+   			$img = "/images-system/medium/".$section['icon'];
+   		
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['campanas_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" height="100" src="<?php echo $img; ?>" />
+				</div>
+				<div class="col-sm-8">
+					<p class="section-title"><strong><?php echo $section['title']; ?></strong></p>
+				</div>
+				<div class="col-sm-2">
+					<a href="/editar-campanas/<?php echo $section['campanas_id']; ?>/<?php echo Tools::slugify($section['title']); ?>/<?php echo $section['kind']."/"; ?>" class="btn btn-info btn-xs">Editar</a>
+					<a href="" class="btn btn-danger btn-xs deleteCampanas" sId="<?php echo $section['campanas_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
+   	
    	public function getEditSectionHeader()
 	{
 		ob_start();
@@ -1503,6 +1598,12 @@ class Layout_View
 			case 'actividades':
 				?>
 			<script src="/js/actividades.js"></script>
+			<?php
+			break;
+			
+			case 'campanas':
+				?>
+			<script src="/js/campanas.js"></script>
 			<?php
 			break;
 			
@@ -1576,6 +1677,16 @@ class Layout_View
 			<input type="hidden" value="<?php echo $section['actividades_id']; ?>" id="sectionId" />
 			<?php
 			break;
+			
+			case 'campanas':
+				$iconSize 		= 'JPG (270 * 241 px)';
+				$portraitSize 	= 'JPG (570 * 290 px)';
+			?>
+			<input type="hidden" value="<?php echo $section['campanas_id']; ?>" id="sectionId" />
+			<?php
+			break;
+			
+			
 		}
 		?>
    		
@@ -1683,7 +1794,7 @@ class Layout_View
 					</div>
 					
 					<?php 
-					if ($this->kindPage == 'causas' || $this->kindPage == 'espacios' || $this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades')
+					if ($this->kindPage == 'causas' || $this->kindPage == 'espacios' || $this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas')
 					{
 						?>
 					<!-- Textarea input-->
@@ -1712,7 +1823,7 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'espacios' || $this->kindPage == 'proyectos')
+					if ($this->kindPage == 'espacios' || $this->kindPage == 'proyectos' || $this->kindPage == 'campanas')
 					{
 						?>
 					<div class="form-group">
@@ -1726,7 +1837,7 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'espacios' || $this->kindPage == 'proyectos')
+					if ($this->kindPage == 'espacios' || $this->kindPage == 'proyectos' || $this->kindPage == 'campanas')
 					{
 						?>
 					<div class="form-group">
@@ -1842,7 +1953,7 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'proyectos')
+					if ($this->kindPage == 'proyectos' || $this->kindPage == 'campanas')
 					{
 						?>
 						<h4>Links de la tercera columna</h4>
@@ -1872,6 +1983,57 @@ class Layout_View
 							if ($this->data['links-3'])
 							{
 								foreach ($this->data['links-3'] as $link)
+								{
+									?>
+							<div class="itemBlock" id="linkBlock-<?php echo $link['proyectos_links_id']; ?>">
+								<div class="text-right">
+									<a href="#" linkId="<?php echo $link['proyectos_links_id']; ?>" class="glyphicon glyphicon-remove text-danger deleteProyectosLink"></a>
+								</div>
+								<div>
+									<a href="<?php echo $link['url']; ?>" target="_blank" linkId="<?php echo $link['proyectos_links_id']; ?>" class="text-success"><?php echo $link['title']; ?></a>
+								</div>
+							</div>
+									<?php
+								}
+							}
+							?>
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
+					<?php 
+					if ($this->kindPage == 'campanas')
+					{
+						?>
+						<h4>Links spots de radio</h4>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Titulo del link</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="T&iacute;tulo del link" class="form-control" id="linkTitle-4" value="">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Link</b></label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="URL" class="form-control" id="linkUrl-4" value="">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<p  class="text-right"><a href="javascript:void(0)" class="addLink" linkType="4">A&ntilde;adir Link</a></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-10 col-sm-offset-2">
+							<h4 class="sub-header">Links a&ntilde;adidos</h4>	
+						</div>
+						<div class="col-sm-10 col-sm-offset-2" id="linksBox-4">
+							<?php 
+							if ($this->data['links-3'])
+							{
+								foreach ($this->data['links-4'] as $link)
 								{
 									?>
 							<div class="itemBlock" id="linkBlock-<?php echo $link['proyectos_links_id']; ?>">
@@ -1943,7 +2105,22 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'espacios')
+					if ($this->kindPage == 'campanas')
+					{
+						?>
+					<!-- Textarea input-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Contenido segunda columna</b></label>
+						<div class="col-sm-10">
+							<textarea rows="12" cols="" class="form-control has-editor" placeholder="Contenido segunda columna" id="secondColumnContent"><?php echo $section['second_column_content']; ?></textarea>
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
+					<?php 
+					if ($this->kindPage == 'espacios' || $this->kindPage == 'campanas')
 					{
 						?>
 					<!-- Textarea input-->
@@ -1958,7 +2135,22 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'espacios')
+					if ($this->kindPage == 'campanas')
+					{
+						?>
+					<!-- Textarea input-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Contenido Otros</b></label>
+						<div class="col-sm-10">
+							<textarea rows="4" cols="" class="form-control has-editor" placeholder="Contenido de Otros" id="otrosContent"><?php echo $section['otros_content']; ?></textarea>
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
+					<?php 
+					if ($this->kindPage == 'espacios' || $this->kindPage == 'campanas')
 					{
 						?>
 					<div class="form-group">
@@ -2017,6 +2209,27 @@ class Layout_View
 					}
 					?>
 					
+					<?php 
+					if ($this->kindPage == 'campanas')
+					{
+						?>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>¿Promocionar?</b></label>
+						<div class="col-sm-10" id="voluntariadoSelector">
+							<div class="col-sm-2">
+								<input type="radio" name="actRadios" class="voluntariado-selector-item" <?php if($section['promoted'] == 1){echo "checked";} ?> selectorOption="si"> 
+								<label>SI</label>
+							</div>
+							<div class="col-sm-2">
+								<input type="radio" name="actRadios" class="voluntariado-selector-item" <?php if($section['promoted'] == 0){echo "checked";} ?> selectorOption="no"> 
+								<label>NO</label>
+							</div>
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10">
 							<div class="pull-right">
@@ -2028,7 +2241,7 @@ class Layout_View
 			</form>
    		</div>
    		<?php 
-		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades')
+		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas')
 		{
 			?>
    		<div class="row gallery-box">
@@ -2080,7 +2293,7 @@ class Layout_View
 		?>
    		
    		<?php 
-		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades')
+		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas')
 		{
 			?>
    		<div class="row gallery-box">
@@ -2125,8 +2338,6 @@ class Layout_View
    		ob_end_clean();
    		return $inicio;
    	}
-   	
-   	
    	
    	/**
    	 * The very awesome footer!
