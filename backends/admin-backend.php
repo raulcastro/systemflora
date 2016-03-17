@@ -150,6 +150,11 @@ class generalBackend
 				$data['campanas'] 	= $newsArray;
 			break;
 			
+			case 'materiales':
+				$newsArray 			= $this->model->getMateriales();
+				$data['materiales'] 	= $newsArray;
+			break;
+			
 			case 'editar-seccion':
 				switch ($_GET['kind']) 
 				{
@@ -232,6 +237,17 @@ class generalBackend
 						$data['gallery'] 	= $galleryArray;
 							
 						$videosArray	= $this->model->getCampanasVideo($_GET['sectionId']);
+						$data['videos'] = $videosArray;
+					break;
+					
+					case 9:// actividades
+						$sectionRow 		= $this->model->getMaterialesById($_GET['sectionId']);
+						$data['section'] 	= $sectionRow;
+							
+						$galleryArray  		= $this->model->getMaterialesGallery($_GET['sectionId']);
+						$data['gallery'] 	= $galleryArray;
+							
+						$videosArray	= $this->model->getMaterialesVideo($_GET['sectionId']);
 						$data['videos'] = $videosArray;
 					break;
 					

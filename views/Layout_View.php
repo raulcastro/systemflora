@@ -90,6 +90,10 @@ class Layout_View
 				$this->kindPage = 'campanas';
 			break;
 			
+			case 9:
+				$this->kindPage = 'materiales';
+			break;
+			
 			default:
 				;
 			break;
@@ -173,6 +177,10 @@ class Layout_View
 					echo self::getCampanasHeader();
 				break;
 				
+				case 'materiales':
+					echo self::getMaterialesHeader();
+				break;
+				
  				case 'editar-seccion':
  					echo self::getEditSectionHeader();
  				break;
@@ -241,6 +249,10 @@ class Layout_View
 							
 							case 'campanas':
 								echo self :: getCampanasSections();
+							break;
+							
+							case 'materiales':
+								echo self :: getMaterialesSections();
 							break;
 							
 							case 'editar-seccion':
@@ -482,6 +494,7 @@ class Layout_View
 				<li <?php if ($_GET['section'] == 3) echo $active; ?>><a href="/proyectos/">Proyectos</a></li>
 				<li <?php if ($_GET['section'] == 4) echo $active; ?>><a href="/actividades/">Actividades</a></li>
 				<li <?php if ($_GET['section'] == 9) echo $active; ?>><a href="/campanas/">Campa&ntilde;as</a></li>
+				<li <?php if ($_GET['section'] == 10) echo $active; ?>><a href="/materiales/">Materiales</a></li>
 				<li <?php if ($_GET['section'] == 2) echo $active; ?>><a href="/espacios/">Espacios</a></li>
 				<li <?php if ($_GET['section'] == 6) echo $active; ?>><a href="/noticias/">Noticias</a></li>
 				<li <?php if ($_GET['section'] == 7) echo $active; ?>><a href="/links/">Links</a></li>
@@ -1529,6 +1542,90 @@ class Layout_View
    		return $item;
    	}
    	
+   	public function getMaterialesHeader()
+	{
+		ob_start();
+		?>
+		<script src="/js/materiales.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		});
+		</script>
+		
+   		<?php		
+		$sectionHead = ob_get_contents();
+		ob_end_clean();
+		return $sectionHead;
+	}
+   	
+   	
+   	public function getMaterialesSections()
+   	{
+   		ob_start();
+   		?>
+   		<div class="row">
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-1 control-label" for="textinput"><b>T&iacute;tulo</b></label>
+						<div class="col-sm-9">
+							<input type="text" placeholder="T&iacute;tulo" class="form-control" id="newMaterialTitle" value="">
+						</div>
+						<div class="col-sm-2">
+							<button type="submit" class="btn btn-primary" id="addMaterial">A&ntilde;adir material</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
+   		
+   		<div class="row" id="materialesBox">
+   		<?php 
+   		foreach ($this->data['materiales'] as $section)
+   		{
+   			echo self::getMaterialesItem($section);
+   		}
+   		?>
+   		</div>
+   		
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+	
+   	public function getMaterialesItem($section)
+   	{
+   		$img = '';
+   		if (!$section['icon'])
+   			$img = '/images/100x100-default.jpg';
+   		else
+   			$img = "/images-system/medium/".$section['icon'];
+   		
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['materiales_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" height="100" src="<?php echo $img; ?>" />
+				</div>
+				<div class="col-sm-8">
+					<p class="section-title"><strong><?php echo $section['title']; ?></strong></p>
+				</div>
+				<div class="col-sm-2">
+					<a href="/editar-materiales/<?php echo $section['materiales_id']; ?>/<?php echo Tools::slugify($section['title']); ?>/<?php echo $section['kind']."/"; ?>" class="btn btn-info btn-xs">Editar</a>
+					<a href="" class="btn btn-danger btn-xs deleteMaterial" sId="<?php echo $section['materiales_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
+   	
+   	
+   	
    	public function getEditSectionHeader()
 	{
 		ob_start();
@@ -1604,6 +1701,12 @@ class Layout_View
 			case 'campanas':
 				?>
 			<script src="/js/campanas.js"></script>
+			<?php
+			break;
+			
+			case 'materiales':
+				?>
+			<script src="/js/materiales.js"></script>
 			<?php
 			break;
 			
@@ -1683,6 +1786,13 @@ class Layout_View
 				$portraitSize 	= 'JPG (570 * 290 px)';
 			?>
 			<input type="hidden" value="<?php echo $section['campanas_id']; ?>" id="sectionId" />
+			<?php
+			break;
+			
+			case 'materiales':
+				$iconSize 		= 'JPG (370 * 300 px)';
+			?>
+			<input type="hidden" value="<?php echo $section['materiales_id']; ?>" id="sectionId" />
 			<?php
 			break;
 			
@@ -1794,7 +1904,7 @@ class Layout_View
 					</div>
 					
 					<?php 
-					if ($this->kindPage == 'causas' || $this->kindPage == 'espacios' || $this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas')
+					if ($this->kindPage == 'causas' || $this->kindPage == 'espacios' || $this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas' || $this->kindPage == 'materiales')
 					{
 						?>
 					<!-- Textarea input-->
@@ -2241,7 +2351,7 @@ class Layout_View
 			</form>
    		</div>
    		<?php 
-		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas')
+		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas' || $this->kindPage == 'materiales')
 		{
 			?>
    		<div class="row gallery-box">
@@ -2293,7 +2403,7 @@ class Layout_View
 		?>
    		
    		<?php 
-		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas')
+		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas' || $this->kindPage == 'materiales')
 		{
 			?>
    		<div class="row gallery-box">

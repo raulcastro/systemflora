@@ -313,6 +313,48 @@ switch ($_POST['opt'])
 		}
 	break;
 	
+	case 45:
+		if ($lastMaterial = $model->addMaterial($_POST))
+		{
+			echo $lastMaterial;
+		}
+	break;
+	
+	case 46:// Delete material
+		if ($model->deleteMateriales($_POST['materiales_id']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 47:
+		if ($model->updateMateriales($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 48:
+		if ($model->deleteMaterialesPicture($_POST['pictureId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 49:
+		if($model->addMaterialesVideo($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 50:
+		if($model->deleteMaterialesVideo($_POST['videoId']))
+		{
+			echo 1;
+		}
+	break;
+	
 	default:
 	break;
 }

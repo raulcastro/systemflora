@@ -880,6 +880,86 @@ switch ($_POST['opt'])
 			}
 		break;
 		
+		case 27: // change materiales icon
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'materiales-icon';
+			$mediumWidth 	= 100;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('background'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->updateMaterialesIcon($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
+		case 28: // Add actividades gallery
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'materiales-gallery';
+			$mediumWidth 	= 300;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('image'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->addMaterialesGallery($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
 	default:
 	break;
 }

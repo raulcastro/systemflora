@@ -2129,7 +2129,7 @@ class Layout_Model
 	public function getAllLogros()
 	{
 		try {
-			$query = 'SELECT * FROM logros';
+			$query = 'SELECT * FROM logros ORDER BY logros_id DESC';
 			return $this->db->getArray($query);
 		} catch (Exception $e) {
 			return false;
@@ -2945,6 +2945,161 @@ class Layout_Model
 	{
 		try {
 			$query = 'DELETE FROM campanas_videos WHERE video_id = '.$videoId;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addMaterial($data)
+	{
+		try {
+			$query 	= 'INSERT INTO materiales(title) VALUES(?)';
+			$prep 	= $this->db->prepare($query);
+			$prep->bind_param('s', $data['newTitle']);
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getMateriales()
+	{
+		try {
+			$query = 'SELECT * FROM materiales ORDER BY materiales_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteMateriales($id)
+	{
+		try {
+			$id = (int) $id;
+			$query = 'DELETE FROM materiales WHERE materiales_id = '.$id;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getMaterialesById($id)
+	{
+		try {
+			$id = (int) $id;
+			$query = 'SELECT * FROM materiales WHERE materiales_id = '.$id;
+			return $this->db->getRow($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateMaterialesIcon($data)
+	{
+		try {
+			$query = 'UPDATE materiales SET icon = ? WHERE materiales_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['background'], $data['sectionId']);
+	
+			return $prep->execute();
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateMateriales($data)
+	{
+		try {
+			$query = 'UPDATE materiales SET title = ?, description = ?, content = ? WHERE materiales_id = ?';
+				
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('sssi',
+					$data['sectionTitle'],
+					$data['sectionDescription'],
+					$data['sectionContent'],
+					$data['sectionId']);
+				
+			return $prep->execute();
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addMaterialesGallery($data)
+	{
+		try {
+			$query = 'INSERT INTO materiales_gallery(materiales_id, picture) VALUES(?, ?)';
+	
+			$prep = $this->db->prepare($query);
+	
+			$prep->bind_param('is', $data['sectionId'], $data['image']);
+	
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getMaterialesGallery($materiales_id)
+	{
+		try {
+			$query = 'SELECT * FROM materiales_gallery WHERE materiales_id = '.$materiales_id.' ORDER BY picture_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteMaterialesPicture($pictureId)
+	{
+		try {
+			$query = 'DELETE FROM materiales_gallery WHERE picture_id = '.$pictureId;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addMaterialesVideo($data)
+	{
+		try {
+			$query = 'INSERT INTO materiales_videos(materiales_id, video) VALUES(?, ?)';
+	
+			$prep = $this->db->prepare($query);
+	
+			$prep->bind_param('is', $data['sectionId'], $data['video']);
+	
+			if ($prep->execute())
+			{
+				return $prep->insert_id;
+			}
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getMaterialesVideo($materiales_id)
+	{
+		try {
+			$query = 'SELECT * FROM materiales_videos WHERE materiales_id = '.$materiales_id.' ORDER BY video_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteMaterialesVideo($videoId)
+	{
+		try {
+			$query = 'DELETE FROM materiales_videos WHERE video_id = '.$videoId;
 			return $this->db->run($query);
 		} catch (Exception $e) {
 			return false;
