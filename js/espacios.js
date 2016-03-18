@@ -15,6 +15,11 @@ $(document).ready(function()
 		return false;
 	});
 	
+	$('#updateProyectos').click(function(){
+		updateProyectos();
+		return false;
+	});
+	
 	var sectionId = $('#sectionId').val();
 	
 	$(".upload-icon").uploadFile({
@@ -169,6 +174,68 @@ function addBloque()
 	    });
 	}
 }
+
+function updateProyectos()
+{
+	var sectionId 	= $('#sectionId').val();
+	deleteRealacion(sectionId);
+	$('#aliadosBoxItems .aliado-item').each(function(){
+		if ($(this).is(':checked'))
+		{
+			aliadoId = $(this).attr('aliadoId');
+			addRelacion(sectionId, aliadoId);
+		}
+	});
+	alert('Actualizado');
+}
+
+function addRelacion(sectionId, aliadoId)
+{
+	if (aliadoId)
+	{
+		$.ajax({
+	        type:   'POST',
+	        url:    '/ajax/sections.php',
+	        data:{  sectionId: sectionId,
+	        		aliadoId: 	aliadoId,
+	            	opt: 			73
+	             },
+	        success:
+	        function(xml)
+	        {
+	            if (0 != xml)
+	            {
+	            	
+	            }
+	        }
+	    });
+	}
+	
+	return false
+}
+
+function deleteRealacion(sectionId)
+{
+	if (sectionId)
+	{
+		$.ajax({
+	        type:   'POST',
+	        url:    '/ajax/sections.php',
+	        data:{  sectionId: sectionId,
+	            	opt: 			74
+	             },
+	        success:
+	        function(xml)
+	        {
+	            if (0 != xml)
+	            {
+	            	
+	            }
+	        }
+	    });
+	}
+}
+
 
 function extractVideoID(url)
 {

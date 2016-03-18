@@ -1,27 +1,18 @@
 $(document).ready(function()
 {
-	$('#addProyecto').click(function(){
-		addProyecto();
-		return false;
-	});
 	
 	$('#updateSection').click(function(){
 		updateSection();
 		return false;
 	});
 	
-	$('.deleteProyectos').click(function(){
-		deleteProyecto(this);
+	$('#addMaterial').click(function(){
+		addMaterial();
 		return false;
 	});
 	
-	$('.addLink').click(function(){
-		addLink(this);
-		return false;
-	});
-	
-	$('.deleteProyectosLink').click(function(){
-		deleteProyectosLinks(this);
+	$('.deleteMaterial').click(function(){
+		deleteMaterial(this);
 		return false;
 	});
 	
@@ -40,11 +31,6 @@ $(document).ready(function()
 		return false;
 	});
 	
-	$('#updateAliados').click(function(){
-		updateAliados();
-		return false;
-	});
-	
 	var sectionId = $('#sectionId').val();
 	
 	$(".upload-icon").uploadFile({
@@ -54,7 +40,7 @@ $(document).ready(function()
 		doneStr:	"uploaded!",
 		formData: {
 				sectionId: sectionId,
-				opt: 19
+				opt: 30
 			},
 		onSuccess:function(files, data, xhr)
 		{
@@ -72,7 +58,7 @@ $(document).ready(function()
 		doneStr:	"uploaded!",
 		formData: {
 				sectionId: sectionId,
-				opt: 20
+				opt: 31
 			},
 		onSuccess:function(files, data, xhr)
 		{
@@ -99,21 +85,21 @@ $(document).ready(function()
 			});
 		}
 	});
-	
 });
 
-function addProyecto()
+function addMaterial()
 {
-	var proyectoTitle = $('#newProyectoTitle').val();
 	
-	if (proyectoTitle)
+	var newTitle = $('#newMaterialTitle').val();
+	
+	if (newTitle)
 	{
 		$.ajax({
 	        type:   'POST',
 	        url:    '/ajax/sections.php',
 	        data:{  
-	        	newTitle: 	proyectoTitle,
-	            opt: 		23
+	        	newTitle: 	newTitle,
+	            opt: 		54
 	             },
 	        success:
 	        function(newId)
@@ -125,23 +111,17 @@ function addProyecto()
 	            		+ '		<div class="col-sm-2">'
 	            		+ '		<img alt="" height="100" src="/images/100x100-default.jpg" />'
 	            		+ '	</div>'
-	            		+ '	<div class="col-sm-8">'
-	            		+ '		<p class="section-title"><strong>'+proyectoTitle+'</strong></p>'
+	            		+ '	<div class="col-sm-9">'
+	            		+ '		<p class="section-title"><strong>'+newTitle+'</strong></p>'
 	            		+ '	</div>'
-	            		+ '	<div class="col-sm-2">'
-	            		+ '		<a href="/editar-proyectos/'+newId+'/nuevo-proyecto/6/" class="btn btn-info btn-xs">Editar</a>'
-	            		+ ' <a href="" class="btn btn-danger btn-xs deleteProyectos" sId="'+newId+'">Eliminar</a>'
+	            		+ '	<div class="col-sm-1">'
+	            		+ '		<a href="/editar-materiales/'+newId+'/nuevo-material/10/" class="btn btn-info btn-xs deleteSlider" sId="'+newId+'">Editar</a>'
 	            		+ '	</div>'
 	            		+ '</div>'
 	            		+ '</div>';
 	            	
-	            	$('#proyectosBox').prepend(item);
-	            	$('#newProyectoTitle').val('');
-	            	
-	            	$('.deleteProyectos').click(function(){
-	            		deleteProyecto(this);
-	            		return false;
-	            	});
+	            	$('#materialesBox').prepend(item);
+	            	$('#newMaterialTitle').val('');
 	            }
 	        }
 	    });
@@ -150,14 +130,11 @@ function addProyecto()
 
 function updateSection()
 {
-	
 	var sectionId 			= $('#sectionId').val();
 	var sectionTitle		= $('#sectionTitle').val();
 	var sectionDescription	= $('#sectionDescription').val();
 	var sectionContent		= $('#sectionContent').val();
-	var firstColumnTitle = $('#firstColumnTitle').val();
-	var secondColumnTitle = $('#secondColumnTitle').val();
-	var thirdColumnTitle = $('#thirdColumnTitle').val();
+	
 	
 	if (sectionId)
 	{
@@ -168,10 +145,7 @@ function updateSection()
 	        	sectionTitle:			sectionTitle,
 	        	sectionDescription: 	sectionDescription,
 	        	sectionContent: 		sectionContent,
-	        	firstColumnTitle:		firstColumnTitle,
-	        	secondColumnTitle: 		secondColumnTitle,
-	        	thirdColumnTitle: 		thirdColumnTitle,
-	            opt: 					25
+	            opt: 					56
 	             },
 	        success:
 	        function(xml)
@@ -185,16 +159,17 @@ function updateSection()
 	}
 }
 
-function deleteProyecto(node)
+function deleteMaterial(node)
 {
 	var sId = $(node).attr('sId');
+	
 	if (sId)
 	{
 		$.ajax({
 	        type:   'POST',
 	        url:    '/ajax/sections.php',
-	        data:{  logros_id: 	sId,
-	            	opt: 		24
+	        data:{  materiales_id: 	sId,
+	            	opt: 			55
 	             },
 	        success:
 	        function(xml)
@@ -210,80 +185,6 @@ function deleteProyecto(node)
 	return false;
 }
 
-
-function addLink(node)
-{
-	var sectionId 	= $('#sectionId').val();
-	var linkType 	= $(node).attr('linkType');
-	
-	var linkTitle 	= $('#linkTitle-'+linkType).val();
-	var linkUrl 	= $('#linkUrl-'+linkType).val();
-	
-	if (sectionId && linkUrl)
-	{
-		$.ajax({
-	        type:   'POST',
-	        url:    '/ajax/sections.php',
-	        data:{  sectionId: 	sectionId,
-	        	linkType:		linkType,
-	        	linkTitle: 		linkTitle,
-	        	linkUrl: 		linkUrl,
-	            opt: 			26
-	             },
-	        success:
-	        function(linkId)
-	        {
-	            if (0 != linkId)
-	            {
-	            	item = '<div class="itemBlock" id="linkBlock-'+linkId+'"> ' +
-						'		<div class="text-right">' +
-						'		<a href="#" linkId="'+linkId+'" class="glyphicon glyphicon-remove text-danger deleteProyectosLink"></a>' +
-						'	</div>' +
-						'	<div>' +
-						'<a href="'+linkUrl+'" target="_blank" linkId="'+linkId+'" class="text-success">'+linkTitle+'</a>' +
-						'	</div>' +
-						'</div>';
-	            	
-	            	$('#linksBox-'+linkType).prepend(item);
-	            	
-	            	$('#linkTitle-'+linkType).val('');
-	            	$('#linkUrl-'+linkType).val('');
-	            	
-	            	$('.deleteProyectosLink').click(function(){
-	            		deleteProyectosLinks(this);
-	            		return false;
-	            	});
-	            }
-	        }
-	    });
-	}
-}
-
-function deleteProyectosLinks(node)
-{
-	var linkId 	= $(node).attr('linkId');
-	
-	if (linkId)
-	{
-		$.ajax({
-	        type:   'POST',
-	        url:    '/ajax/sections.php',
-	        data:{  linkId: 	linkId,
-	            opt: 			27
-	             },
-	        success:
-	        function(xml)
-	        {
-	            if (0 != xml)
-	            {
-	            	$('#linkBlock-'+linkId).remove();
-	            	
-	            }
-	        }
-	    });
-	}
-}
-
 function deletePicture(node)
 {
 	var sId = $(node).attr('pictureId');
@@ -294,7 +195,7 @@ function deletePicture(node)
 	        type:   'POST',
 	        url:    '/ajax/sections.php',
 	        data:{  pictureId: 	sId,
-	            	opt: 		30
+	            	opt: 		57
 	             },
 	        success:
 	        function(xml)
@@ -325,9 +226,9 @@ function addVideo()
 		$.ajax({
 	        type:   'POST',
 	        url:    '/ajax/sections.php',
-	        data:{  sectionId: 			sectionId,
+	        data:{  sectionId: 	sectionId,
 	        	video:			singleVideo,
-	            opt: 					28
+	            opt: 			58
 	             },
 	        success:
 	        function(video_id)
@@ -364,7 +265,7 @@ function deleteVideo(node)
 	        type:   'POST',
 	        url:    '/ajax/sections.php',
 	        data:{  videoId: 	sId,
-	            	opt: 			29
+	            	opt: 		59
 	             },
 	        success:
 	        function(xml)
@@ -380,66 +281,6 @@ function deleteVideo(node)
 	return false;
 }
 
-function updateAliados()
-{
-	var sectionId 	= $('#sectionId').val();
-	deleteRealacion(sectionId);
-	$('#aliadosBoxItems .aliado-item').each(function(){
-		if ($(this).is(':checked'))
-		{
-			aliadoId = $(this).attr('aliadoId');
-			addRelacion(sectionId, aliadoId);
-		}
-	});
-	alert('Actualizado');
-}
-
-function addRelacion(sectionId, aliadoId)
-{
-	if (aliadoId)
-	{
-		$.ajax({
-	        type:   'POST',
-	        url:    '/ajax/sections.php',
-	        data:{  sectionId: sectionId,
-	        		aliadoId: 	aliadoId,
-	            	opt: 			63
-	             },
-	        success:
-	        function(xml)
-	        {
-	            if (0 != xml)
-	            {
-	            	
-	            }
-	        }
-	    });
-	}
-	
-	return false
-}
-
-function deleteRealacion(sectionId)
-{
-	if (sectionId)
-	{
-		$.ajax({
-	        type:   'POST',
-	        url:    '/ajax/sections.php',
-	        data:{  sectionId: sectionId,
-	            	opt: 			64
-	             },
-	        success:
-	        function(xml)
-	        {
-	            if (0 != xml)
-	            {
-	            	
-	            }
-	        }
-	    });
-	}
-}
 
 
 function extractVideoID(url)
@@ -452,9 +293,4 @@ function extractVideoID(url)
 //        alert("Could not extract video ID.");
     }
 }
-
-
-
-
-
 

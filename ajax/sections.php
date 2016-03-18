@@ -355,6 +355,216 @@ switch ($_POST['opt'])
 		}
 	break;
 	
+	case 51:
+		if ($last = $model->addVoluntariado($_POST))
+		{
+			echo $last;
+		}
+	break;
+	
+	case 52:
+		if ($model->deleteVoluntariado($_POST['voluntariado_id']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 53:
+		if ($model->updateVoluntariado($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 54:
+		if ($lastMaterial = $model->addEmbajadores($_POST))
+		{
+			echo $lastMaterial;
+		}
+	break;
+	
+	case 55:// Delete material
+		if ($model->deleteEmbajadores($_POST['materiales_id']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 56:
+		if ($model->updateEmbajadores($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 57:
+		if ($model->deleteEmbajadoresPicture($_POST['pictureId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 58:
+		if($model->addEmbajadoresVideo($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 59:
+		if($model->deleteEmbajadoresVideo($_POST['videoId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 60:
+		if ($last = $model->addTestimonios($_POST))
+		{
+			echo $last;
+		}
+	break;
+	
+	case 61:// Delete material
+		if ($model->deleteTestimonios($_POST['testimonioId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 62:
+		if ($model->updateTestimonios($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 63:
+		if ($model->addRelacionAliadosProyectos($_POST['sectionId'], $_POST['aliadoId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 64:
+		if ($model->deleteRelacionAliadosProyectos($_POST['sectionId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 65:
+		if ($model->addRelacionCausasProyectos($_POST['sectionId'], $_POST['aliadoId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 66:
+		if ($model->deleteRelacionCausasProyectos($_POST['sectionId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 67:
+		if ($lastMaterial = $model->addContenidos($_POST))
+		{
+			echo $lastMaterial;
+		}
+	break;
+	
+	case 68:// Delete material
+		if ($model->deleteContenidos($_POST['materiales_id']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 69:
+		if ($model->updateContenidos($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 70:
+		if ($model->deleteContenidosPicture($_POST['pictureId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 71:
+		if($model->addContenidosVideo($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 72:
+		if($model->deleteContenidosVideo($_POST['videoId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 73:
+		if ($model->addRelacionEspaciosContenidos($_POST['sectionId'], $_POST['aliadoId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 74:
+		if ($model->deleteRelacionEspaciosContenidos($_POST['sectionId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 75:
+		if ($lastMaterial = $model->addProductos($_POST))
+		{
+			echo $lastMaterial;
+		}
+	break;
+	
+	case 76:// Delete material
+		if ($model->deleteProductos($_POST['materiales_id']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 77:
+		if ($model->updateProductos($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 78:
+		if ($model->deleteProductosPicture($_POST['pictureId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 79:
+		if($model->addProductosVideo($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 80:
+		if($model->deleteProductosVideo($_POST['videoId']))
+		{
+			echo 1;
+		}
+	break;
+	
 	default:
 	break;
 }

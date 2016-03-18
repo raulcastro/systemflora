@@ -920,7 +920,7 @@ switch ($_POST['opt'])
 			}
 		break;
 		
-		case 28: // Add actividades gallery
+		case 28: // Add materiales gallery
 			$model	= new Layout_Model();
 			$data 	= $backend->loadBackend();
 		
@@ -951,6 +951,406 @@ switch ($_POST['opt'])
 				if ($newData)
 				{
 					$lastId = $model->addMaterialesGallery($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
+		case 29: // change voluntariado icon
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'voluntariado-icon';
+			$mediumWidth 	= 100;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('background'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->updateVoluntariadoIcon($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
+		case 30: // change voluntariado icon
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'embajadores-icon';
+			$mediumWidth 	= 100;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('background'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->updateEmbajadoresIcon($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
+		case 31: // Add embajadores gallery
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'materiales-gallery';
+			$mediumWidth 	= 300;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('image'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->addEmbajadoresGallery($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
+		case 32: // Update testimonios-icon
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'testimonio';
+			$mediumWidth 	= 100;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('icon'=>$result['fileName'], 'directorioId'=>$_POST['directorioId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->updateTestimoniosIcon($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
+		case 34: // Update contenidos-icon
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'contenidos';
+			$mediumWidth 	= 100;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('background'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->updateContenidosIcon($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
+		case 35: // change contenidos portrait
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'contenidos-portrait';
+			$mediumWidth 	= 300;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('background'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->updateContenidosPortrait($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
+		case 36: // Add embajadores gallery
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'contenidos-gallery';
+			$mediumWidth 	= 300;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('image'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->addContenidosGallery($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
+		case 37: // Update contenidos-icon
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'contenidos';
+			$mediumWidth 	= 100;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('background'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->updateProductosIcon($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
+		case 38: // change contenidos portrait
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'contenidos-portrait';
+			$mediumWidth 	= 300;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('background'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->updateProductosPortrait($info);
+				}
+		
+				$data  = array('success'=>true, 'fileName'=>$result['fileName'],
+						'wp'=>$wp, 'hp'=>$hp, 'lastId'=>$lastId);
+		
+				echo htmlspecialchars(json_encode($data), ENT_NOQUOTES);
+			}
+		break;
+		
+		case 39: // Add embajadores gallery
+			$model	= new Layout_Model();
+			$data 	= $backend->loadBackend();
+		
+			$allowedExtensions = array("jpg", "JPG", "jpeg", "png");
+			$sizeLimit 	= 20 * 1024 * 1024;
+		
+			$uploader 	= new Media_Model($allowedExtensions, $sizeLimit);
+		
+			$savePath 		= $root.'/images-system/original/';
+			$medium 		= $root.'/images-system/medium/';
+			$pre	  		= 'contenidos-gallery';
+			$mediumWidth 	= 300;
+		
+			if ($result = $uploader->handleUpload($savePath, $pre))
+			{
+				$uploader->getThumb($result['fileName']	, $savePath, $medium, $mediumWidth,
+						'width', '');
+		
+				$newData = getimagesize($medium.$result['fileName']);
+		
+				$wp     = $newData[0];
+				$hp     = $newData[1];
+		
+				$lastId = 0;
+		
+				$info = array('image'=>$result['fileName'], 'sectionId'=>$_POST['sectionId']);
+		
+				if ($newData)
+				{
+					$lastId = $model->addProductosGallery($info);
 				}
 		
 				$data  = array('success'=>true, 'fileName'=>$result['fileName'],

@@ -1,7 +1,7 @@
 $(document).ready(function()
 {
-	$('#addProyecto').click(function(){
-		addProyecto();
+	$('#addVoluntariado').click(function(){
+		addVoluntariado();
 		return false;
 	});
 	
@@ -10,8 +10,8 @@ $(document).ready(function()
 		return false;
 	});
 	
-	$('.deleteProyectos').click(function(){
-		deleteProyecto(this);
+	$('.delete').click(function(){
+		deleteVoluntariado(this);
 		return false;
 	});
 	
@@ -21,7 +21,7 @@ $(document).ready(function()
 	});
 	
 	$('.deleteProyectosLink').click(function(){
-		deleteProyectosLinks(this);
+		deleteCampanasLinks(this);
 		return false;
 	});
 	
@@ -40,11 +40,6 @@ $(document).ready(function()
 		return false;
 	});
 	
-	$('#updateAliados').click(function(){
-		updateAliados();
-		return false;
-	});
-	
 	var sectionId = $('#sectionId').val();
 	
 	$(".upload-icon").uploadFile({
@@ -54,7 +49,7 @@ $(document).ready(function()
 		doneStr:	"uploaded!",
 		formData: {
 				sectionId: sectionId,
-				opt: 19
+				opt: 29
 			},
 		onSuccess:function(files, data, xhr)
 		{
@@ -64,56 +59,23 @@ $(document).ready(function()
 			$('#iconImg').attr('src', '/images-system/medium/'+imageGallery);
 		}
 	});
-	
-	$(".upload-gallery").uploadFile({
-		url:		"/ajax/media.php",
-		fileName:	"myfile",
-		multiple: 	true,
-		doneStr:	"uploaded!",
-		formData: {
-				sectionId: sectionId,
-				opt: 20
-			},
-		onSuccess:function(files, data, xhr)
-		{
-			obj 			= JSON.parse(data);
-			imageGallery 	= obj.fileName;
-			lastIdGallery 	= obj.lastId;
-			
-			item = '<div class="col-sm-3 gallery-item" id="itemPicture-'+lastIdGallery+'">' +
-				'		<div class="delete-picture">' +
-				'		<div class="text-right">' +
-				'			<a href="#" pictureId="'+lastIdGallery+'" class="glyphicon glyphicon-remove text-danger delete-picture"></a>' +
-				'		</div>	' +
-				'	</div>' +
-				'	<div class="image">' +
-				'		<img alt="" src="/images-system/medium/'+imageGallery+'">' +
-				'	</div>' +
-				'</div>';
-			
-			$('#galleryBoxItems').prepend(item);
-			
-			$('.delete-picture').click(function(){
-				deletePicture(this);
-				return false;
-			});
-		}
-	});
-	
 });
 
-function addProyecto()
+function addVoluntariado()
 {
-	var proyectoTitle = $('#newProyectoTitle').val();
+	var newTitle = $('#newTitle').val();
+	var type = $('#voluntariadoType').val();
+	var pageSection = $('#pageSection').val();
 	
-	if (proyectoTitle)
+	if (newTitle)
 	{
 		$.ajax({
 	        type:   'POST',
 	        url:    '/ajax/sections.php',
 	        data:{  
-	        	newTitle: 	proyectoTitle,
-	            opt: 		23
+	        	newTitle: 	newTitle,
+	        	type:	type,
+	            opt: 		51
 	             },
 	        success:
 	        function(newId)
@@ -126,20 +88,20 @@ function addProyecto()
 	            		+ '		<img alt="" height="100" src="/images/100x100-default.jpg" />'
 	            		+ '	</div>'
 	            		+ '	<div class="col-sm-8">'
-	            		+ '		<p class="section-title"><strong>'+proyectoTitle+'</strong></p>'
+	            		+ '		<p class="section-title"><strong>'+newTitle+'</strong></p>'
 	            		+ '	</div>'
 	            		+ '	<div class="col-sm-2">'
-	            		+ '		<a href="/editar-proyectos/'+newId+'/nuevo-proyecto/6/" class="btn btn-info btn-xs">Editar</a>'
-	            		+ ' <a href="" class="btn btn-danger btn-xs deleteProyectos" sId="'+newId+'">Eliminar</a>'
+	            		+ '		<a href="/editar-voluntariado/'+newId+'/nuevo-node/10/'+pageSection+'/" class="btn btn-info btn-xs">Editar</a>'
+	            		+ ' <a href="" class="btn btn-danger btn-xs delete" sId="'+newId+'">Eliminar</a>'
 	            		+ '	</div>'
 	            		+ '</div>'
 	            		+ '</div>';
 	            	
-	            	$('#proyectosBox').prepend(item);
-	            	$('#newProyectoTitle').val('');
+	            	$('#voluntariadoBox').prepend(item);
+	            	$('#newTitle').val('');
 	            	
-	            	$('.deleteProyectos').click(function(){
-	            		deleteProyecto(this);
+	            	$('.delete').click(function(){
+	            		deleteVoluntariado(this);
 	            		return false;
 	            	});
 	            }
@@ -155,9 +117,14 @@ function updateSection()
 	var sectionTitle		= $('#sectionTitle').val();
 	var sectionDescription	= $('#sectionDescription').val();
 	var sectionContent		= $('#sectionContent').val();
-	var firstColumnTitle = $('#firstColumnTitle').val();
-	var secondColumnTitle = $('#secondColumnTitle').val();
-	var thirdColumnTitle = $('#thirdColumnTitle').val();
+	var firstColumnTitle 	= $('#firstColumnTitle').val();
+	var firstColumnContent = $('#firstColumnContent').val();
+	var secondColumnTitle 	= $('#secondColumnTitle').val();
+	var secondColumnContent = $('#secondColumnContent').val();
+	var thirdColumnTitle 	= $('#thirdColumnTitle').val();
+	var thirdColumnContent 	= $('#thirdColumnContent').val();
+	var singleVideo 		= $('#singleVideo').val();
+	
 	
 	if (sectionId)
 	{
@@ -169,9 +136,12 @@ function updateSection()
 	        	sectionDescription: 	sectionDescription,
 	        	sectionContent: 		sectionContent,
 	        	firstColumnTitle:		firstColumnTitle,
+	        	firstColumnContent:		firstColumnContent,
 	        	secondColumnTitle: 		secondColumnTitle,
+	        	secondColumnContent:	secondColumnContent,
 	        	thirdColumnTitle: 		thirdColumnTitle,
-	            opt: 					25
+	        	thirdColumnContent: 	thirdColumnContent,
+	            opt: 					53
 	             },
 	        success:
 	        function(xml)
@@ -185,16 +155,17 @@ function updateSection()
 	}
 }
 
-function deleteProyecto(node)
+function deleteVoluntariado(node)
 {
 	var sId = $(node).attr('sId');
+
 	if (sId)
 	{
 		$.ajax({
 	        type:   'POST',
 	        url:    '/ajax/sections.php',
-	        data:{  logros_id: 	sId,
-	            	opt: 		24
+	        data:{  voluntariado_id: sId,
+	            	opt: 		52
 	             },
 	        success:
 	        function(xml)
@@ -228,7 +199,7 @@ function addLink(node)
 	        	linkType:		linkType,
 	        	linkTitle: 		linkTitle,
 	        	linkUrl: 		linkUrl,
-	            opt: 			26
+	            opt: 			40
 	             },
 	        success:
 	        function(linkId)
@@ -250,7 +221,7 @@ function addLink(node)
 	            	$('#linkUrl-'+linkType).val('');
 	            	
 	            	$('.deleteProyectosLink').click(function(){
-	            		deleteProyectosLinks(this);
+	            		deleteCampanasLinks(this);
 	            		return false;
 	            	});
 	            }
@@ -259,7 +230,7 @@ function addLink(node)
 	}
 }
 
-function deleteProyectosLinks(node)
+function deleteCampanasLinks(node)
 {
 	var linkId 	= $(node).attr('linkId');
 	
@@ -269,7 +240,7 @@ function deleteProyectosLinks(node)
 	        type:   'POST',
 	        url:    '/ajax/sections.php',
 	        data:{  linkId: 	linkId,
-	            opt: 			27
+	            opt: 			41
 	             },
 	        success:
 	        function(xml)
@@ -294,7 +265,7 @@ function deletePicture(node)
 	        type:   'POST',
 	        url:    '/ajax/sections.php',
 	        data:{  pictureId: 	sId,
-	            	opt: 		30
+	            	opt: 		42
 	             },
 	        success:
 	        function(xml)
@@ -325,9 +296,9 @@ function addVideo()
 		$.ajax({
 	        type:   'POST',
 	        url:    '/ajax/sections.php',
-	        data:{  sectionId: 			sectionId,
+	        data:{  sectionId: 	sectionId,
 	        	video:			singleVideo,
-	            opt: 					28
+	            opt: 			43
 	             },
 	        success:
 	        function(video_id)
@@ -364,7 +335,7 @@ function deleteVideo(node)
 	        type:   'POST',
 	        url:    '/ajax/sections.php',
 	        data:{  videoId: 	sId,
-	            	opt: 			29
+	            	opt: 		44
 	             },
 	        success:
 	        function(xml)
@@ -379,68 +350,6 @@ function deleteVideo(node)
 	
 	return false;
 }
-
-function updateAliados()
-{
-	var sectionId 	= $('#sectionId').val();
-	deleteRealacion(sectionId);
-	$('#aliadosBoxItems .aliado-item').each(function(){
-		if ($(this).is(':checked'))
-		{
-			aliadoId = $(this).attr('aliadoId');
-			addRelacion(sectionId, aliadoId);
-		}
-	});
-	alert('Actualizado');
-}
-
-function addRelacion(sectionId, aliadoId)
-{
-	if (aliadoId)
-	{
-		$.ajax({
-	        type:   'POST',
-	        url:    '/ajax/sections.php',
-	        data:{  sectionId: sectionId,
-	        		aliadoId: 	aliadoId,
-	            	opt: 			63
-	             },
-	        success:
-	        function(xml)
-	        {
-	            if (0 != xml)
-	            {
-	            	
-	            }
-	        }
-	    });
-	}
-	
-	return false
-}
-
-function deleteRealacion(sectionId)
-{
-	if (sectionId)
-	{
-		$.ajax({
-	        type:   'POST',
-	        url:    '/ajax/sections.php',
-	        data:{  sectionId: sectionId,
-	            	opt: 			64
-	             },
-	        success:
-	        function(xml)
-	        {
-	            if (0 != xml)
-	            {
-	            	
-	            }
-	        }
-	    });
-	}
-}
-
 
 function extractVideoID(url)
 {

@@ -31,6 +31,14 @@ RewriteRule ^links/$ 							/links.php?section=7
 RewriteRule ^logros/$ 							/logros.php?section=8
 RewriteRule ^campanas/$ 						/campanas.php?section=9
 RewriteRule ^materiales/$ 						/materiales.php?section=10
+RewriteRule ^servicio-social/$ 					/servicio.php?section=11&type=1
+RewriteRule ^practicas/$ 						/practicas.php?section=12&type=2
+RewriteRule ^embajadores/$ 						/embajadores.php?section=13
+RewriteRule ^contenidos/$ 						/contenidos.php?section=15
+RewriteRule ^productos/$ 						/productos.php?section=20
+RewriteRule ^testimonios/$ 						/testimonios.php?section=14
+RewriteRule ^donativos/$ 						/donativos.php?section=16&type=3
+RewriteRule ^aportaciones/$ 					/aportaciones.php?section=17&type=4
 RewriteRule ^banner/$ 							/banner.php?section=17
 RewriteRule ^aliados/$ 							/aliados.php?section=18
 RewriteRule ^directorio/$ 						/directorio.php?section=19
@@ -46,6 +54,10 @@ RewriteRule ^editar-proyectos/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?s
 RewriteRule ^editar-actividades/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ /editar.php?section=4&sectionId=$1&kind=$3
 RewriteRule ^editar-campanas/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?section=9&sectionId=$1&kind=$3
 RewriteRule ^editar-materiales/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?section=10&sectionId=$1&kind=$3
+RewriteRule ^editar-voluntariado/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/([0-9]+)/$ /editar.php?section=$4&sectionId=$1&kind=$3
+RewriteRule ^editar-embajadores/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?section=13&sectionId=$1&kind=$3
+RewriteRule ^editar-contenidos/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?section=15&sectionId=$1&kind=$3
+RewriteRule ^editar-producto/([0-9]+)/([A-Za-z0-9-]+)/([0-9]+)/$ 	/editar.php?section=20&sectionId=$1&kind=$3
 
 
 

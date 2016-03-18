@@ -94,6 +94,22 @@ class Layout_View
 				$this->kindPage = 'materiales';
 			break;
 			
+			case 10:
+				$this->kindPage = 'voluntariado';
+			break;
+			
+			case 11:
+				$this->kindPage = 'embajadores';
+			break;
+			
+			case 12:
+				$this->kindPage = 'contenidos';
+			break;
+			
+			case 13:
+				$this->kindPage = 'productos';
+			break;
+			
 			default:
 				;
 			break;
@@ -181,8 +197,28 @@ class Layout_View
 					echo self::getMaterialesHeader();
 				break;
 				
+				case 'voluntariado':
+					echo self::getVoluntariadoHeader();
+				break;
+				
+				case 'embajadores':
+					echo self::getEmbajadoresHeader();
+				break;
+				
+				case 'contenidos':
+					echo self::getContenidosHeader();
+				break;
+				
+				case 'productos':
+					echo self::getProductosHeader();
+				break;
+				
  				case 'editar-seccion':
  					echo self::getEditSectionHeader();
+ 				break;
+ 				
+ 				case 'testimonios':
+ 					echo self :: getTestimoniosHead();
  				break;
  				
 			}
@@ -257,6 +293,26 @@ class Layout_View
 							
 							case 'editar-seccion':
 								echo self :: getEditSection();
+							break;
+							
+							case 'voluntariado':
+								echo self::getVoluntariadoSection();
+							break;
+							
+							case 'embajadores':
+								echo self :: getEmbajadoresSections();
+							break;
+							
+							case 'contenidos':
+								echo self :: getContenidosSections();
+							break;
+							
+							case 'testimonios':
+								echo self :: getTestimonios();
+							break;
+							
+							case 'productos':
+								echo self :: getProductosSections();
 							break;
 							
 							default :
@@ -495,8 +551,16 @@ class Layout_View
 				<li <?php if ($_GET['section'] == 4) echo $active; ?>><a href="/actividades/">Actividades</a></li>
 				<li <?php if ($_GET['section'] == 9) echo $active; ?>><a href="/campanas/">Campa&ntilde;as</a></li>
 				<li <?php if ($_GET['section'] == 10) echo $active; ?>><a href="/materiales/">Materiales</a></li>
-				<li <?php if ($_GET['section'] == 2) echo $active; ?>><a href="/espacios/">Espacios</a></li>
 				<li <?php if ($_GET['section'] == 6) echo $active; ?>><a href="/noticias/">Noticias</a></li>
+				<li <?php if ($_GET['section'] == 2) echo $active; ?>><a href="/espacios/">Espacios</a></li>
+				<li <?php if ($_GET['section'] == 15) echo $active; ?>><a href="/contenidos/">Contenidos</a></li>
+				<li <?php if ($_GET['section'] == 11) echo $active; ?>><a href="/servicio-social/">Servicio Social</a></li>
+				<li <?php if ($_GET['section'] == 12) echo $active; ?>><a href="/practicas/">Practicas profesionales</a></li>
+				<li <?php if ($_GET['section'] == 13) echo $active; ?>><a href="/embajadores/">Embajadores</a></li>
+				<li <?php if ($_GET['section'] == 14) echo $active; ?>><a href="/testimonios/">Testimonios</a></li>
+				<li <?php if ($_GET['section'] == 16) echo $active; ?>><a href="/donativos/">Donativos</a></li>
+				<li <?php if ($_GET['section'] == 17) echo $active; ?>><a href="/aportaciones/">Aportaciones</a></li>
+				<li <?php if ($_GET['section'] == 20) echo $active; ?>><a href="/productos/">Productos</a></li>
 				<li <?php if ($_GET['section'] == 7) echo $active; ?>><a href="/links/">Links</a></li>
 			</ul>
 		</div>
@@ -1624,6 +1688,537 @@ class Layout_View
    		return $item;
    	}
    	
+   	public function getVoluntariadoHeader()
+	{
+		ob_start();
+		?>
+		<script src="/js/voluntariado.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		});
+		</script>
+		
+   		<?php		
+		$sectionHead = ob_get_contents();
+		ob_end_clean();
+		return $sectionHead;
+	}
+   	
+   	
+   	public function getVoluntariadoSection()
+   	{
+   		$pageSection = 0;
+   		 
+   		switch ($_GET['type'])
+   		{
+   			case '1';
+   			$pageSection = 11;
+   			break;
+   		
+   			case '2':
+   				$pageSection = 12;
+   				break;
+   					
+   			case '3':
+   				$pageSection = 16;
+   			break;
+   			
+   			case '4':
+   				$pageSection = 17;
+			break;
+   		}
+   		
+   		ob_start();
+   		?>
+   		<div class="row">
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-1 control-label" for="textinput"><b>T&iacute;tulo</b></label>
+						<div class="col-sm-9">
+							<input type="text" placeholder="T&iacute;tulo" class="form-control" id="newTitle" value="">
+							<input type="hidden" id="voluntariadoType" value="<?php echo $_GET['type']; ?>">
+							<input type="hidden" id="pageSection" value="<?php echo $pageSection; ?>">
+						</div>
+						<div class="col-sm-2">
+							<button type="submit" class="btn btn-primary" id="addVoluntariado">A&ntilde;adir</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
+   		
+   		<div class="row" id="voluntariadoBox">
+   		<?php
+   		foreach ($this->data['voluntariados'] as $section)
+   		{
+   			echo self::getVoluntariadoItem($section);
+   		}
+   		?>
+   		</div>
+   		
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+	
+   	public function getVoluntariadoItem($section)
+   	{
+   		$img = '';
+   		if (!$section['icon'])
+   			$img = '/images/100x100-default.jpg';
+   		else
+   			$img = "/images-system/medium/".$section['icon'];
+   		
+   		$pageSection = 0;
+   		
+   		switch ($_GET['type'])
+   		{
+   			case '1';
+   				$pageSection = 11;
+   			break;
+   			
+   			case '2':
+				$pageSection = 12;
+			break;
+			
+			case '3':
+				$pageSection = 16;
+			break;
+			
+			case '4':
+				$pageSection = 17;
+			break;
+   		}
+   		
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['voluntariado_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" height="100" src="<?php echo $img; ?>" />
+				</div>
+				<div class="col-sm-8">
+					<p class="section-title"><strong><?php echo $section['title']; ?></strong></p>
+				</div>
+				<div class="col-sm-2">
+					<a href="/editar-voluntariado/<?php echo $section['voluntariado_id']; ?>/<?php echo Tools::slugify($section['title']); ?>/<?php echo $section['kind']."/".$pageSection; ?>/" class="btn btn-info btn-xs">Editar</a>
+					<a href="" class="btn btn-danger btn-xs delete" sId="<?php echo $section['voluntariado_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
+   	
+   	public function getEmbajadoresHeader()
+	{
+		ob_start();
+		?>
+		<script src="/js/embajadores.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		});
+		</script>
+		
+   		<?php		
+		$sectionHead = ob_get_contents();
+		ob_end_clean();
+		return $sectionHead;
+	}
+   	
+   	
+   	public function getEmbajadoresSections()
+   	{
+   		ob_start();
+   		?>
+   		<div class="row">
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-1 control-label" for="textinput"><b>T&iacute;tulo</b></label>
+						<div class="col-sm-9">
+							<input type="text" placeholder="T&iacute;tulo" class="form-control" id="newMaterialTitle" value="">
+						</div>
+						<div class="col-sm-2">
+							<button type="submit" class="btn btn-primary" id="addMaterial">A&ntilde;adir</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
+   		
+   		<div class="row" id="materialesBox">
+   		<?php 
+   		foreach ($this->data['materiales'] as $section)
+   		{
+   			echo self::getEmbajadoresItem($section);
+   		}
+   		?>
+   		</div>
+   		
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+	
+   	public function getEmbajadoresItem($section)
+   	{
+   		$img = '';
+   		if (!$section['icon'])
+   			$img = '/images/100x100-default.jpg';
+   		else
+   			$img = "/images-system/medium/".$section['icon'];
+   		
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['materiales_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" height="100" src="<?php echo $img; ?>" />
+				</div>
+				<div class="col-sm-8">
+					<p class="section-title"><strong><?php echo $section['title']; ?></strong></p>
+				</div>
+				<div class="col-sm-2">
+					<a href="/editar-embajadores/<?php echo $section['materiales_id']; ?>/<?php echo Tools::slugify($section['title']); ?>/<?php echo $section['kind']."/"; ?>" class="btn btn-info btn-xs">Editar</a>
+					<a href="" class="btn btn-danger btn-xs deleteMaterial" sId="<?php echo $section['materiales_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
+   	
+   	public function getContenidosHeader()
+	{
+		ob_start();
+		?>
+		<script src="/js/contenidos.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		});
+		</script>
+		
+   		<?php		
+		$sectionHead = ob_get_contents();
+		ob_end_clean();
+		return $sectionHead;
+	}
+   	
+   	
+   	public function getContenidosSections()
+   	{
+   		ob_start();
+   		?>
+   		<div class="row">
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-1 control-label" for="textinput"><b>T&iacute;tulo</b></label>
+						<div class="col-sm-9">
+							<input type="text" placeholder="T&iacute;tulo" class="form-control" id="newMaterialTitle" value="">
+						</div>
+						<div class="col-sm-2">
+							<button type="submit" class="btn btn-primary" id="addMaterial">A&ntilde;adir</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
+   		
+   		<div class="row" id="materialesBox">
+   		<?php 
+   		foreach ($this->data['materiales'] as $section)
+   		{
+   			echo self::getContenidosItem($section);
+   		}
+   		?>
+   		</div>
+   		
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+	
+   	public function getContenidosItem($section)
+   	{
+   		$img = '';
+   		if (!$section['icon'])
+   			$img = '/images/100x100-default.jpg';
+   		else
+   			$img = "/images-system/medium/".$section['icon'];
+   		
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['materiales_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" height="100" src="<?php echo $img; ?>" />
+				</div>
+				<div class="col-sm-8">
+					<p class="section-title"><strong><?php echo $section['title']; ?></strong></p>
+				</div>
+				<div class="col-sm-2">
+					<a href="/editar-contenidos/<?php echo $section['materiales_id']; ?>/<?php echo Tools::slugify($section['title']); ?>/<?php echo $section['kind']."/"; ?>" class="btn btn-info btn-xs">Editar</a>
+					<a href="" class="btn btn-danger btn-xs deleteMaterial" sId="<?php echo $section['materiales_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
+   	
+   	/**
+	 * extra files for the main-slider
+	 * @return string
+	 */
+	public function getTestimoniosHead()
+	{
+		ob_start();
+		?>
+		<link href="/css/uploadfile.dir.css" rel="stylesheet">
+		<script src="/js/jquery.uploadfile.min.js"></script>
+		<script src="/js/testimonios.js"></script>
+		
+		<<script type="text/javascript">
+		$(document).ready(function()
+		{
+		<?php
+		if ($this->data['testimonios'])
+		{
+			foreach ($this->data['testimonios'] as $testimonio)
+			{
+				?>
+				$("#uploadDir-<?php echo $testimonio['testimonios_id']; ?>").uploadFile({
+					url:		"/ajax/media.php",
+					fileName:	"myfile",
+					multiple: 	true,
+					doneStr:	"uploaded!",
+					dragDrop:	true,
+					formData: {
+							directorioId: <?php echo $testimonio['testimonios_id']; ?>,
+							opt: 32 
+						},
+					onSuccess:function(files, data, xhr)
+					{
+						obj 			= JSON.parse(data);
+						imageGallery 	= obj.fileName;
+						lastIdGallery 	= obj.lastId;
+
+						$('#iconDir<?php echo $testimonio['testimonios_id']; ?>').attr('src',"/images-system/medium/"+imageGallery);
+					}
+				});
+				<?php
+			}
+		}
+		?>
+		});
+		</script>
+   		<?php		
+		$agenciesHead = ob_get_contents();
+		ob_end_clean();
+		return $agenciesHead;
+	}
+   	
+   	/**
+	 * Main slider
+	 * 
+	 * @return string
+	 */
+	public function getTestimonios()
+	{
+		ob_start();
+		?>
+		<div class="row">
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-1 control-label" for="textinput"><b>Testimonio</b></label>
+						<div class="col-sm-8">
+							<textarea placeholder="testimonio" class="form-control" id="newTestimonio"></textarea>
+						</div>
+						<div class="col-sm-2 col-sm-offset-1">
+							<button type="submit" class="btn btn-primary" id="addTestimonio">A&ntilde;adir</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
+		
+		<div class="row" id="dirBox">
+			<?php 
+			foreach ($this->data['testimonios'] as $testimonio)
+			{
+				echo self::getTestimoniosItem($testimonio);
+			}
+			?>
+		</div>
+		<?php
+		$agencies = ob_get_contents();
+		ob_end_clean();
+		return $agencies; 
+	}
+	
+	public function getTestimoniosItem($testimonio)
+	{
+		ob_start();
+		$img = '';
+		if ($testimonio['icon'])
+			$img = '/images-system/medium/'.$testimonio['icon'];
+		else
+			$img = '/images/100x100-default.jpg'; 
+		?>
+		<div class="col-sm-12 slider-item" id="sId-<?php echo $testimonio['testimonios_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" src="<?php echo $img; ?>" id="iconDir<?php echo $testimonio['testimonios_id']; ?>" />
+				</div>
+				<div class="col-sm-4">
+					<div class="col-sm-12" id="uploadDir-<?php echo $testimonio['testimonios_id']; ?>">
+						Cambiar foto. JPG (270 * 241 px)
+					</div>
+				</div>
+				<div class="col-sm-offset-3 col-sm-2">
+					<a href="javascript:void(0);" class="btn btn-info btn-xs saveDir" sId="<?php echo $testimonio['testimonios_id']; ?>">Guardar</a>
+					<a href="javascript:void(0);" class="btn btn-danger btn-xs deleteDir" sId="<?php echo $testimonio['testimonios_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+			
+			<div class="col-sm-12 slider-section">
+				<p><?php echo $testimonio['description']; ?></p>
+			</div>
+			
+			<div class="col-sm-12 slider-section " id="causasSelector-<?php echo $testimonio['testimonios_id']; ?>">
+				<div class="col-sm-2">
+					<input type="checkbox" class="causas-selector-item" <?php if($testimonio['general'] == 1){echo "checked";} ?> causaName="general" > 
+					<label>General</label>
+				</div>
+				
+				<div class="col-sm-2">
+					<input type="checkbox" class="causas-selector-item" <?php if($testimonio['servicios'] == 1){echo "checked";} ?> causaName="servicios" > 
+					<label>Servicios</label>
+				</div>
+				<div class="col-sm-2">
+					<input type="checkbox" class="causas-selector-item" <?php if($testimonio['practicas'] == 1){echo "checked";} ?> causaName="practicas" > 
+					<label>Practicas</label>
+				</div>
+				<div class="col-sm-2">
+					<input type="checkbox" class="causas-selector-item" <?php if($testimonio['voluntariado'] == 1){echo "checked";} ?> causaName="voluntariado" > 
+					<label>Voluntariado</label>
+				</div>
+				
+				<div class="col-sm-2">
+					<input type="checkbox" class="causas-selector-item" <?php if($testimonio['experiencia'] == 1){echo "checked";} ?> causaName="experiencia" > 
+					<label>Experiencia</label>
+				</div>
+				
+				<div class="col-sm-2">
+					<input type="checkbox" class="causas-selector-item" <?php if($testimonio['embajadores'] == 1){echo "checked";} ?> causaName="embajadores" > 
+					<label>Embajadores</label>
+				</div>
+				
+				
+			</div>
+			 
+		</div>
+		<?php
+		$sliders = ob_get_contents();
+		ob_end_clean();
+		return $sliders;
+	}
+	
+	public function getProductosHeader()
+	{
+		ob_start();
+		?>
+		<script src="/js/productos.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		});
+		</script>
+		
+   		<?php		
+		$sectionHead = ob_get_contents();
+		ob_end_clean();
+		return $sectionHead;
+	}
+   	
+   	
+   	public function getProductosSections()
+   	{
+   		ob_start();
+   		?>
+   		<div class="row">
+   			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-1 control-label" for="textinput"><b>T&iacute;tulo</b></label>
+						<div class="col-sm-9">
+							<input type="text" placeholder="T&iacute;tulo" class="form-control" id="newMaterialTitle" value="">
+						</div>
+						<div class="col-sm-2">
+							<button type="submit" class="btn btn-primary" id="addMaterial">A&ntilde;adir</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+   		</div>
+   		
+   		<div class="row" id="materialesBox">
+   		<?php 
+   		foreach ($this->data['materiales'] as $section)
+   		{
+   			echo self::getProductosItem($section);
+   		}
+   		?>
+   		</div>
+   		
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+	
+   	public function getProductosItem($section)
+   	{
+   		$img = '';
+   		if (!$section['icon'])
+   			$img = '/images/100x100-default.jpg';
+   		else
+   			$img = "/images-system/medium/".$section['icon'];
+   		
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['materiales_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-2">
+					<img alt="" height="100" src="<?php echo $img; ?>" />
+				</div>
+				<div class="col-sm-8">
+					<p class="section-title"><strong><?php echo $section['title']; ?></strong></p>
+				</div>
+				<div class="col-sm-2">
+					<a href="/editar-contenidos/<?php echo $section['materiales_id']; ?>/<?php echo Tools::slugify($section['title']); ?>/<?php echo $section['kind']."/"; ?>" class="btn btn-info btn-xs">Editar</a>
+					<a href="" class="btn btn-danger btn-xs deleteMaterial" sId="<?php echo $section['materiales_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
+   	
    	
    	
    	public function getEditSectionHeader()
@@ -1707,6 +2302,30 @@ class Layout_View
 			case 'materiales':
 				?>
 			<script src="/js/materiales.js"></script>
+			<?php
+			break;
+			
+			case 'voluntariado':
+				?>
+			<script src="/js/voluntariado.js"></script>
+			<?php
+			break;
+			
+			case 'embajadores':
+				?>
+			<script src="/js/embajadores.js"></script>
+			<?php
+			break;
+			
+			case 'contenidos':
+				?>
+			<script src="/js/contenidos.js"></script>
+			<?php
+			break;
+			
+			case 'productos':
+				?>
+			<script src="/js/productos.js"></script>
 			<?php
 			break;
 			
@@ -1796,6 +2415,22 @@ class Layout_View
 			<?php
 			break;
 			
+			case 'voluntariado':
+				$iconSize 		= 'JPG (270 * 241 px)';
+			?>
+			<input type="hidden" value="<?php echo $section['voluntariado_id']; ?>" id="sectionId" />
+			<?php
+			break;
+			
+			case 'embajadores':
+			case 'contenidos':
+			case 'productos':
+				$iconSize 		= 'JPG (270 * 241 px)';
+				$portraitSize 	= 'JPG (800 * 290 px)';
+			?>
+			<input type="hidden" value="<?php echo $section['materiales_id']; ?>" id="sectionId" />
+			<?php
+			break;
 			
 		}
 		?>
@@ -1904,7 +2539,7 @@ class Layout_View
 					</div>
 					
 					<?php 
-					if ($this->kindPage == 'causas' || $this->kindPage == 'espacios' || $this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas' || $this->kindPage == 'materiales')
+					if ($this->kindPage == 'causas' || $this->kindPage == 'espacios' || $this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas' || $this->kindPage == 'materiales' || $this->kindPage == 'voluntariado' || $this->kindPage == 'embajadores' || $this->kindPage == 'contenidos' || $this->kindPage == 'productos')
 					{
 						?>
 					<!-- Textarea input-->
@@ -1919,7 +2554,7 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'proyectos')
+					if ($this->kindPage == 'proyectos' || $this->kindPage == 'voluntariado')
 					{
 						?>
 					<div class="form-group">
@@ -1933,7 +2568,7 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'espacios' || $this->kindPage == 'proyectos' || $this->kindPage == 'campanas')
+					if ($this->kindPage == 'espacios' || $this->kindPage == 'proyectos' || $this->kindPage == 'campanas' || $this->kindPage == 'voluntariado')
 					{
 						?>
 					<div class="form-group">
@@ -1947,7 +2582,7 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'espacios' || $this->kindPage == 'proyectos' || $this->kindPage == 'campanas')
+					if ($this->kindPage == 'espacios' || $this->kindPage == 'proyectos' || $this->kindPage == 'campanas' || $this->kindPage == 'voluntariado')
 					{
 						?>
 					<div class="form-group">
@@ -2215,7 +2850,22 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'campanas')
+					if ($this->kindPage == 'voluntariado')
+					{
+						?>
+					<!-- Textarea input-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Contenido primera columna</b></label>
+						<div class="col-sm-10">
+							<textarea rows="12" cols="" class="form-control has-editor" placeholder="Contenido primera columna" id="firstColumnContent"><?php echo $section['second_column_content']; ?></textarea>
+						</div>
+					</div>
+						<?php
+					}
+					?>
+					
+					<?php 
+					if ($this->kindPage == 'campanas' || $this->kindPage == 'voluntariado')
 					{
 						?>
 					<!-- Textarea input-->
@@ -2230,7 +2880,7 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'espacios' || $this->kindPage == 'campanas')
+					if ($this->kindPage == 'espacios' || $this->kindPage == 'campanas' || $this->kindPage == 'voluntariado')
 					{
 						?>
 					<!-- Textarea input-->
@@ -2351,7 +3001,7 @@ class Layout_View
 			</form>
    		</div>
    		<?php 
-		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas' || $this->kindPage == 'materiales')
+		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas' || $this->kindPage == 'materiales' || $this->kindPage == 'embajadores' || $this->kindPage == 'contenidos' || $this->kindPage == 'productos')
 		{
 			?>
    		<div class="row gallery-box">
@@ -2403,7 +3053,7 @@ class Layout_View
 		?>
    		
    		<?php 
-		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas' || $this->kindPage == 'materiales')
+		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas' || $this->kindPage == 'materiales' || $this->kindPage == 'embajadores' || $this->kindPage == 'contenidos' || $this->kindPage == 'productos')
 		{
 			?>
    		<div class="row gallery-box">
@@ -2443,6 +3093,131 @@ class Layout_View
    			<?php
 		}
 		?>
+		
+		<?php 
+		if ($this->kindPage == 'proyectos')
+		{
+			?>
+   		<div class="row gallery-box">
+   			<h4 class="subheader">Aliados</h4>
+   			<div class="row">
+				<div class="col-sm-12" id="aliadosBoxItems">
+					<?php 
+					if ($this->data['aliados'])
+					{
+						foreach ($this->data['aliados'] as $aliado)
+						{
+							?>
+					<div class="col-xs-2 aliados-choose" id="itemPicture-<?php echo $aliado['picture_id']; ?>">
+						<div class="image">
+							<img alt="" width="100" src="/images-system/medium/<?php echo $aliado['aliado']; ?>">
+						</div>
+						<div class="col-sm-12">
+							<input type="checkbox" aliadoId="<?php echo $aliado['aliado_id']; ?>"  class="aliado-item" <?php if($aliado['checked'] == 1){echo "checked";} ?>> 
+							<label>Patrocinador</label>
+						</div>
+					</div>
+							<?php
+						}
+					}
+					?>
+				</div>
+			</div>
+			<br>
+			<div class="clearfix"></div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<div class="pull-right">
+						<button type="submit" class="btn btn-primary" id="updateAliados">Guardar</button>
+					</div>
+				</div>
+			</div>
+   		</div>
+   			<?php
+		}
+		?>
+		
+		<?php 
+		if ($this->kindPage == 'causas')
+		{
+			?>
+   		<div class="row gallery-box">
+   			<h4 class="subheader">Proyectos</h4>
+   			<div class="row">
+				<div class="col-sm-12" id="aliadosBoxItems">
+					<?php 
+					if ($this->data['proyectos'])
+					{
+						foreach ($this->data['proyectos'] as $proyecto)
+						{
+							?>
+					<div class="col-xs-3 aliados-choose">
+						<div class="col-sm-12">
+							<input type="checkbox" aliadoId="<?php echo $proyecto['proyectos_id']; ?>"  class="aliado-item" <?php if($proyecto['checked'] == 1){echo "checked";} ?>> 
+							<label><?php echo $proyecto['title']; ?></label>
+						</div>
+					</div>
+							<?php
+						}
+					}
+					?>
+				</div>
+			</div>
+			<br>
+			<div class="clearfix"></div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<div class="pull-right">
+						<button type="submit" class="btn btn-primary" id="updateProyectos">Guardar</button>
+					</div>
+				</div>
+			</div>
+   		</div>
+   			<?php
+		}
+		?>
+		
+		<?php 
+		if ($this->kindPage == 'espacios')
+		{
+			?>
+   		<div class="row gallery-box">
+   			<h4 class="subheader">Contenidos</h4>
+   			<div class="row">
+				<div class="col-sm-12" id="aliadosBoxItems">
+					<?php 
+					if ($this->data['contenidos'])
+					{
+						foreach ($this->data['contenidos'] as $contenido)
+						{
+							?>
+					<div class="col-xs-3 aliados-choose">
+						<div class="col-sm-12">
+							<input type="checkbox" aliadoId="<?php echo $contenido['materiales_id']; ?>"  class="aliado-item" <?php if($contenido['checked'] == 1){echo "checked";} ?>> 
+							<label><?php echo $contenido['title']; ?></label>
+						</div>
+					</div>
+							<?php
+						}
+					}
+					?>
+				</div>
+			</div>
+			<br>
+			<div class="clearfix"></div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<div class="pull-right">
+						<button type="submit" class="btn btn-primary" id="updateProyectos">Guardar</button>
+					</div>
+				</div>
+			</div>
+   		</div>
+   			<?php
+		}
+		?>
+		
+		
    		<?php
    		$inicio = ob_get_contents();
    		ob_end_clean();

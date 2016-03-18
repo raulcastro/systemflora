@@ -155,12 +155,52 @@ class generalBackend
 				$data['materiales'] 	= $newsArray;
 			break;
 			
+			case 'voluntariado':
+				$newsArray 			= $this->model->getVoluntariado($_GET['type']);
+				$data['voluntariados'] 	= $newsArray;
+			break;
+			
+			case 'embajadores':
+				$newsArray 			= $this->model->getEmbajadores();
+				$data['materiales'] 	= $newsArray;
+			break;
+			
+			case 'contenidos':
+				$newsArray 			= $this->model->getContenidos();
+				$data['materiales'] 	= $newsArray;
+			break;
+			
+			case 'testimonios':
+				$newsArray 			= $this->model->getTestimonios();
+				$data['testimonios'] 	= $newsArray;
+			break;
+			
+			case 'productos':
+				$newsArray 			= $this->model->getProductos();
+				$data['productos'] 	= $newsArray;
+			break;
+			
 			case 'editar-seccion':
 				switch ($_GET['kind']) 
 				{
 					case 1:// Causas
 						$sectionRow 		= $this->model->getSeccionInfo($_GET['sectionId']);
 						$data['section'] 	= $sectionRow;
+						
+						$proyectosArray 	= $this->model->getProyectos();
+						
+						$i = 0;
+						foreach ($proyectosArray as $proyecto)
+						{
+							if ($this->model->checkRelacionCausasProyectos($_GET['sectionId'], $proyecto['proyectos_id']))
+							{
+								$proyectosArray[$i]['checked'] = '1';
+							}
+						
+							$i++;
+						}
+						
+						$data['proyectos'] 	= $proyectosArray;
 					break;
 					
 					case 2:// Links
@@ -174,6 +214,19 @@ class generalBackend
 						
 						$bloquesArray 		= $this->model->getEspaciosBloques($_GET['sectionId']);
 						$data['bloques'] 	= $bloquesArray;
+						
+						$newsArray 			= $this->model->getContenidos();
+						$i = 0;
+						foreach ($newsArray as $contenido)
+						{
+							if ($this->model->checkRelacionEspaciosContenidos($_GET['sectionId'], $contenido['materiales_id']))
+							{
+								$newsArray[$i]['checked'] = '1';
+							}
+						
+							$i++;
+						}
+						$data['contenidos'] 	= $newsArray;
 					break;
 					
 					case 4:// Noticias
@@ -210,6 +263,20 @@ class generalBackend
 						
 						$videosArray	= $this->model->getProyectosVideo($_GET['sectionId']);
 						$data['videos'] = $videosArray;
+						
+						$aliadosArray 		= $this->model->getAliados();
+						$i = 0;
+						foreach ($aliadosArray as $aliado)
+						{
+							if ($this->model->checkRelacionAliadosProyectos($_GET['sectionId'], $aliado['aliado_id']))
+							{
+								$aliadosArray[$i]['checked'] = '1';
+							}
+							
+							$i++;
+						}
+// 						var_dump($aliadosArray);
+						$data['aliados'] 	= $aliadosArray;
 					break;
 					
 					case 7:// actividades
@@ -240,7 +307,7 @@ class generalBackend
 						$data['videos'] = $videosArray;
 					break;
 					
-					case 9:// actividades
+					case 9:// materiales
 						$sectionRow 		= $this->model->getMaterialesById($_GET['sectionId']);
 						$data['section'] 	= $sectionRow;
 							
@@ -248,6 +315,44 @@ class generalBackend
 						$data['gallery'] 	= $galleryArray;
 							
 						$videosArray	= $this->model->getMaterialesVideo($_GET['sectionId']);
+						$data['videos'] = $videosArray;
+					break;
+					
+					case 10: // voluntariado
+						$sectionRow 		= $this->model->getVoluntariadoById($_GET['sectionId']);
+						$data['section'] 	= $sectionRow;
+					break;
+					
+					case 11:// embajadores
+						$sectionRow 		= $this->model->getEmbajadoresById($_GET['sectionId']);
+						$data['section'] 	= $sectionRow;
+							
+						$galleryArray  		= $this->model->getEmbajadoresGallery($_GET['sectionId']);
+						$data['gallery'] 	= $galleryArray;
+							
+						$videosArray	= $this->model->getEmbajadoresVideo($_GET['sectionId']);
+						$data['videos'] = $videosArray;
+					break;
+					
+					case 12:// contenidos
+						$sectionRow 		= $this->model->getContenidosById($_GET['sectionId']);
+						$data['section'] 	= $sectionRow;
+							
+						$galleryArray  		= $this->model->getContenidosGallery($_GET['sectionId']);
+						$data['gallery'] 	= $galleryArray;
+							
+						$videosArray	= $this->model->getContenidosVideo($_GET['sectionId']);
+						$data['videos'] = $videosArray;
+					break;
+					
+					case 13:// productos
+						$sectionRow 		= $this->model->getProductosById($_GET['sectionId']);
+						$data['section'] 	= $sectionRow;
+							
+						$galleryArray  		= $this->model->getProductosGallery($_GET['sectionId']);
+						$data['gallery'] 	= $galleryArray;
+							
+						$videosArray	= $this->model->getProductosVideo($_GET['sectionId']);
 						$data['videos'] = $videosArray;
 					break;
 					
