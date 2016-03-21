@@ -2176,7 +2176,7 @@ class Layout_View
    		
    		<div class="row" id="materialesBox">
    		<?php 
-   		foreach ($this->data['materiales'] as $section)
+   		foreach ($this->data['productos'] as $section)
    		{
    			echo self::getProductosItem($section);
    		}
@@ -2749,7 +2749,7 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'campanas')
+					if ($this->kindPage == 'campanas!')
 					{
 						?>
 						<h4>Links spots de radio</h4>
@@ -2895,7 +2895,7 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'campanas')
+					if ($this->kindPage == 'campanas!')
 					{
 						?>
 					<!-- Textarea input-->
@@ -2924,7 +2924,7 @@ class Layout_View
 					?>
 					
 					<?php 
-					if ($this->kindPage == 'noticias' || $this->kindPage == 'actividades')
+					if ($this->kindPage == 'noticias')
 					{
 						?>
 					<div class="form-group">
