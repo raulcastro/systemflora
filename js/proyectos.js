@@ -219,7 +219,7 @@ function addLink(node)
 	var linkTitle 	= $('#linkTitle-'+linkType).val();
 	var linkUrl 	= $('#linkUrl-'+linkType).val();
 	
-	if (sectionId && linkUrl)
+	if (sectionId && linkTitle)
 	{
 		$.ajax({
 	        type:   'POST',

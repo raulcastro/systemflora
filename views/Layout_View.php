@@ -3182,7 +3182,7 @@ class Layout_View
 		{
 			?>
    		<div class="row gallery-box">
-   			<h4 class="subheader">Contenidos</h4>
+   			<h4 class="subheader">Contenidos destacados</h4>
    			<div class="row">
 				<div class="col-sm-12" id="aliadosBoxItems">
 					<?php 
