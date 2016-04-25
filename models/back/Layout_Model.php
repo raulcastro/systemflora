@@ -236,6 +236,65 @@ class Layout_Model
 		}
 	}
 	
+	public function addFooter($name)
+	{
+		try
+		{
+			$query = 'DELETE FROM footer';
+				
+			if ($this->db->run($query))
+			{
+				$query = 'INSERT INTO footer(banner)
+	                VALUES(?)';
+	
+				$prep = $this->db->prepare($query);
+	
+				$prep->bind_param(
+						's',
+						$name
+				);
+	
+				if ($prep->execute())
+					return $prep->insert_id;
+			}
+		}
+		catch (Exception $e)
+		{
+			return false;
+		}
+	}
+	
+	public function getFooter()
+	{
+		try {
+			$query = 'SELECT * FROM footer';
+	
+			return $this->db->getRow($query);
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteFooter($data)
+	{
+		try {
+			$query = 'DELETE FROM footer WHERE banner_id = ?';
+	
+			$prep = $this->db->prepare($query);
+	
+			$prep->bind_param('i', $data['sId']);
+	
+			if($prep->execute())
+			{
+				return true;
+			}
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
 	public function getAliados()
 	{
 		try {
@@ -444,12 +503,13 @@ class Layout_Model
 	public function updateLinks($data)
 	{
 		try {
-			$query = 'UPDATE links SET title = ?, description = ? WHERE link_id = ?';
+			$query = 'UPDATE links SET title = ?, description = ?, content = ? WHERE link_id = ?';
 				
 			$prep = $this->db->prepare($query);
-			$prep->bind_param('ssi',
+			$prep->bind_param('sssi',
 					$data['sectionTitle'],
 					$data['sectionDescription'],
+					$data['sectionContent'],
 					$data['sectionId']);
 				
 			return $prep->execute();
@@ -1073,16 +1133,42 @@ class Layout_Model
 	public function updateProyectos($data)
 	{
 		try {
-			$query = 'UPDATE proyectos 
-					SET 
-					title = ?, 
-					description = ?, 
+// 			$query = 'UPDATE proyectos 
+// 					SET 
+// 					title = ?, 
+// 					description = ?, 
+// 					content = ?,
+// 					first_column_title = ?,
+// 					second_column_title = ?,
+// 					third_column_title = ?,
+// 					conservacion = ?,
+// 					bienestar = ?,
+// 					educacion = ?
+// 					WHERE proyectos_id = ?';
+	
+// 			$prep = $this->db->prepare($query);
+// 			$prep->bind_param('ssssssiiii',
+// 					$data['sectionTitle'],
+// 					$data['sectionDescription'],
+// 					$data['sectionContent'],
+// 					$data['firstColumnTitle'],
+// 					$data['secondColumnTitle'],
+// 					$data['thirdColumnTitle'],
+// 					$data['conservacion'],
+// 					$data['bienestar'],
+// 					$data['educacion'],
+// 					$data['sectionId']);
+			
+			$query = 'UPDATE proyectos
+					SET
+					title = ?,
+					description = ?,
 					content = ?,
 					first_column_title = ?,
 					second_column_title = ?,
-					third_column_title = ? 
+					third_column_title = ?
 					WHERE proyectos_id = ?';
-	
+			
 			$prep = $this->db->prepare($query);
 			$prep->bind_param('ssssssi',
 					$data['sectionTitle'],
@@ -2119,17 +2205,18 @@ class Layout_Model
 	public function updateTestimonios($data)
 	{
 		try {
-			$query = 'UPDATE testimonios SET general = ?, servicios = ?, practicas = ?, voluntariado = ?, experiencia = ?, embajadores = ? 
+			$query = 'UPDATE testimonios SET general = ?, servicios = ?, practicas = ?, voluntariado = ?, experiencia = ?, embajadores = ?, aliados = ? 
 					WHERE testimonios_id = ?';
 	
 			$prep = $this->db->prepare($query);
-			$prep->bind_param('iiiiiii',
+			$prep->bind_param('iiiiiiii',
 					$data['general'],
 					$data['servicios'],
 					$data['practicas'],
 					$data['voluntariado'],
 					$data['experiencia'],
 					$data['embajadores'],
+					$data['aliados'],
 					$data['testimoniosId']);
 	
 			return $prep->execute();
@@ -2569,6 +2656,114 @@ class Layout_Model
 		}
 	}
 	
+	public function addRelacionAliadosCampanas($sectionId, $aliadoId)
+	{
+		try {
+			$query = 'INSERT INTO campanas_aliados(proyectos_id, aliado_id) VALUES('.$sectionId.', '.$aliadoId.')';
+				
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteRelacionAliadosCampanas($sectionId)
+	{
+		try {
+			$query = 'DELETE FROM campanas_aliados WHERE proyectos_id = '.$sectionId;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function checkRelacionAliadosCampanas($sectionId, $aliadoId)
+	{
+		try {
+			$query = 'SELECT * FROM campanas_aliados WHERE proyectos_id = '.$sectionId.' AND aliado_id = '.$aliadoId;
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function updateMaterialesPortrait($data)
+	{
+		try {
+			$query = 'UPDATE materiales SET portrait = ? WHERE materiales_id = ?';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('si', $data['background'], $data['sectionId']);
+	
+			return $prep->execute();
+	
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addDocument($name)
+	{
+		try {
+			$query = 'INSERT INTO documentos(documento) VALUES(?)';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('s', $name);
+			return $prep->execute();
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function getDocuments()
+	{
+		try {
+			$query = 'SELECT * FROM documentos ORDER BY documento_id DESC';
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteDocument($id)
+	{
+		try {
+			$id = (int) $id;
+			$query = 'DELETE FROM documentos WHERE documento_id = '.$id;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function addRelacionAliadosEspacios($sectionId, $aliadoId)
+	{
+		try {
+			$query = 'INSERT INTO espacios_aliados(espacio_id, aliado_id) VALUES('.$sectionId.', '.$aliadoId.')';
+				
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function deleteRelacionAliadosEspacios($sectionId)
+	{
+		try {
+			$query = 'DELETE FROM espacios_aliados WHERE espacio_id = '.$sectionId;
+			return $this->db->run($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	
+	public function checkRelacionAliadosEspacios($sectionId, $aliadoId)
+	{
+		try {
+			$query = 'SELECT * FROM espacios_aliados WHERE espacio_id = '.$sectionId.' AND aliado_id = '.$aliadoId;
+			return $this->db->getArray($query);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
 }
 
 

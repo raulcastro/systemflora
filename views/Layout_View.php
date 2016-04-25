@@ -165,6 +165,10 @@ class Layout_View
 	 				echo self :: getBannerHead();
  				break;
  				
+ 				case 'footer':
+ 					echo self :: getFooterHead();
+ 				break;
+ 				
  				case 'aliados':
  					echo self :: getAliadosHead();
  				break;
@@ -221,6 +225,10 @@ class Layout_View
  					echo self :: getTestimoniosHead();
  				break;
  				
+ 				case 'documentos':
+ 					echo self::getDocumentosHeader();
+ 				break;
+ 				
 			}
 			?>
 		</head>
@@ -249,6 +257,10 @@ class Layout_View
 							
 							case 'banner':
 								echo self :: getBanner();
+							break;
+							
+							case 'footer':
+								echo self :: getFooterUploader();
 							break;
 							
 							case 'aliados':
@@ -313,6 +325,10 @@ class Layout_View
 							
 							case 'productos':
 								echo self :: getProductosSections();
+							break;
+							
+							case 'documentos':
+								echo self::getDocumentosSections();
 							break;
 							
 							default :
@@ -411,6 +427,7 @@ class Layout_View
 				<ul class="nav navbar-nav main-menu">
 					<li><a <?php if ($_GET['section'] == 1) echo $active; ?> href="/dashboard/"><b><?php echo $this->data['userInfo']['name']; ?></b></a></li>
 					<li><a <?php if ($_GET['section'] == 17) echo $active; ?> href="/banner/">Banner Principal</a></li>
+					<li><a <?php if ($_GET['section'] == 17) echo $active; ?> href="/footer/">Footer</a></li>
 					<li><a <?php if ($_GET['section'] == 5) echo $active; ?> href="/aliados/">Aliados y donantes</a></li>
 					<li><a <?php if ($_GET['section'] == 5) echo $active; ?> href="/directorio/">Directorio</a></li>		
 					<li><a <?php if ($_GET['section'] == 10) echo $active; ?> href="/sign-out/" class="sign-out">Salir</a></li>
@@ -561,6 +578,7 @@ class Layout_View
 				<li <?php if ($_GET['section'] == 16) echo $active; ?>><a href="/donativos/">Donativos</a></li>
 				<li <?php if ($_GET['section'] == 17) echo $active; ?>><a href="/aportaciones/">Aportaciones</a></li>
 				<li <?php if ($_GET['section'] == 20) echo $active; ?>><a href="/productos/">Productos</a></li>
+				<li <?php if ($_GET['section'] == 21) echo $active; ?>><a href="/documentos/">Documentos</a></li>
 				<li <?php if ($_GET['section'] == 7) echo $active; ?>><a href="/links/">Links</a></li>
 			</ul>
 		</div>
@@ -721,6 +739,78 @@ class Layout_View
 		ob_end_clean();
 		return $sliders;
 	}
+	
+	/**
+	 * extra files for the main-slider
+	 * @return string
+	 */
+	public function getFooterHead()
+	{
+		ob_start();
+		?>
+		<link href="/css/uploadfile.css" rel="stylesheet">
+		<script src="/js/jquery.uploadfile.min.js"></script>
+		<script src="/js/footer.js"></script>
+   		<?php		
+		$agenciesHead = ob_get_contents();
+		ob_end_clean();
+		return $agenciesHead;
+	}
+   	
+   	/**
+	 * Main slider
+	 * 
+	 * @return string
+	 */
+	public function getFooterUploader()
+	{
+		ob_start();
+		?>
+		<div class="row">
+			<div class="col-sm-12">
+				<h5>JPG(2050 * 1404 px)</h5>
+			</div>
+			<div class="col-sm-12 upload-slider">
+				Upload
+			</div>
+		</div>
+		
+		<div class="row" id="slidersBox">
+		<?php 
+		if ($this->data['banner'])
+		{
+			echo self::getFooterItem($this->data['banner']);
+		}
+		?>
+		</div>
+		<?php
+		$agencies = ob_get_contents();
+		ob_end_clean();
+		return $agencies; 
+	}
+	
+	public function getFooterItem($banner)
+	{
+		ob_start();
+		?>
+		<div class="col-sm-12 slider-item" id="sId-<?php echo $banner['banner_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-4">
+					<img alt="" src="/images-system/medium/<?php echo $banner['banner']; ?>" />
+				</div>
+				<div class="col-sm-offset-7 col-sm-1">
+					<a href="javascript:void(0);" class="btn btn-danger btn-xs deleteSlider" sId="<?php echo $banner['banner_id']; ?>">Delete</a>
+				</div>
+			</div>
+		</div>
+		<?php
+		$sliders = ob_get_contents();
+		ob_end_clean();
+		return $sliders;
+	}
+	
+	
+	
 	
 	/**
 	 * extra files for the main-slider
@@ -890,11 +980,15 @@ class Layout_View
    	public function getLinksItem($section)
    	{
    		ob_start();
+   		if ($section['icon'])
+			$img = '/images-system/medium/'.$section['icon'];
+		else
+			$img = '/images/default-122-100.jpg'; 
    		?>
    		<div class="col-sm-12 slider-item" id="sId-<?php echo $section['causas_id']; ?>">
 			<div class="col-sm-12">
 				<div class="col-sm-2">
-					<img alt="" height="100" src="/images-system/medium/<?php echo $section['icon']; ?>" />
+					<img alt="" height="100" src="<?php echo $img; ?>" />
 				</div>
 				<div class="col-sm-9">
 					<p class="section-title"><?php echo $section['title']; ?></p>
@@ -2099,16 +2193,16 @@ class Layout_View
 			</div>
 			
 			<div class="col-sm-12 slider-section " id="causasSelector-<?php echo $testimonio['testimonios_id']; ?>">
-				<div class="col-sm-2">
+				<div class="col-sm-1">
 					<input type="checkbox" class="causas-selector-item" <?php if($testimonio['general'] == 1){echo "checked";} ?> causaName="general" > 
 					<label>General</label>
 				</div>
 				
-				<div class="col-sm-2">
+				<div class="col-sm-1">
 					<input type="checkbox" class="causas-selector-item" <?php if($testimonio['servicios'] == 1){echo "checked";} ?> causaName="servicios" > 
 					<label>Servicios</label>
 				</div>
-				<div class="col-sm-2">
+				<div class="col-sm-1">
 					<input type="checkbox" class="causas-selector-item" <?php if($testimonio['practicas'] == 1){echo "checked";} ?> causaName="practicas" > 
 					<label>Practicas</label>
 				</div>
@@ -2127,7 +2221,10 @@ class Layout_View
 					<label>Embajadores</label>
 				</div>
 				
-				
+				<div class="col-sm-2">
+					<input type="checkbox" class="causas-selector-item" <?php if($testimonio['aliados'] == 1){echo "checked";} ?> causaName="aliados" > 
+					<label>Aliados y donantes</label>
+				</div>
 			</div>
 			 
 		</div>
@@ -2219,7 +2316,75 @@ class Layout_View
    		return $item;
    	}
    	
+   	public function getDocumentosHeader()
+	{
+		ob_start();
+		?>
+		<link href="/css/uploadfile.css" rel="stylesheet">
+		<script src="/js/jquery.uploadfile.min.js"></script>
+		<script src="/js/documentos.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		});
+		</script>
+		
+   		<?php		
+		$sectionHead = ob_get_contents();
+		ob_end_clean();
+		return $sectionHead;
+	}
    	
+   	
+   	public function getDocumentosSections()
+   	{
+   		ob_start();
+   		?>
+   		<div class="row">
+			<div class="col-sm-12">
+				<div class="col-sm-6 upload-icon">
+					Cargar documento
+				</div>
+			</div>
+			<br>
+			<div class="clearfix"></div>
+   		
+   		</div>
+   		
+   		<div class="row" id="documentsBox">
+   		<?php 
+   		foreach ($this->data['documentos'] as $documento)
+   		{
+   			$url = $this->data['appInfo']['url'].'/pdf/'.$documento['documento'];
+   			echo self::getDocumentosItem($documento, $url);
+   		}
+   		?>
+   		</div>
+   		
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+	
+   	public function getDocumentosItem($documento, $url)
+   	{
+   		ob_start();
+   		?>
+   		<div class="col-sm-12 slider-item" id="sId-<?php echo $documento['documento_id']; ?>">
+			<div class="col-sm-12">
+				<div class="col-sm-8">
+					<p class="section-title"><i><?php echo $url; ?></i></p>
+				</div>
+				<div class="col-sm-2">
+					<a href="" class="btn btn-danger btn-xs deleteDocumento" sId="<?php echo $documento['documento_id']; ?>">Eliminar</a>
+				</div>
+			</div>
+		</div>
+   		<?php
+   		$item = ob_get_contents();
+   		ob_end_clean();
+   		return $item;
+   	}
    	
    	public function getEditSectionHeader()
 	{
@@ -2234,7 +2399,7 @@ class Layout_View
 				{
 					$('.has-editor').trumbowyg({
 					    fullscreenable: false,
-					    semantic: true,
+					    semantic: 		true,
 					    resetCss: true,
 					    removeformatPasted: true,
 					    autogrow: true,
@@ -2410,6 +2575,7 @@ class Layout_View
 			
 			case 'materiales':
 				$iconSize 		= 'JPG (370 * 300 px)';
+				$portraitSize 	= 'JPG (800 * 290 px)';
 			?>
 			<input type="hidden" value="<?php echo $section['materiales_id']; ?>" id="sectionId" />
 			<?php
@@ -2539,7 +2705,7 @@ class Layout_View
 					</div>
 					
 					<?php 
-					if ($this->kindPage == 'causas' || $this->kindPage == 'espacios' || $this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas' || $this->kindPage == 'materiales' || $this->kindPage == 'voluntariado' || $this->kindPage == 'embajadores' || $this->kindPage == 'contenidos' || $this->kindPage == 'productos')
+					if ($this->kindPage == 'links' || $this->kindPage == 'causas' || $this->kindPage == 'espacios' || $this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas' || $this->kindPage == 'materiales' || $this->kindPage == 'voluntariado' || $this->kindPage == 'embajadores' || $this->kindPage == 'contenidos' || $this->kindPage == 'productos')
 					{
 						?>
 					<!-- Textarea input-->
@@ -3000,6 +3166,27 @@ class Layout_View
 				</fieldset>
 			</form>
    		</div>
+   		
+   		<?php 
+		if ($this->kindPage == 'contenidos')
+		{
+			?>
+   			<div class="row">
+				<div class="col-sm-12">
+					<form class="form-horizontal" role="form">
+						<fieldset>
+							<label class="col-sm-2 control-label" for="textinput"><b>URL del Contenido</b></label>
+							<div class="col-sm-8">
+								<label class="control-label" for="textinput"><i><?php echo $this->data['appInfo']['front'];?>contenidos/<?php echo $_GET['sectionId'];?>/<?php echo Tools::slugify($section['title']);?>/</i></label>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+		</div>
+		<?php 
+		}
+		?>
+   		
    		<?php 
 		if ($this->kindPage == 'noticias' || $this->kindPage == 'proyectos' || $this->kindPage == 'actividades' || $this->kindPage == 'campanas' || $this->kindPage == 'materiales' || $this->kindPage == 'embajadores' || $this->kindPage == 'contenidos' || $this->kindPage == 'productos')
 		{
@@ -3095,7 +3282,7 @@ class Layout_View
 		?>
 		
 		<?php 
-		if ($this->kindPage == 'proyectos')
+		if ($this->kindPage == 'proyectos' || $this->kindPage == 'campanas' || $this->kindPage == 'espacios')
 		{
 			?>
    		<div class="row gallery-box">
@@ -3144,7 +3331,7 @@ class Layout_View
    		<div class="row gallery-box">
    			<h4 class="subheader">Proyectos</h4>
    			<div class="row">
-				<div class="col-sm-12" id="aliadosBoxItems">
+				<div class="col-sm-12" id="contenidosBoxItems">
 					<?php 
 					if ($this->data['proyectos'])
 					{
@@ -3184,7 +3371,7 @@ class Layout_View
    		<div class="row gallery-box">
    			<h4 class="subheader">Contenidos destacados</h4>
    			<div class="row">
-				<div class="col-sm-12" id="aliadosBoxItems">
+				<div class="col-sm-12" id="contenidosBoxItems">
 					<?php 
 					if ($this->data['contenidos'])
 					{

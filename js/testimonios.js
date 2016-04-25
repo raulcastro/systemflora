@@ -108,6 +108,7 @@ function saveDirectorio(node)
 	var voluntariado 	= 0;
 	var experiencia 	= 0;
 	var embajadores 	= 0;
+	var aliados		 	= 0;
 	
 	$('#causasSelector-'+sid+' .causas-selector-item').each(function(){
 		var causaName = $(this).attr('causaName');
@@ -155,6 +156,13 @@ function saveDirectorio(node)
 				}
 			break;
 			
+			case 'aliados':
+				if ($(this).is(':checked'))
+				{
+					aliados = 1;
+				}
+			break;
+			
 		}
 	});
 	
@@ -164,13 +172,14 @@ function saveDirectorio(node)
 	        type:   'POST',
 	        url:    '/ajax/sections.php',
 	        data:{  testimoniosId: 		sid,
-	        	general:	general,
-	    	servicios:		servicios,
-	    	practicas:		practicas,
-	    	voluntariado:	voluntariado,
-	    	experiencia:	experiencia,
-	    	embajadores:	embajadores,
-	            opt: 		62
+	        	general:		general,
+	        	servicios:		servicios,
+	        	practicas:		practicas,
+	        	voluntariado:	voluntariado,
+	        	experiencia:	experiencia,
+	        	embajadores:	embajadores,
+	        	aliados:		aliados,
+	            opt: 			62
 	             },
 	        success:
 	        function(xml)

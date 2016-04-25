@@ -85,6 +85,24 @@ $(document).ready(function()
 			});
 		}
 	});
+	
+	$(".upload-portrait").uploadFile({
+		url:		"/ajax/media.php",
+		fileName:	"myfile",
+		multiple: 	true,
+		doneStr:	"uploaded!",
+		formData: {
+				sectionId: sectionId,
+				opt: 40
+			},
+		onSuccess:function(files, data, xhr)
+		{
+			obj 			= JSON.parse(data);
+			imageGallery 	= obj.fileName;
+			lastIdGallery 	= obj.lastId;
+			$('#portraitImg').attr('src', '/images-system/medium/'+imageGallery);
+		}
+	});
 });
 
 function addMaterial()

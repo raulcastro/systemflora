@@ -173,8 +173,8 @@ function deleteLogro(node)
 function addFechaDestacada()
 {
 	
-	var newTitle = $('#newFechaDestacadaTitle').val();
-	var newURL = $('#newFechaDestacadaURL').val();
+	var newTitle 	= $('#newFechaDestacadaTitle').val();
+	var newURL 		= $('#newFechaDestacadaURL').val();
 	
 	if (newTitle)
 	{

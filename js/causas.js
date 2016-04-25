@@ -65,7 +65,7 @@ function updateProyectos()
 {
 	var sectionId 	= $('#sectionId').val();
 	deleteRealacion(sectionId);
-	$('#aliadosBoxItems .aliado-item').each(function(){
+	$('#contenidosBoxItems .aliado-item').each(function(){
 		if ($(this).is(':checked'))
 		{
 			aliadoId = $(this).attr('aliadoId');

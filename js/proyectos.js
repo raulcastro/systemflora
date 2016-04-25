@@ -155,9 +155,9 @@ function updateSection()
 	var sectionTitle		= $('#sectionTitle').val();
 	var sectionDescription	= $('#sectionDescription').val();
 	var sectionContent		= $('#sectionContent').val();
-	var firstColumnTitle = $('#firstColumnTitle').val();
-	var secondColumnTitle = $('#secondColumnTitle').val();
-	var thirdColumnTitle = $('#thirdColumnTitle').val();
+	var firstColumnTitle 	= $('#firstColumnTitle').val();
+	var secondColumnTitle 	= $('#secondColumnTitle').val();
+	var thirdColumnTitle 	= $('#thirdColumnTitle').val();
 	
 	if (sectionId)
 	{

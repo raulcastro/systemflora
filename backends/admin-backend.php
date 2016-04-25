@@ -46,6 +46,7 @@ class generalBackend
 				'title' 		=> $appInfoRow['title'],
 				'siteName' 		=> $appInfoRow['site_name'],
 				'url' 			=> $appInfoRow['url'],
+				'front'			=> $appInfoRow['front'],
 				'content' 		=> $appInfoRow['content'],
 				'description'	=> $appInfoRow['description'],
 				'keywords' 		=> $appInfoRow['keywords'],
@@ -83,6 +84,11 @@ class generalBackend
 			
 			case 'banner':
 				$slidersArray 		= $this->model->getBanner();
+				$data['banner'] 	= $slidersArray;
+			break;
+			
+			case 'footer':
+				$slidersArray 		= $this->model->getFooter();
 				$data['banner'] 	= $slidersArray;
 			break;
 			
@@ -180,6 +186,11 @@ class generalBackend
 				$data['productos'] 	= $newsArray;
 			break;
 			
+			case 'documentos':
+				$documentosArray = $this->model->getDocuments();
+				$data['documentos'] = $documentosArray;
+			break;
+			
 			case 'editar-seccion':
 				switch ($_GET['kind']) 
 				{
@@ -227,6 +238,20 @@ class generalBackend
 							$i++;
 						}
 						$data['contenidos'] 	= $newsArray;
+						
+						$aliadosArray 		= $this->model->getAliados();
+						$i = 0;
+						foreach ($aliadosArray as $aliado)
+						{
+							if ($this->model->checkRelacionAliadosEspacios($_GET['sectionId'], $aliado['aliado_id']))
+							{
+								$aliadosArray[$i]['checked'] = '1';
+							}
+								
+							$i++;
+						}
+						// 						var_dump($aliadosArray);
+						$data['aliados'] 	= $aliadosArray;
 					break;
 					
 					case 4:// Noticias
@@ -305,6 +330,20 @@ class generalBackend
 							
 						$videosArray	= $this->model->getCampanasVideo($_GET['sectionId']);
 						$data['videos'] = $videosArray;
+						
+						$aliadosArray 		= $this->model->getAliados();
+						$i = 0;
+						foreach ($aliadosArray as $aliado)
+						{
+							if ($this->model->checkRelacionAliadosCampanas($_GET['sectionId'], $aliado['aliado_id']))
+							{
+								$aliadosArray[$i]['checked'] = '1';
+							}
+								
+							$i++;
+						}
+
+						$data['aliados'] 	= $aliadosArray;
 					break;
 					
 					case 9:// materiales

@@ -31,6 +31,7 @@ function updateSection()
 	var sectionId 			= $('#sectionId').val();
 	var sectionTitle		= $('#sectionTitle').val();
 	var sectionDescription	= $('#sectionDescription').val();
+	var sectionContent		= $('#sectionContent').val();
 	
 	if (sectionId)
 	{
@@ -40,6 +41,7 @@ function updateSection()
 	        data:{  sectionId: 			sectionId,
 	        	sectionTitle:			sectionTitle,
 	        	sectionDescription: 	sectionDescription,
+	        	sectionContent:			sectionContent,
 	            opt: 					2
 	             },
 	        success:

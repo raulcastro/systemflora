@@ -16,7 +16,12 @@ $(document).ready(function()
 	});
 	
 	$('#updateProyectos').click(function(){
-		updateProyectos();
+		updateContenidos();
+		return false;
+	});
+	
+	$('#updateAliados').click(function(){
+		updateAliados();
 		return false;
 	});
 	
@@ -175,21 +180,21 @@ function addBloque()
 	}
 }
 
-function updateProyectos()
+function updateContenidos()
 {
 	var sectionId 	= $('#sectionId').val();
-	deleteRealacion(sectionId);
-	$('#aliadosBoxItems .aliado-item').each(function(){
+	deleteRealacionContenidos(sectionId);
+	$('#contenidosBoxItems .aliado-item').each(function(){
 		if ($(this).is(':checked'))
 		{
 			aliadoId = $(this).attr('aliadoId');
-			addRelacion(sectionId, aliadoId);
+			addRelacionContenidos(sectionId, aliadoId);
 		}
 	});
 	alert('Actualizado');
 }
 
-function addRelacion(sectionId, aliadoId)
+function addRelacionContenidos(sectionId, aliadoId)
 {
 	if (aliadoId)
 	{
@@ -214,7 +219,7 @@ function addRelacion(sectionId, aliadoId)
 	return false
 }
 
-function deleteRealacion(sectionId)
+function deleteRealacionContenidos(sectionId)
 {
 	if (sectionId)
 	{
@@ -223,6 +228,67 @@ function deleteRealacion(sectionId)
 	        url:    '/ajax/sections.php',
 	        data:{  sectionId: sectionId,
 	            	opt: 			74
+	             },
+	        success:
+	        function(xml)
+	        {
+	            if (0 != xml)
+	            {
+	            	
+	            }
+	        }
+	    });
+	}
+}
+
+function updateAliados()
+{
+	var sectionId 	= $('#sectionId').val();
+	deleteRealacion(sectionId);
+	$('#aliadosBoxItems .aliado-item').each(function(){
+		if ($(this).is(':checked'))
+		{
+			aliadoId = $(this).attr('aliadoId');
+			addRelacion(sectionId, aliadoId);
+		}
+	});
+	alert('Actualizado');
+}
+
+function addRelacion(sectionId, aliadoId)
+{
+	if (aliadoId)
+	{
+		$.ajax({
+	        type:   'POST',
+	        url:    '/ajax/sections.php',
+	        data:{  sectionId: sectionId,
+	        		aliadoId: 	aliadoId,
+	            	opt: 			85
+	             },
+	        success:
+	        function(xml)
+	        {
+	            if (0 != xml)
+	            {
+	            	
+	            }
+	        }
+	    });
+	}
+	
+	return false
+}
+
+function deleteRealacion(sectionId)
+{
+	if (sectionId)
+	{
+		$.ajax({
+	        type:   'POST',
+	        url:    '/ajax/sections.php',
+	        data:{  sectionId: sectionId,
+	            	opt: 			86
 	             },
 	        success:
 	        function(xml)

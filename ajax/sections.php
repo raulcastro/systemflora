@@ -5,7 +5,7 @@ require_once($root.'/views/Layout_View.php');
 require_once $root.'/backends/admin-backend.php';
 require_once $root.'/Framework/Tools.php';
 $model	= new Layout_Model();
-
+$data 	= $backend->loadBackend();
 
 $memberId = (int) $_POST['memberId'];
 
@@ -560,6 +560,52 @@ switch ($_POST['opt'])
 	
 	case 80:
 		if($model->deleteProductosVideo($_POST['videoId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 81:
+		if ($model->addRelacionAliadosCampanas($_POST['sectionId'], $_POST['aliadoId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 82:
+		if ($model->deleteRelacionAliadosCampanas($_POST['sectionId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 83:
+		if ($documents = $model->getDocuments())
+		{
+			foreach ($documents as $documento)
+			{
+				$url = $data['appInfo']['url'].'/pdf/'.$documento['documento'];
+				echo Layout_View::getDocumentosItem($documento, $url);
+			}
+		}
+	break;
+	
+	case 84:
+		if ($model->deleteDocument($_POST['id']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 85:
+		if ($model->addRelacionAliadosEspacios($_POST['sectionId'], $_POST['aliadoId']))
+		{
+			echo 1;
+		}
+	break;
+	
+	case 86:
+		if ($model->deleteRelacionAliadosEspacios($_POST['sectionId']))
 		{
 			echo 1;
 		}
