@@ -229,6 +229,9 @@ class Layout_View
  					echo self::getDocumentosHeader();
  				break;
  				
+ 				case 'redes':
+ 					echo self::getRedesHeader();
+ 				break;
 			}
 			?>
 		</head>
@@ -331,6 +334,10 @@ class Layout_View
 								echo self::getDocumentosSections();
 							break;
 							
+							case 'redes':
+								echo self::getRedesSections();
+							break;
+							
 							default :
 								# code...
 							break;
@@ -428,6 +435,7 @@ class Layout_View
 					<li><a <?php if ($_GET['section'] == 1) echo $active; ?> href="/dashboard/"><b><?php echo $this->data['userInfo']['name']; ?></b></a></li>
 					<li><a <?php if ($_GET['section'] == 17) echo $active; ?> href="/banner/">Banner Principal</a></li>
 					<li><a <?php if ($_GET['section'] == 17) echo $active; ?> href="/footer/">Footer</a></li>
+					<li><a <?php if ($_GET['section'] == 17) echo $active; ?> href="/redes-sociales/">Redes sociales</a></li>
 					<li><a <?php if ($_GET['section'] == 5) echo $active; ?> href="/aliados/">Aliados y donantes</a></li>
 					<li><a <?php if ($_GET['section'] == 5) echo $active; ?> href="/directorio/">Directorio</a></li>		
 					<li><a <?php if ($_GET['section'] == 10) echo $active; ?> href="/sign-out/" class="sign-out">Salir</a></li>
@@ -2385,6 +2393,110 @@ class Layout_View
    		ob_end_clean();
    		return $item;
    	}
+   	
+   	public function getRedesHeader()
+	{
+		ob_start();
+		?>
+		<script src="/js/redes.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		});
+		</script>
+		
+   		<?php		
+		$sectionHead = ob_get_contents();
+		ob_end_clean();
+		return $sectionHead;
+	}
+   	
+   	
+   	public function getRedesSections()
+   	{
+   		ob_start();
+   		?>
+   		<div class="row">
+			<form class="form-horizontal" role="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Twitter</b></label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="rTwitter" value="<?php echo $this->data['appInfo']['twitter']; ?>">
+						</div>
+					</div>
+				</fieldset>
+				
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Facebook</b></label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="rFacebook" value="<?php echo $this->data['appInfo']['facebook']; ?>">
+						</div>
+					</div>
+				</fieldset>
+				
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Google Plus</b></label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="rGoogle" value="<?php echo $this->data['appInfo']['googleplus']; ?>">
+						</div>
+					</div>
+				</fieldset>
+				
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Pinterest</b></label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="rPinterest" value="<?php echo $this->data['appInfo']['pinterest']; ?>">
+						</div>
+					</div>
+				</fieldset>
+				
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Linkedin</b></label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="rLinkedin" value="<?php echo $this->data['appInfo']['linkedin']; ?>">
+						</div>
+					</div>
+				</fieldset>
+				
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Youtube</b></label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="rYoutube" value="<?php echo $this->data['appInfo']['youtube']; ?>">
+						</div>
+					</div>
+				</fieldset>
+				
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="textinput"><b>Instagram</b></label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="rInstagram" value="<?php echo $this->data['appInfo']['instagram']; ?>">
+						</div>
+					</div>
+				</fieldset>
+				
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<div class="pull-right">
+							<button type="submit" class="btn btn-primary" id="updateRedes">Guardar</button>
+						</div>
+					</div>
+				</div>
+			</form>
+			<div class="clearfix"></div>
+   		</div>
+   		<?php
+   		$inicio = ob_get_contents();
+   		ob_end_clean();
+   		return $inicio;
+   	}
+   	
+   	
    	
    	public function getEditSectionHeader()
 	{

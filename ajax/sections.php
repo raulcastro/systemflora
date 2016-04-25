@@ -611,6 +611,13 @@ switch ($_POST['opt'])
 		}
 	break;
 	
+	case 87:
+		if ($model->updateSocial($_POST))
+		{
+			echo 1;
+		}
+	break;
+	
 	default:
 	break;
 }

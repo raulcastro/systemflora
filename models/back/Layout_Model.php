@@ -2764,6 +2764,35 @@ class Layout_Model
 			return false;
 		}
 	}
+	
+	public function updateSocial($data)
+	{
+		try {
+			$query = 'UPDATE app_info SET
+					twitter 	= ?,
+					facebook 	= ?,
+					googleplus 	= ?,
+					pinterest 	= ?,
+					linkedin 	= ?,
+					youtube 	= ?,
+					instagram 	= ?
+					';
+			$prep = $this->db->prepare($query);
+			$prep->bind_param('sssssss', 
+					$data['rTwitter'],
+					$data['rFacebook'],
+					$data['rGoogle'],
+					$data['rPinterest'],
+					$data['rLinkedin'],
+					$data['rYoutube'],
+					$data['rInstagram']
+					);
+			
+			return $prep->execute();
+		} catch (Exception $e) {
+			return false;
+		}
+	}
 }
 
 
