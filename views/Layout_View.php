@@ -3194,7 +3194,7 @@ class Layout_View
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="textinput"><b>URL del Video</b></label>
 						<div class="col-sm-10">
-							<input type="text" placeholder="URL del Video" class="form-control" id="singleVideo" value="<?php echo $section['video']; ?>">
+							<input type="text" placeholder="URL del Video" class="form-control" id="singleVideo" value="<?php echo 'https://www.youtube.com/watch?v='.$section['video']; ?>">
 						</div>
 					</div>
 						<?php
