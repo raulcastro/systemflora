@@ -2670,7 +2670,7 @@ class Layout_View
 			break;
 			
 			case 'actividades':
-				$iconSize 		= 'JPG (270 * 241 px)';
+				$iconSize 		= 'JPG (270 * 241 px o 569 * 290 px)';
 				$portraitSize 	= 'JPG (800 * 290 px)';
 			?>
 			<input type="hidden" value="<?php echo $section['actividades_id']; ?>" id="sectionId" />
